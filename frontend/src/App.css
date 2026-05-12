@@ -1,7 +1,7 @@
 body {
   margin: 0;
-  background: #101010;
-  color: white;
+  background: #f5f3ff;
+  color: #2d2a32;
   font-family: Arial, sans-serif;
 }
 
@@ -15,36 +15,45 @@ body {
   flex-direction: column;
 }
 
+/* 상단바 */
 .topbar {
-  height: 60px;
-  background: #1b1b1b;
+  height: 64px;
 
-  border-bottom: 1px solid #333;
+  background: rgba(255, 255, 255, 0.72);
+
+  backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid #ddd6fe;
 
   display: flex;
   align-items: center;
   gap: 24px;
 
-  padding: 0 20px;
+  padding: 0 24px;
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 
 .status {
   font-weight: bold;
+  font-size: 15px;
 }
 
 .connected {
-  color: #4ade80;
+  color: #34c759;
 }
 
 .disconnected {
-  color: #f87171;
+  color: #ff6b81;
 }
 
+/* 메인 레이아웃 */
 .main-layout {
   flex: 1;
   display: flex;
 }
 
+/* 비디오 영역 */
 .preview-section {
   flex: 1;
 
@@ -54,93 +63,170 @@ body {
   justify-content: center;
   align-items: center;
 
-  background: black;
+  background: linear-gradient(135deg, #dbeafe, #ede9fe, #ffe4e6);
 }
 
 .video-preview {
-  width: 100%;
-  height: 100%;
+  width: 96%;
+  height: 94%;
 
   object-fit: contain;
+
+  border-radius: 28px;
+
+  background: black;
+
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 }
 
+/* 자막 */
 .caption-overlay {
   position: absolute;
 
-  bottom: 40px;
+  bottom: 48px;
   left: 50%;
 
   transform: translateX(-50%);
 
-  max-width: 80%;
+  max-width: 85%;
 
-  font-size: 36px;
-  font-weight: bold;
+  font-size: 34px;
+  font-weight: 900;
 
   text-align: center;
 
-  padding: 14px 24px;
-
-  border-radius: 16px;
-
-  background: rgba(0, 0, 0, 0.55);
-
-  backdrop-filter: blur(6px);
-
   color: white;
+
+  background: transparent;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 0;
+
+  box-shadow: none;
+
+  backdrop-filter: none;
+
+  line-height: 1.4;
+
+  user-select: none;
+
+  -webkit-text-stroke: 2px black;
+
+  text-shadow:
+    -2px -2px 0 black,
+    2px -2px 0 black,
+    -2px 2px 0 black,
+    2px 2px 0 black,
+    0px 3px 6px rgba(0, 0, 0, 0.5);
 }
 
+/* 우측 패널 */
 .control-panel {
-  width: 320px;
+  width: 340px;
 
-  background: #181818;
+  background: rgba(255, 255, 255, 0.78);
 
-  border-left: 1px solid #333;
+  backdrop-filter: blur(16px);
 
-  padding: 20px;
+  border-left: 1px solid #ddd6fe;
+
+  padding: 24px;
 
   overflow-y: auto;
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.04);
 }
 
 .control-panel h2 {
   margin-top: 0;
+
+  color: #7c3aed;
+
+  font-size: 20px;
 }
 
+/* 라벨 */
+.control-panel label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 입력창 */
 .control-panel input {
   width: 100%;
 
-  padding: 10px;
+  padding: 12px 14px;
 
-  border-radius: 8px;
+  border-radius: 14px;
 
-  border: 1px solid #333;
+  border: 1px solid #d8b4fe;
 
-  background: #222;
+  background: rgba(255, 255, 255, 0.9);
 
-  color: white;
+  color: #2d2a32;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: 0.2s;
 }
 
+.control-panel input:focus {
+  border-color: #a78bfa;
+
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.18);
+}
+
+/* range slider */
+.control-panel input[type="range"] {
+  padding: 0;
+  cursor: pointer;
+}
+
+/* 버튼 */
 .control-panel button {
-  padding: 12px;
+  padding: 13px;
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: 16px;
 
-  background: #2563eb;
+  background: linear-gradient(135deg, #a78bfa, #f9a8d4);
 
   color: white;
 
   font-weight: bold;
 
+  font-size: 15px;
+
   cursor: pointer;
+
+  transition: 0.2s;
+
+  box-shadow: 0 6px 18px rgba(167, 139, 250, 0.28);
 }
 
+.control-panel button:hover {
+  transform: translateY(-2px);
+
+  opacity: 0.95;
+}
+
+/* 구분선 */
 .control-panel hr {
   width: 100%;
-  border: 1px solid #333;
+
+  border: none;
+
+  border-top: 1px solid #ddd6fe;
+
+  margin: 8px 0;
 }

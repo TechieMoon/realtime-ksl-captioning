@@ -15,6 +15,8 @@ function App() {
   const [latency, setLatency] = useState(0);
   const [fps] = useState(10);
 
+  const [fontSize, setFontSize] = useState(34);
+
   const [serverUrl, setServerUrl] = useState(
     "ws://localhost:8000/ws/captions?session_id=demo-1",
   );
@@ -60,7 +62,11 @@ function App() {
       wsRef.current.close();
     }
 
-    let url = serverUrl;
+    let url = `ws://localhost:8000/ws/captions?session_id=${sessionId}`;
+
+    if (serverUrl.trim()) {
+      url = serverUrl;
+    }
 
     if (token.trim()) {
       url += `&token=${token}`;
@@ -178,7 +184,6 @@ function App() {
 
     const view = new DataView(packet.buffer);
 
-    // big-endian
     view.setUint32(0, metadataBytes.length, false);
 
     packet.set(metadataBytes, 4);
@@ -210,7 +215,14 @@ function App() {
             className="video-preview"
           />
 
-          <div className="caption-overlay">{caption}</div>
+          <div
+            className="caption-overlay"
+            style={{
+              fontSize: `${fontSize}px`,
+            }}
+          >
+            {caption}
+          </div>
         </section>
 
         <aside className="control-panel">
@@ -240,17 +252,25 @@ function App() {
 
           <h2>Overlay</h2>
 
-          <label>Font Size</label>
+          <label>Font Size: {fontSize}px</label>
 
-          <input type="range" min="20" max="60" />
-
-          <label>Opacity</label>
-
-          <input type="range" min="0" max="100" />
+          <input
+            type="range"
+            min="20"
+            max="80"
+            value={fontSize}
+            onChange={(e) => setFontSize(Number(e.target.value))}
+          />
 
           <hr />
 
-          <button>Clean Preview Mode</button>
+          <button
+            onClick={() => {
+              setFontSize(34);
+            }}
+          >
+            Reset Overlay
+          </button>
         </aside>
       </main>
 
