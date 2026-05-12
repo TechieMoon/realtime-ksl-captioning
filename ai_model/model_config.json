@@ -1,11 +1,19 @@
 {
-  "model_type": "ksl-word-recognition-placeholder",
-  "intended_backbone": "YOLO-assisted VideoMAE",
+  "model_type": "yolo-assisted-videomae-ksl-word-recognition",
   "default_word_duration_ms": 500,
   "min_emit_confidence": 0.55,
-  "prototype_min_motion": 0.08,
-  "emit_demo_label_without_weights": false,
-  "demo_label_id": 1,
+  "roi_detector": {
+    "enabled": false,
+    "weights_path": "yolo/yolo.pt",
+    "confidence_threshold": 0.25,
+    "padding": 0.15,
+    "class_ids": []
+  },
+  "classifier": {
+    "architecture": "VideoMAEForVideoClassification",
+    "checkpoint_path": "videomae",
+    "clip_size": 8
+  },
   "smoothing": {
     "window_size": 5,
     "stable_frames": 3
