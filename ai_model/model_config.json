@@ -1,0 +1,13 @@
+{
+  "model_type": "ksl-word-recognition-placeholder",
+  "intended_backbone": "YOLO-assisted VideoMAE",
+  "default_word_duration_ms": 500,
+  "min_emit_confidence": 0.55,
+  "prototype_min_motion": 0.08,
+  "emit_demo_label_without_weights": false,
+  "demo_label_id": 1,
+  "smoothing": {
+    "window_size": 5,
+    "stable_frames": 3
+  }
+}

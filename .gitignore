@@ -13,7 +13,7 @@ venv/
 env/
 
 .huggingface/
-models/
+/models/
 dist/
 build/
 

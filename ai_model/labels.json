@@ -1,0 +1,29 @@
+{
+  "labels": [
+    {
+      "id": 0,
+      "name": "unknown",
+      "text": ""
+    },
+    {
+      "id": 1,
+      "name": "hello",
+      "text": "안녕하세요"
+    },
+    {
+      "id": 2,
+      "name": "thanks",
+      "text": "감사합니다"
+    },
+    {
+      "id": 3,
+      "name": "yes",
+      "text": "네"
+    },
+    {
+      "id": 4,
+      "name": "no",
+      "text": "아니요"
+    }
+  ]
+}

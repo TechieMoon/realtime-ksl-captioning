@@ -106,6 +106,30 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 The Hugging Face model repo must include `inference.py` with `load_model(model_dir, device)` and `predict(...)`. See [docs/ai-model-tasks.md](docs/ai-model-tasks.md).
 
+## Checked-In AI Model Package
+
+This repository now includes a local Hugging Face-compatible model package in [ai_model](ai_model). It is intentionally inference-first: training can happen later, then the trained weights/config can be added behind the same `inference.py` contract.
+
+Local backend test with the checked-in model package:
+
+```powershell
+cd server
+$env:MODEL_BACKEND = "huggingface"
+$env:HF_MODEL_ID = "..\ai_model"
+$env:MODEL_DEVICE = "cpu"
+pytest tests/test_ai_model_contract.py tests/test_huggingface_adapter.py
+```
+
+Planned production direction:
+
+```text
+Webcam video -> YOLO/ROI detection -> VideoMAE-style temporal classifier -> KSL word captions
+Microphone audio -> Whisper/faster-whisper ASR -> speech captions
+Caption manager -> merge by timestamps -> overlay / virtual camera output
+```
+
+The current AI package covers the KSL model contract and conservative real-time inference scaffold. Audio ASR and caption merging can be added as separate backend/client tasks without changing this model contract.
+
 ## WebSocket Protocol
 
 Endpoint:

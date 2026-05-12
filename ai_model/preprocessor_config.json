@@ -1,0 +1,17 @@
+{
+  "input_format": "RGB numpy.ndarray uint8",
+  "frame_shape": "(height, width, 3)",
+  "target_size": 224,
+  "clip_size": 8,
+  "mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "roi_strategy": "full_frame_until_detector_weights_are_added"
+}
