@@ -7,6 +7,7 @@ _MODEL_DIR = Path(__file__).resolve().parent
 if str(_MODEL_DIR) not in sys.path:
     sys.path.insert(0, str(_MODEL_DIR))
 
+from mediapipe_mvp import has_mediapipe_artifact, load_mediapipe_mvp
 from modeling import KslWordRecognizer, load_json, load_labels
 
 
@@ -14,6 +15,9 @@ def load_model(model_dir: str, device: str) -> KslWordRecognizer:
     """Load the YOLO-assisted VideoMAE KSL word recognition pipeline."""
 
     root = Path(model_dir)
+    if has_mediapipe_artifact(root):
+        return load_mediapipe_mvp(root, device)
+
     labels = load_labels(root / "labels.json")
     preprocessor = load_json(root / "preprocessor_config.json", default={})
     config = load_json(root / "model_config.json", default={})

@@ -2,11 +2,40 @@
 
 This folder is a Hugging Face-compatible model package for word-level Korean Sign Language recognition. It contains the model structure and inference contract; AIHub data preparation and training experiments can be done later without changing the backend contract.
 
+## Current MVP Artifact
+
+The repository can load a lightweight MediaPipe MVP artifact when `mediapipe_mvp.joblib` is present. This artifact is trained for a one-person proof-of-concept, not for production-quality Korean Sign Language translation.
+
+Current MVP vocabulary:
+
+```text
+수어, 좋다, 감사, 괜찮다, 싫다, 이해, 부탁, 모르다, 맞다, 힘
+```
+
+Measured locally on the development machine:
+
+```text
+Validation accuracy: about 70.7% on a tiny held-out split
+Mean inference latency: about 33.8 ms/frame on CPU
+Approximate throughput: about 29.6 fps
+```
+
+Training command used for the initial artifact:
+
+```powershell
+python training\train_mediapipe_mvp.py --max-per-label 20 --sequence-length 16 --angles F D U --labels "수어,좋다,감사,괜찮다,싫다,이해,부탁,모르다,맞다,힘"
+```
+
+The trained `mediapipe_mvp.joblib` file is intentionally not tracked in GitHub. It should be distributed through Hugging Face.
+
 ## Runtime Structure
 
 ```text
 RGB webcam frame
-  -> YoloRoiExtractor
+  -> MediaPipe MVP recognizer when mediapipe_mvp.joblib exists
+     - extracts pose and hand landmarks
+     - classifies a short keypoint sequence with a lightweight classifier
+  -> otherwise YoloRoiExtractor
      - uses yolo/yolo.pt when present and enabled
      - falls back to the full frame when no detector checkpoint exists
   -> VideoMAEWordClassifier

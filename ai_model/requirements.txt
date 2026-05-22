@@ -4,3 +4,6 @@ safetensors>=0.4,<1.0
 torch>=2.3,<3.0
 transformers>=4.44,<5.0
 ultralytics>=8.3,<9.0
+mediapipe>=0.10.35,<1.0
+scikit-learn>=1.8,<2.0
+joblib>=1.5,<2.0
