@@ -1,3 +1,18 @@
+---
+library_name: scikit-learn
+pipeline_tag: video-classification
+language:
+  - ko
+tags:
+  - korean-sign-language
+  - sign-language-recognition
+  - mediapipe
+  - keypoint-classification
+  - real-time
+  - joblib
+license: other
+---
+
 # KSL Word Recognition Model Repo
 
 This folder is a Hugging Face-compatible model package for word-level Korean Sign Language recognition. It contains the model structure and inference contract; AIHub data preparation and training experiments can be done later without changing the backend contract.
@@ -27,6 +42,23 @@ python training\train_mediapipe_mvp.py --max-per-label 20 --sequence-length 16 -
 ```
 
 The trained `mediapipe_mvp.joblib` file is intentionally not tracked in GitHub. It should be distributed through Hugging Face.
+
+Hugging Face model repo used by the backend:
+
+```text
+TechieMoon/realtime-ksl-captioning-mediapipe-mvp
+```
+
+Backend environment:
+
+```powershell
+$env:MODEL_BACKEND = "huggingface"
+$env:HF_MODEL_ID = "TechieMoon/realtime-ksl-captioning-mediapipe-mvp"
+$env:MODEL_DEVICE = "cpu"
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+This MVP artifact does not contain the AIHub video dataset. It only contains the trained lightweight classifier and inference code.
 
 ## Runtime Structure
 

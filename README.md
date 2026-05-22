@@ -97,14 +97,22 @@ When the AI model repo is ready:
 
 ```powershell
 $env:MODEL_BACKEND = "huggingface"
-$env:HF_MODEL_ID = "org-or-user/model-name"
+$env:HF_MODEL_ID = "TechieMoon/realtime-ksl-captioning-mediapipe-mvp"
 $env:HF_MODEL_REVISION = "main"
-$env:MODEL_DEVICE = "cuda:0"
+$env:MODEL_DEVICE = "cpu"
 $env:HF_TOKEN = "<optional-private-model-token>"
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 The Hugging Face model repo must include `inference.py` with `load_model(model_dir, device)` and `predict(...)`. See [docs/ai-model-tasks.md](docs/ai-model-tasks.md).
+
+The current MVP model is hosted at:
+
+```text
+TechieMoon/realtime-ksl-captioning-mediapipe-mvp
+```
+
+This model uses MediaPipe keypoints and a small classifier. It is fast enough for the one-person MVP, but it is not a full production Korean Sign Language translation model.
 
 ## Checked-In AI Model Package
 
@@ -129,6 +137,12 @@ Caption manager -> merge by timestamps -> overlay / virtual camera output
 ```
 
 The current AI package covers the KSL model contract and conservative real-time inference scaffold. Audio ASR and caption merging can be added as separate backend/client tasks without changing this model contract.
+
+## Training
+
+Training code lives in [training/README.md](training/README.md). AIHub dataset zip files and trained model artifacts are intentionally not tracked in GitHub.
+
+The training script prints validation accuracy and a per-class report automatically, then writes `ai_model/mediapipe_mvp.joblib` for Hugging Face upload.
 
 ## WebSocket Protocol
 
