@@ -46,7 +46,7 @@ Start message:
   "type": "start",
   "width": 640,
   "height": 360,
-  "fps": 10,
+  "fps": 8,
   "format": "jpeg",
   "client_name": "desktop-client"
 }
@@ -95,7 +95,7 @@ Caption event:
 
 ## Implementation Notes
 
-- Start with 640x360 or 480x270 at 8-12 fps. Higher frame rates are unnecessary until the model proves it can keep up.
+- Start with 640x360 or 480x270 at 8 fps. Higher frame rates are unnecessary until the model proves it can keep up.
 - JPEG quality around 70-85 is enough for the MVP.
 - Keep sending frames even if captions arrive slowly; the server drops old frames to preserve real-time behavior.
 - Reconnect automatically if the socket closes, but do not spam reconnects faster than once per second.

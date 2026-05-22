@@ -18,7 +18,7 @@ Current default vocabulary:
 
 Do not commit AIHub zip files to GitHub.
 
-Place downloaded AIHub files under the repository root with this structure:
+Place downloaded AIHub files under the repository root or on a larger data drive with this structure:
 
 ```text
 수어 영상/
@@ -41,6 +41,15 @@ For the first MVP run, the minimum useful files are:
 
 The script reads directly from zip files, so full extraction is not required.
 
+If the files are on `D:\수어 영상`, no extra option is needed because the training script checks that path automatically. You can also set an explicit path:
+
+```powershell
+$env:KSL_DATA_ROOT = "D:\수어 영상"
+$env:KSL_CACHE_DIR = "D:\ksl_cache\mediapipe_mvp_features"
+```
+
+Do not rely on a Windows shortcut such as `수어 영상.lnk`; Python sees it as a shortcut file, not as the dataset folder.
+
 ## Install
 
 From the repository root:
@@ -52,10 +61,16 @@ python -m pip install -r ai_model/requirements.txt
 
 ## Train And Evaluate
 
-Run:
+Fast smoke run:
 
 ```powershell
 python training\train_mediapipe_mvp.py --max-per-label 20 --sequence-length 16 --angles F D U --labels "수어,좋다,감사,괜찮다,싫다,이해,부탁,모르다,맞다,힘"
+```
+
+Stronger one-person MVP run used for the current artifact:
+
+```powershell
+python training\train_mediapipe_mvp.py --data-root "D:\수어 영상" --cache-dir "D:\ksl_cache\mediapipe_mvp_features" --max-per-label 90 --sequence-length 16 --angles F D U L R --classifier extra_trees --confidence-threshold 0.45
 ```
 
 The script automatically:
@@ -65,8 +80,28 @@ The script automatically:
 - trains the classifier
 - prints validation accuracy and a per-class classification report
 - saves `ai_model/mediapipe_mvp.joblib`
+- saves `ai_model/metrics_mediapipe_mvp.json`
 
 The saved model artifact is ignored by Git and should be uploaded to Hugging Face instead.
+
+The current artifact was trained with 900 balanced samples across 10 labels. It reached 98.0% accuracy on a 50-sample held-out signer split. This is a controlled-demo metric, not a guarantee for arbitrary real meeting footage.
+
+## Benchmark
+
+After training, measure end-to-end local inference on a real AIHub clip:
+
+```powershell
+python training\benchmark_mediapipe_mvp.py --data-root "D:\수어 영상" --cache-dir "D:\ksl_cache\mediapipe_mvp_features" --max-frames 120
+```
+
+Current development-machine result:
+
+```text
+Mean latency: about 112.3 ms/frame on CPU
+Approx throughput: about 8.9 fps
+```
+
+For the live demo, configure the frontend to send 640x360 or lower at about 8 fps.
 
 ## Upload To Hugging Face
 
@@ -75,6 +110,7 @@ After training:
 ```powershell
 hf auth login
 hf upload TechieMoon/realtime-ksl-captioning-mediapipe-mvp ai_model\mediapipe_mvp.joblib mediapipe_mvp.joblib --type model --commit-message "Update MediaPipe MVP model"
+hf upload TechieMoon/realtime-ksl-captioning-mediapipe-mvp ai_model\metrics_mediapipe_mvp.json metrics_mediapipe_mvp.json --type model --commit-message "Upload MVP metrics"
 hf upload TechieMoon/realtime-ksl-captioning-mediapipe-mvp ai_model\README.md README.md --type model --commit-message "Update model card"
 ```
 

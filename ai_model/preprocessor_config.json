@@ -1,6 +1,7 @@
 {
   "input_format": "RGB numpy.ndarray uint8",
   "frame_shape": "(height, width, 3)",
+  "mediapipe_max_input_width": 640,
   "target_size": 224,
   "clip_size": 8,
   "mean": [

@@ -63,6 +63,7 @@ Prediction output:
 - Return an empty text or low confidence when the sign is unknown.
 - Prefer stable word output over rapid flickering predictions.
 - Track latency per frame; first demo target is under 150 ms inference time on RTX3090 for one frame.
+- The current MediaPipe MVP runs mostly on CPU and benchmarks around 112 ms/frame on the development machine; a later VideoMAE/torch model can use RTX3090 more directly.
 
 ## Packaging Notes
 
@@ -77,4 +78,3 @@ Prediction output:
 - `predict([rgb_frame], [timestamp_ms])` returns a list with one valid prediction.
 - Repeated calls do not reload weights.
 - The model can process at least 8 fps in the controlled MVP demo setup.
-

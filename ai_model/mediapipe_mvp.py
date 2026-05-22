@@ -13,6 +13,7 @@ import numpy as np
 POSE_LANDMARKS = 33
 HAND_LANDMARKS = 21
 FEATURE_DIM = POSE_LANDMARKS * 4 + HAND_LANDMARKS * 3 * 2
+MAX_MEDIAPIPE_WIDTH = 640
 HOLISTIC_TASK_URL = (
     "https://storage.googleapis.com/mediapipe-models/"
     "holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task"
@@ -23,6 +24,7 @@ HOLISTIC_TASK_URL = (
 class MediaPipeMvpConfig:
     sequence_length: int
     confidence_threshold: float
+    include_deltas: bool
     labels: list[str]
 
 
@@ -35,6 +37,7 @@ class MediaPipeMvpRecognizer:
         self.config = MediaPipeMvpConfig(
             sequence_length=int(artifact["sequence_length"]),
             confidence_threshold=float(artifact.get("confidence_threshold", 0.45)),
+            include_deltas=bool(artifact.get("include_deltas", False)),
             labels=list(artifact["labels"]),
         )
         self.device = device
@@ -52,7 +55,7 @@ class MediaPipeMvpRecognizer:
         if len(self.buffer) < self.config.sequence_length:
             return {"text": "", "words": [], "is_final": False}
 
-        sample = np.asarray(self.buffer, dtype=np.float32).reshape(1, -1)
+        sample = sequence_to_model_vector(np.asarray(self.buffer, dtype=np.float32), self.config.include_deltas)
         probabilities = self.classifier.predict_proba(sample)[0]
         class_index = int(np.argmax(probabilities))
         confidence = float(probabilities[class_index])
@@ -83,8 +86,19 @@ def load_mediapipe_mvp(model_dir: Path, device: str) -> MediaPipeMvpRecognizer:
     return MediaPipeMvpRecognizer(model_dir / "mediapipe_mvp.joblib", device=device)
 
 
+def sequence_to_model_vector(sequence: np.ndarray, include_deltas: bool) -> np.ndarray:
+    sequence = np.asarray(sequence, dtype=np.float32)
+    if sequence.ndim != 2:
+        raise ValueError("sequence must have shape (sequence_length, feature_dim)")
+    if not include_deltas:
+        return sequence.reshape(1, -1)
+
+    deltas = np.diff(sequence, axis=0, prepend=sequence[:1])
+    return np.concatenate([sequence, deltas], axis=1).reshape(1, -1)
+
+
 def extract_mediapipe_features(frame_rgb: np.ndarray, holistic: Any) -> np.ndarray:
-    frame = _validate_rgb_frame(frame_rgb)
+    frame = _resize_for_mediapipe(_validate_rgb_frame(frame_rgb))
     results = holistic.process(frame)
     parts = [
         _flatten_landmarks(results.pose_landmarks, POSE_LANDMARKS, include_visibility=True),
@@ -200,3 +214,15 @@ def _validate_rgb_frame(frame: np.ndarray) -> np.ndarray:
     if frame.dtype != np.uint8:
         raise ValueError("frame dtype must be uint8")
     return np.ascontiguousarray(frame)
+
+
+def _resize_for_mediapipe(frame: np.ndarray) -> np.ndarray:
+    height, width = frame.shape[:2]
+    if width <= MAX_MEDIAPIPE_WIDTH:
+        return frame
+
+    import cv2
+
+    scale = MAX_MEDIAPIPE_WIDTH / width
+    resized_height = max(1, int(round(height * scale)))
+    return cv2.resize(frame, (MAX_MEDIAPIPE_WIDTH, resized_height), interpolation=cv2.INTER_AREA)

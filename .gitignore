@@ -7,6 +7,7 @@ __pycache__/
 .ruff_cache/
 .coverage
 htmlcov/
+.cache/
 
 .env
 .venv/
@@ -20,6 +21,8 @@ build/
 
 # Local AIHub data drops are too large for git.
 수어 영상/
+수어 영상.lnk
 *.pdf
 ai_model/*.joblib
 ai_model/assets/*.task
+ai_model/metrics*.json

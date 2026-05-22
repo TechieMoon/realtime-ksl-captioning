@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import re
 import tempfile
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from zipfile import ZipFile
@@ -11,8 +14,10 @@ from zipfile import ZipFile
 import cv2
 import joblib
 import numpy as np
+from sklearn.ensemble import ExtraTreesClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -23,13 +28,20 @@ AI_MODEL_DIR = REPO_ROOT / "ai_model"
 if str(AI_MODEL_DIR) not in sys.path:
     sys.path.insert(0, str(AI_MODEL_DIR))
 
-from mediapipe_mvp import FEATURE_DIM, _create_holistic, extract_mediapipe_features  # noqa: E402
+from mediapipe_mvp import (  # noqa: E402
+    FEATURE_DIM,
+    MAX_MEDIAPIPE_WIDTH,
+    _create_holistic,
+    extract_mediapipe_features,
+    sequence_to_model_vector,
+)
 
 
 VIDEO_RE = re.compile(r"NIA_SL_WORD(\d+)_REAL(\d+)_([FDLRU])\.mp4$")
 LABEL_RE = re.compile(r"NIA_SL_WORD(\d+)_REAL(\d+)_([FDLRU])_morpheme\.json$")
 
 DEFAULT_LABELS = ["수어", "좋다", "감사", "괜찮다", "싫다", "이해", "부탁", "모르다", "맞다", "힘"]
+FEATURE_CACHE_VERSION = f"mediapipe_width_{MAX_MEDIAPIPE_WIDTH}_v1"
 
 
 @dataclass(frozen=True)
@@ -55,7 +67,9 @@ def main() -> None:
     args = _parse_args()
     data_root = args.data_root.resolve()
     output_path = args.output.resolve()
+    metrics_path = args.metrics_output.resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    metrics_path.parent.mkdir(parents=True, exist_ok=True)
 
     labels = [label.strip() for label in args.labels.split(",") if label.strip()]
     label_infos = _load_label_infos(data_root)
@@ -73,12 +87,16 @@ def main() -> None:
     for label in labels:
         print(f"  {label}: {sum(sample.label == label for sample in samples)} samples")
 
+    cache_dir = args.cache_dir.resolve()
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
     holistic = _create_holistic()
     try:
-        x, y, groups = _extract_dataset(samples, holistic, args.sequence_length)
+        sequences, y, groups = _extract_dataset(samples, holistic, args.sequence_length, cache_dir)
     finally:
         holistic.close()
 
+    x = np.concatenate([sequence_to_model_vector(sequence, args.include_deltas) for sequence in sequences], axis=0)
     label_to_index = {label: index for index, label in enumerate(labels)}
     y_index = np.asarray([label_to_index[label] for label in y], dtype=np.int64)
 
@@ -87,14 +105,12 @@ def main() -> None:
         print("Eval signer split is not possible; falling back to stratified random split.")
         train_mask = _stratified_split(y_index, train_ratio=0.8, seed=args.seed)
 
-    classifier = make_pipeline(
-        StandardScaler(),
-        LogisticRegression(max_iter=2000, class_weight="balanced", random_state=args.seed),
-    )
+    classifier = _build_classifier(args.classifier, args.seed)
     classifier.fit(x[train_mask], y_index[train_mask])
 
     predictions = classifier.predict(x[~train_mask])
     accuracy = accuracy_score(y_index[~train_mask], predictions)
+    report = classification_report(y_index[~train_mask], predictions, target_names=labels, zero_division=0, output_dict=True)
     print(f"Validation accuracy: {accuracy:.3f}")
     print(classification_report(y_index[~train_mask], predictions, target_names=labels, zero_division=0))
 
@@ -103,6 +119,7 @@ def main() -> None:
         "labels": labels,
         "sequence_length": args.sequence_length,
         "feature_dim": FEATURE_DIM,
+        "include_deltas": args.include_deltas,
         "confidence_threshold": args.confidence_threshold,
         "training_summary": {
             "samples": len(samples),
@@ -110,24 +127,70 @@ def main() -> None:
             "angles": args.angles,
             "eval_signer": args.eval_signer,
             "accuracy": accuracy,
+            "classifier": args.classifier,
+            "include_deltas": args.include_deltas,
+            "max_mediapipe_width": MAX_MEDIAPIPE_WIDTH,
         },
     }
     joblib.dump(artifact, output_path)
+    metrics = {
+        "accuracy": accuracy,
+        "classifier": args.classifier,
+        "include_deltas": args.include_deltas,
+        "feature_cache_version": FEATURE_CACHE_VERSION,
+        "max_mediapipe_width": MAX_MEDIAPIPE_WIDTH,
+        "sequence_length": args.sequence_length,
+        "max_per_label": args.max_per_label,
+        "angles": args.angles,
+        "eval_signer": args.eval_signer,
+        "labels": labels,
+        "samples_total": len(samples),
+        "samples_train": int(train_mask.sum()),
+        "samples_eval": int((~train_mask).sum()),
+        "report": report,
+    }
+    metrics_path.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved model artifact: {output_path}")
+    print(f"Saved metrics: {metrics_path}")
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train the MediaPipe keypoint MVP classifier.")
-    parser.add_argument("--data-root", type=Path, default=REPO_ROOT / "수어 영상")
+    parser.add_argument("--data-root", type=Path, default=_default_data_root())
     parser.add_argument("--output", type=Path, default=AI_MODEL_DIR / "mediapipe_mvp.joblib")
+    parser.add_argument("--metrics-output", type=Path, default=AI_MODEL_DIR / "metrics_mediapipe_mvp.json")
+    parser.add_argument("--cache-dir", type=Path, default=_default_cache_dir())
     parser.add_argument("--labels", default=",".join(DEFAULT_LABELS))
     parser.add_argument("--angles", nargs="+", default=["F", "D", "U", "L", "R"])
     parser.add_argument("--sequence-length", type=int, default=24)
-    parser.add_argument("--max-per-label", type=int, default=60)
+    parser.add_argument("--max-per-label", type=int, default=90)
     parser.add_argument("--eval-signer", type=int, default=18)
     parser.add_argument("--confidence-threshold", type=float, default=0.45)
+    parser.add_argument("--classifier", choices=["logistic", "mlp", "random_forest", "extra_trees"], default="extra_trees")
+    parser.set_defaults(include_deltas=True)
+    parser.add_argument("--include-deltas", dest="include_deltas", action="store_true")
+    parser.add_argument("--no-include-deltas", dest="include_deltas", action="store_false")
     parser.add_argument("--seed", type=int, default=7)
     return parser.parse_args()
+
+
+def _default_data_root() -> Path:
+    env_root = os.environ.get("KSL_DATA_ROOT")
+    if env_root:
+        return Path(env_root)
+    for candidate in (REPO_ROOT / "수어 영상", Path("D:/수어 영상")):
+        if candidate.exists():
+            return candidate
+    return REPO_ROOT / "수어 영상"
+
+
+def _default_cache_dir() -> Path:
+    env_cache = os.environ.get("KSL_CACHE_DIR")
+    if env_cache:
+        return Path(env_cache)
+    if Path("D:/수어 영상").exists():
+        return Path("D:/ksl_cache/mediapipe_mvp_features")
+    return REPO_ROOT / ".cache" / "mediapipe_mvp_features"
 
 
 def _load_label_infos(data_root: Path) -> dict[tuple[int, int, str], LabelInfo]:
@@ -199,26 +262,49 @@ def _collect_samples(
 
     samples: list[VideoSample] = []
     for label in sorted(samples_by_label):
-        label_samples = sorted(
-            samples_by_label[label],
-            key=lambda sample: (sample.signer_id, sample.word_id, sample.angle, sample.member),
-        )
-        samples.extend(label_samples[:max_per_label])
+        samples.extend(_balanced_take(samples_by_label[label], max_per_label=max_per_label))
     return samples
 
 
-def _extract_dataset(samples: list[VideoSample], holistic: object, sequence_length: int) -> tuple[np.ndarray, list[str], list[int]]:
+def _balanced_take(samples: list[VideoSample], *, max_per_label: int) -> list[VideoSample]:
+    by_signer: dict[int, list[VideoSample]] = defaultdict(list)
+    for sample in samples:
+        by_signer[sample.signer_id].append(sample)
+    for signer_samples in by_signer.values():
+        signer_samples.sort(key=lambda sample: (sample.word_id, sample.angle, sample.member))
+
+    selected: list[VideoSample] = []
+    while len(selected) < max_per_label and by_signer:
+        progressed = False
+        for signer_id in sorted(by_signer):
+            signer_samples = by_signer[signer_id]
+            if signer_samples:
+                selected.append(signer_samples.pop(0))
+                progressed = True
+                if len(selected) >= max_per_label:
+                    break
+        if not progressed:
+            break
+    return selected
+
+
+def _extract_dataset(
+    samples: list[VideoSample],
+    holistic: object,
+    sequence_length: int,
+    cache_dir: Path,
+) -> tuple[np.ndarray, list[str], list[int]]:
     features: list[np.ndarray] = []
     labels: list[str] = []
     groups: list[int] = []
     total = len(samples)
     for index, sample in enumerate(samples, start=1):
         print(f"[{index}/{total}] {sample.label} signer={sample.signer_id} angle={sample.angle} {sample.member}")
-        sequence = _extract_video_sequence(sample, holistic, sequence_length)
+        sequence = _load_or_extract_video_sequence(sample, holistic, sequence_length, cache_dir)
         if sequence is None:
             print("  skipped: no frames extracted")
             continue
-        features.append(sequence.reshape(-1))
+        features.append(sequence)
         labels.append(sample.label)
         groups.append(sample.signer_id)
 
@@ -227,11 +313,39 @@ def _extract_dataset(samples: list[VideoSample], holistic: object, sequence_leng
     return np.asarray(features, dtype=np.float32), labels, groups
 
 
-def _extract_video_sequence(sample: VideoSample, holistic: object, sequence_length: int) -> np.ndarray | None:
+def _load_or_extract_video_sequence(
+    sample: VideoSample,
+    holistic: object,
+    sequence_length: int,
+    cache_dir: Path,
+) -> np.ndarray | None:
+    key = hashlib.sha1(
+        f"{FEATURE_CACHE_VERSION}|{sample.zip_path}|{sample.member}|{sample.start}|{sample.end}|{sequence_length}".encode(
+            "utf-8"
+        )
+    ).hexdigest()
+    cache_path = cache_dir / f"{key}.npz"
+    if cache_path.exists():
+        return np.load(cache_path)["sequence"].astype(np.float32)
+
+    sequence = _extract_video_sequence(sample, holistic, sequence_length, cache_dir)
+    if sequence is not None:
+        np.savez_compressed(cache_path, sequence=sequence)
+    return sequence
+
+
+def _extract_video_sequence(
+    sample: VideoSample,
+    holistic: object,
+    sequence_length: int,
+    cache_dir: Path,
+) -> np.ndarray | None:
     with ZipFile(sample.zip_path) as zip_file:
         video_bytes = zip_file.read(sample.member)
 
-    with tempfile.NamedTemporaryFile(suffix=".mp4", delete=True) as temp_file:
+    scratch_dir = cache_dir / "_tmp"
+    scratch_dir.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(suffix=".mp4", dir=scratch_dir, delete=True) as temp_file:
         temp_file.write(video_bytes)
         temp_file.flush()
 
@@ -257,6 +371,41 @@ def _extract_video_sequence(sample: VideoSample, holistic: object, sequence_leng
         capture.release()
 
     return np.asarray(sequence, dtype=np.float32)
+
+
+def _build_classifier(name: str, seed: int) -> object:
+    if name == "logistic":
+        return make_pipeline(
+            StandardScaler(),
+            LogisticRegression(max_iter=3000, class_weight="balanced", random_state=seed),
+        )
+    if name == "mlp":
+        return make_pipeline(
+            StandardScaler(),
+            MLPClassifier(
+                hidden_layer_sizes=(256, 128),
+                alpha=0.001,
+                batch_size=32,
+                max_iter=800,
+                early_stopping=True,
+                random_state=seed,
+            ),
+        )
+    if name == "random_forest":
+        return RandomForestClassifier(
+            n_estimators=600,
+            class_weight="balanced_subsample",
+            random_state=seed,
+            n_jobs=-1,
+        )
+    if name == "extra_trees":
+        return ExtraTreesClassifier(
+            n_estimators=800,
+            class_weight="balanced",
+            random_state=seed,
+            n_jobs=-1,
+        )
+    raise ValueError(f"Unsupported classifier: {name}")
 
 
 def _stratified_split(y: np.ndarray, *, train_ratio: float, seed: int) -> np.ndarray:

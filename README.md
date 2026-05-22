@@ -96,6 +96,7 @@ $env:MODEL_BACKEND = "mock"
 When the AI model repo is ready:
 
 ```powershell
+pip install -r ai_model\requirements.txt
 $env:MODEL_BACKEND = "huggingface"
 $env:HF_MODEL_ID = "TechieMoon/realtime-ksl-captioning-mediapipe-mvp"
 $env:HF_MODEL_REVISION = "main"
@@ -112,7 +113,18 @@ The current MVP model is hosted at:
 TechieMoon/realtime-ksl-captioning-mediapipe-mvp
 ```
 
-This model uses MediaPipe keypoints and a small classifier. It is fast enough for the one-person MVP, but it is not a full production Korean Sign Language translation model.
+This model uses MediaPipe keypoints and a small classifier. It is fast enough for the controlled one-person MVP when the client sends about 8 fps, but it is not a full production Korean Sign Language translation model.
+
+Current measured MVP numbers on the development machine:
+
+```text
+Vocabulary: 수어, 좋다, 감사, 괜찮다, 싫다, 이해, 부탁, 모르다, 맞다, 힘
+Training: 900 balanced AIHub real_word samples
+Validation: 98.0% accuracy on a 50-sample held-out signer split
+Inference: about 112.3 ms/frame on CPU, about 8.9 fps
+```
+
+For the live demo, send webcam frames at 640x360 or lower and about 8 fps. Higher frame rates will be dropped by the backend when inference is slower than capture.
 
 ## Checked-In AI Model Package
 
@@ -142,7 +154,7 @@ The current AI package covers the KSL model contract and conservative real-time 
 
 Training code lives in [training/README.md](training/README.md). AIHub dataset zip files and trained model artifacts are intentionally not tracked in GitHub.
 
-The training script prints validation accuracy and a per-class report automatically, then writes `ai_model/mediapipe_mvp.joblib` for Hugging Face upload.
+The training script prints validation accuracy and a per-class report automatically, then writes `ai_model/mediapipe_mvp.joblib` for Hugging Face upload. It also writes `ai_model/metrics_mediapipe_mvp.json`, which should be uploaded to Hugging Face with the model artifact but not committed to GitHub.
 
 ## WebSocket Protocol
 
@@ -161,7 +173,7 @@ Start message:
   "type": "start",
   "width": 640,
   "height": 360,
-  "fps": 10,
+  "fps": 8,
   "format": "jpeg",
   "client_name": "desktop-client"
 }

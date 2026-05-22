@@ -15,11 +15,11 @@ license: other
 
 # KSL Word Recognition Model Repo
 
-This folder is a Hugging Face-compatible model package for word-level Korean Sign Language recognition. It contains the model structure and inference contract; AIHub data preparation and training experiments can be done later without changing the backend contract.
+This folder is a Hugging Face-compatible model package for word-level Korean Sign Language recognition. It contains the model structure, inference contract, and the MediaPipe MVP runtime used by the backend.
 
 ## Current MVP Artifact
 
-The repository can load a lightweight MediaPipe MVP artifact when `mediapipe_mvp.joblib` is present. This artifact is trained for a one-person proof-of-concept, not for production-quality Korean Sign Language translation.
+The repository loads a lightweight MediaPipe MVP artifact when `mediapipe_mvp.joblib` is present. This artifact is trained for a controlled one-person proof-of-concept, not for production-quality Korean Sign Language translation.
 
 Current MVP vocabulary:
 
@@ -30,15 +30,24 @@ Current MVP vocabulary:
 Measured locally on the development machine:
 
 ```text
-Validation accuracy: about 70.7% on a tiny held-out split
-Mean inference latency: about 33.8 ms/frame on CPU
-Approximate throughput: about 29.6 fps
+Validation accuracy: 98.0% on a 50-sample held-out signer split
+Training samples: 900 balanced samples, 10 labels, 5 camera angles
+Mean inference latency: about 112.3 ms/frame on CPU
+Approximate throughput: about 8.9 fps
 ```
 
-Training command used for the initial artifact:
+Important limitation: this metric is from controlled AIHub word clips and a small 10-word vocabulary. It is suitable for a one-person demo, but it is not evidence of robust real-world meeting performance.
+
+Training command used for the current artifact:
 
 ```powershell
-python training\train_mediapipe_mvp.py --max-per-label 20 --sequence-length 16 --angles F D U --labels "수어,좋다,감사,괜찮다,싫다,이해,부탁,모르다,맞다,힘"
+python training\train_mediapipe_mvp.py --data-root "D:\수어 영상" --cache-dir "D:\ksl_cache\mediapipe_mvp_features" --max-per-label 90 --sequence-length 16 --angles F D U L R --classifier extra_trees --confidence-threshold 0.45
+```
+
+Benchmark command:
+
+```powershell
+python training\benchmark_mediapipe_mvp.py --data-root "D:\수어 영상" --cache-dir "D:\ksl_cache\mediapipe_mvp_features" --max-frames 120
 ```
 
 The trained `mediapipe_mvp.joblib` file is intentionally not tracked in GitHub. It should be distributed through Hugging Face.
@@ -65,6 +74,7 @@ This MVP artifact does not contain the AIHub video dataset. It only contains the
 ```text
 RGB webcam frame
   -> MediaPipe MVP recognizer when mediapipe_mvp.joblib exists
+     - resizes large RGB frames to max width 640 before MediaPipe
      - extracts pose and hand landmarks
      - classifies a short keypoint sequence with a lightweight classifier
   -> otherwise YoloRoiExtractor
