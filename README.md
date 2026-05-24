@@ -156,6 +156,19 @@ Training code lives in [training/README.md](training/README.md). AIHub dataset z
 
 The training script prints validation accuracy and a per-class report automatically, then writes `ai_model/mediapipe_mvp.joblib` for Hugging Face upload. It also writes `ai_model/metrics_mediapipe_mvp.json`, which should be uploaded to Hugging Face with the model artifact but not committed to GitHub.
 
+For a class-presentation model that uses the full downloaded AIHub training and validation splits:
+
+```powershell
+$env:KSL_DATA_ROOT = "D:\수어 영상"
+$env:KSL_CACHE_DIR = "D:\ksl_cache\full_mediapipe_features"
+python training\train_full_mediapipe.py --time-budget-hours 12 --data-root "D:\수어 영상" --cache-dir "D:\ksl_cache\full_mediapipe_features"
+python training\upload_mediapipe_to_hf.py --repo-id TechieMoon/realtime-ksl-captioning-mediapipe-mvp
+```
+
+The full trainer uses `1.Training` only for training and `2.Validation` only for evaluation. It scans every paired `video.zip` and `morpheme.zip`, tries multiple model candidates within the 12-hour budget, and keeps the best validation-accuracy artifact.
+
+The full downloaded `real_word` split is large enough that the first strict all-data MediaPipe run may spend the whole 12 hours extracting features. Re-run the same command to resume from cache; do not delete `D:\ksl_cache\full_mediapipe_features`.
+
 ## WebSocket Protocol
 
 Endpoint:

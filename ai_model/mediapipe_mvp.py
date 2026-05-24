@@ -56,7 +56,7 @@ class MediaPipeMvpRecognizer:
             return {"text": "", "words": [], "is_final": False}
 
         sample = sequence_to_model_vector(np.asarray(self.buffer, dtype=np.float32), self.config.include_deltas)
-        probabilities = self.classifier.predict_proba(sample)[0]
+        probabilities = _predict_probabilities(self.classifier, sample)[0]
         class_index = int(np.argmax(probabilities))
         confidence = float(probabilities[class_index])
         if confidence < self.config.confidence_threshold:
@@ -95,6 +95,27 @@ def sequence_to_model_vector(sequence: np.ndarray, include_deltas: bool) -> np.n
 
     deltas = np.diff(sequence, axis=0, prepend=sequence[:1])
     return np.concatenate([sequence, deltas], axis=1).reshape(1, -1)
+
+
+def _predict_probabilities(classifier: Any, sample: np.ndarray) -> np.ndarray:
+    predict_proba = getattr(classifier, "predict_proba", None)
+    if callable(predict_proba):
+        return predict_proba(sample)
+
+    decision_function = getattr(classifier, "decision_function", None)
+    if callable(decision_function):
+        scores = np.asarray(decision_function(sample), dtype=np.float32)
+        if scores.ndim == 1:
+            scores = scores.reshape(1, -1)
+        scores -= scores.max(axis=1, keepdims=True)
+        exp_scores = np.exp(scores)
+        return exp_scores / exp_scores.sum(axis=1, keepdims=True)
+
+    predictions = np.asarray(classifier.predict(sample), dtype=np.int64)
+    class_count = max(int(predictions.max(initial=0)) + 1, 1)
+    probabilities = np.zeros((len(predictions), class_count), dtype=np.float32)
+    probabilities[np.arange(len(predictions)), predictions] = 1.0
+    return probabilities
 
 
 def extract_mediapipe_features(frame_rgb: np.ndarray, holistic: Any) -> np.ndarray:

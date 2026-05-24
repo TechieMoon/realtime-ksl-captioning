@@ -61,6 +61,37 @@ python -m pip install -r ai_model/requirements.txt
 
 ## Train And Evaluate
 
+Full dataset search for a class-presentation model:
+
+```powershell
+$env:KSL_DATA_ROOT = "D:\수어 영상"
+$env:KSL_CACHE_DIR = "D:\ksl_cache\full_mediapipe_features"
+python training\train_full_mediapipe.py --time-budget-hours 12 --data-root "D:\수어 영상" --cache-dir "D:\ksl_cache\full_mediapipe_features"
+```
+
+This script:
+
+- scans every paired `video.zip` and `morpheme.zip` under `1.Training`
+- trains only on `1.Training`
+- evaluates on every matching label in `2.Validation`
+- uses all labels that appear in both train and validation by default
+- tries multiple candidate settings until the 12-hour budget is nearly exhausted
+- keeps the best validation-accuracy artifact at `ai_model/mediapipe_mvp.joblib`
+- writes full metrics to `ai_model/metrics_full_mediapipe.json`
+- writes the generated vocabulary to `ai_model/labels.json`
+
+It intentionally trains from source videos rather than AIHub `keypoint.zip` files because the real server receives webcam RGB frames and extracts MediaPipe keypoints online. Training and inference must use the same feature extractor.
+
+If the first run spends most of the 12 hours extracting MediaPipe features, run the same command again. The cache is resumable, so the next run continues from existing `.npz` feature files instead of starting over.
+
+On the currently downloaded `real_word` files, dry-run discovery found about 238k training samples and 30k validation samples. A strict all-data MediaPipe run can therefore exceed 12 hours on the first pass. The 12-hour limit is enforced per run; repeat the same command to continue from cache until a complete candidate finishes.
+
+To inspect what will be used without training:
+
+```powershell
+python training\train_full_mediapipe.py --data-root "D:\수어 영상" --cache-dir "D:\ksl_cache\full_mediapipe_features" --dry-run
+```
+
 Fast smoke run:
 
 ```powershell
@@ -112,6 +143,13 @@ hf auth login
 hf upload TechieMoon/realtime-ksl-captioning-mediapipe-mvp ai_model\mediapipe_mvp.joblib mediapipe_mvp.joblib --type model --commit-message "Update MediaPipe MVP model"
 hf upload TechieMoon/realtime-ksl-captioning-mediapipe-mvp ai_model\metrics_mediapipe_mvp.json metrics_mediapipe_mvp.json --type model --commit-message "Upload MVP metrics"
 hf upload TechieMoon/realtime-ksl-captioning-mediapipe-mvp ai_model\README.md README.md --type model --commit-message "Update model card"
+```
+
+For the full-dataset model, use the uploader script:
+
+```powershell
+$env:HF_TOKEN = "<your-hugging-face-token>"
+python training\upload_mediapipe_to_hf.py --repo-id TechieMoon/realtime-ksl-captioning-mediapipe-mvp --commit-message "Upload full dataset MediaPipe model"
 ```
 
 ## Data Growth Plan

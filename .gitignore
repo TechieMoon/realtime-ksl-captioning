@@ -26,3 +26,4 @@ build/
 ai_model/*.joblib
 ai_model/assets/*.task
 ai_model/metrics*.json
+training/runs/
