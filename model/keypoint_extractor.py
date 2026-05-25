@@ -229,6 +229,8 @@ class HolisticKeypointExtractor:
 
         source_fps = cap.get(cv2.CAP_PROP_FPS) or self.config.target_fps
         frame_stride = max(1, round(source_fps / self.config.target_fps))
+        frames: list[np.ndarray] = []
+        frame_index = 0
 
         if self._legacy_holistic is not None:
             keypoints = self._extract_video_with_legacy(cap, frame_stride)
