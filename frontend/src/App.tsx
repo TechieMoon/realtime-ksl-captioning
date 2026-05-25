@@ -24,6 +24,8 @@ function App() {
   const [sessionId, setSessionId] = useState("demo-1");
   const [token, setToken] = useState("");
 
+  const [showCaption, setShowCaption] = useState(true);
+
   useEffect(() => {
     startWebcam();
 
@@ -101,8 +103,6 @@ function App() {
       try {
         const data = JSON.parse(event.data);
 
-        console.log(data);
-
         if (data.type === "caption") {
           setCaption(data.text);
 
@@ -116,8 +116,6 @@ function App() {
     };
 
     ws.onclose = () => {
-      console.log("disconnected");
-
       setConnected(false);
 
       if (intervalRef.current) {
@@ -134,17 +132,12 @@ function App() {
 
   async function captureAndSendFrame() {
     if (!videoRef.current) return;
-
     if (!canvasRef.current) return;
-
     if (!wsRef.current) return;
-
     if (wsRef.current.readyState !== WebSocket.OPEN) return;
 
     const canvas = canvasRef.current;
-
     const ctx = canvas.getContext("2d");
-
     if (!ctx) return;
 
     canvas.width = 640;
@@ -157,7 +150,6 @@ function App() {
         if (!blob) return;
 
         const jpegBytes = await blob.arrayBuffer();
-
         sendFramePacket(jpegBytes);
       },
       "image/jpeg",
@@ -187,7 +179,6 @@ function App() {
     view.setUint32(0, metadataBytes.length, false);
 
     packet.set(metadataBytes, 4);
-
     packet.set(new Uint8Array(jpegBytes), 4 + metadataBytes.length);
 
     wsRef.current.send(packet);
@@ -215,35 +206,32 @@ function App() {
             className="video-preview"
           />
 
-          <div
-            className="caption-overlay"
-            style={{
-              fontSize: `${fontSize}px`,
-            }}
-          >
-            {caption}
-          </div>
+          {showCaption && (
+            <div
+              className="caption-overlay"
+              style={{ fontSize: `${fontSize}px` }}
+            >
+              {caption}
+            </div>
+          )}
         </section>
 
         <aside className="control-panel">
           <h2>Server</h2>
 
           <label>Server URL</label>
-
           <input
             value={serverUrl}
             onChange={(e) => setServerUrl(e.target.value)}
           />
 
           <label>Session ID</label>
-
           <input
             value={sessionId}
             onChange={(e) => setSessionId(e.target.value)}
           />
 
           <label>Token</label>
-
           <input value={token} onChange={(e) => setToken(e.target.value)} />
 
           <button onClick={connectServer}>Connect</button>
@@ -253,7 +241,6 @@ function App() {
           <h2>Overlay</h2>
 
           <label>Font Size: {fontSize}px</label>
-
           <input
             type="range"
             min="20"
@@ -264,13 +251,24 @@ function App() {
 
           <hr />
 
-          <button
-            onClick={() => {
-              setFontSize(34);
-            }}
-          >
-            Reset Overlay
-          </button>
+          <h2>Caption</h2>
+
+          <div className="toggle-row">
+            <label className="toggle-switch">
+              <input
+                type="checkbox"
+                checked={showCaption}
+                onChange={(e) => setShowCaption(e.target.checked)}
+              />
+              <span className="slider" />
+            </label>
+
+            <span className="toggle-text">
+              {showCaption ? "Show Caption" : "Hide Caption"}
+            </span>
+          </div>
+
+          <button onClick={() => setFontSize(34)}>Reset Overlay</button>
         </aside>
       </main>
 
