@@ -11,7 +11,7 @@ from app.schemas import CaptionPrediction
 @dataclass(frozen=True, slots=True)
 class FrameForInference:
     frame_id: int
-    timestamp_ms: int | None
+    timestamp_ms: float | None
     image_rgb: np.ndarray
 
 

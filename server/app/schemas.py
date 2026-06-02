@@ -14,10 +14,21 @@ class StartMessage(BaseModel):
 
 class FrameMetadata(BaseModel):
     frame_id: int = Field(ge=0)
-    timestamp_ms: int | None = Field(default=None, ge=0)
+    timestamp_ms: float | None = Field(default=None, ge=0)
     width: int | None = Field(default=None, ge=1)
     height: int | None = Field(default=None, ge=1)
     format: Literal["jpeg", "jpg"] = "jpeg"
+    segment_id: str | None = None
+
+
+class SegmentStartMessage(BaseModel):
+    type: Literal["segment_start"]
+    segment_id: str
+
+
+class SegmentEndMessage(BaseModel):
+    type: Literal["segment_end"]
+    segment_id: str
 
 
 class WordCaption(BaseModel):
@@ -42,6 +53,7 @@ class CaptionEvent(BaseModel):
     words: list[WordCaption]
     is_final: bool
     latency_ms: float
+    segment_id: str | None = None
 
 
 class StatusEvent(BaseModel):
@@ -56,4 +68,3 @@ class ErrorEvent(BaseModel):
     session_id: str | None = None
     code: str
     message: str
-

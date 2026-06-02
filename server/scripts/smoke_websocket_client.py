@@ -15,17 +15,32 @@ async def main() -> None:
         await websocket.send(json.dumps({"type": "start", "width": 320, "height": 180, "fps": 8, "format": "jpeg"}))
         print(await websocket.recv())
 
+        segment_id = "smoke-word-1"
+        await websocket.send(json.dumps({"type": "segment_start", "segment_id": segment_id}))
+        print(await websocket.recv())
         for frame_id in range(5):
-            await websocket.send(build_frame_packet(_metadata(frame_id), _jpeg(frame_id)))
-            print(await websocket.recv())
+            await websocket.send(build_frame_packet(_metadata(frame_id, segment_id), _jpeg(frame_id)))
             await asyncio.sleep(0.12)
+        await websocket.send(json.dumps({"type": "segment_end", "segment_id": segment_id}))
+        for _ in range(4):
+            message = await websocket.recv()
+            print(message)
+            if '"type":"caption"' in message or '"type": "caption"' in message:
+                break
 
         await websocket.send(json.dumps({"type": "stop"}))
         print(await websocket.recv())
 
 
-def _metadata(frame_id: int) -> dict:
-    return {"frame_id": frame_id, "timestamp_ms": frame_id * 125, "width": 320, "height": 180, "format": "jpeg"}
+def _metadata(frame_id: int, segment_id: str) -> dict:
+    return {
+        "frame_id": frame_id,
+        "timestamp_ms": frame_id * 125,
+        "width": 320,
+        "height": 180,
+        "format": "jpeg",
+        "segment_id": segment_id,
+    }
 
 
 def _jpeg(frame_id: int) -> bytes:
@@ -39,4 +54,3 @@ def _jpeg(frame_id: int) -> bytes:
 
 if __name__ == "__main__":
     asyncio.run(main())
-

@@ -24,7 +24,7 @@ class MockKslModel:
     async def predict(self, frames: list[FrameForInference]) -> list[CaptionPrediction]:
         predictions: list[CaptionPrediction] = []
         for frame in frames:
-            start_ms = frame.timestamp_ms or 0
+            start_ms = int(frame.timestamp_ms or 0)
             end_ms = start_ms + 500
             predictions.append(
                 CaptionPrediction(
