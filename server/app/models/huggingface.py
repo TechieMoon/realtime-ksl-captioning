@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import importlib
+import importlib.machinery
 import importlib.util
 import inspect
 import sys
@@ -266,9 +267,22 @@ def _import_repo_module(model_dir: Path, module_name: str) -> ModuleType:
     if model_path in sys.path:
         sys.path.remove(model_path)
     sys.path.insert(0, model_path)
+
+    package_name = module_name.split(".", maxsplit=1)[0]
     for name in list(sys.modules):
-        if name == "model" or name.startswith("model."):
+        if name == package_name or name.startswith(f"{package_name}."):
             del sys.modules[name]
+
+    package_dir = model_dir / package_name
+    if package_dir.is_dir():
+        package = ModuleType(package_name)
+        package.__path__ = [str(package_dir)]  # type: ignore[attr-defined]
+        package.__package__ = package_name
+        spec = importlib.machinery.ModuleSpec(package_name, loader=None, is_package=True)
+        spec.submodule_search_locations = [str(package_dir)]
+        package.__spec__ = spec
+        sys.modules[package_name] = package
+
     return importlib.import_module(module_name)
 
 
