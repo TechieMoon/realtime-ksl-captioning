@@ -2,35 +2,33 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from typing import Any
 
 _MODEL_DIR = Path(__file__).resolve().parent
 if str(_MODEL_DIR) not in sys.path:
     sys.path.insert(0, str(_MODEL_DIR))
 
-from mediapipe_mvp import has_mediapipe_artifact, load_mediapipe_mvp
-from modeling import KslWordRecognizer, load_json, load_labels
+
+class EmptyKslRecognizer:
+    """Conservative fallback used when no trained MediaPipe artifact is present."""
+
+    def predict_one(self, frame: Any, timestamp_ms: int | None) -> dict:
+        return {"text": "", "words": [], "is_final": False}
 
 
-def load_model(model_dir: str, device: str) -> KslWordRecognizer:
-    """Load the YOLO-assisted VideoMAE KSL word recognition pipeline."""
+def load_model(model_dir: str, device: str) -> Any:
+    """Load the MediaPipe MVP KSL word recognition pipeline."""
 
     root = Path(model_dir)
-    if has_mediapipe_artifact(root):
+    if (root / "mediapipe_mvp.joblib").exists():
+        from mediapipe_mvp import load_mediapipe_mvp
+
         return load_mediapipe_mvp(root, device)
 
-    labels = load_labels(root / "labels.json")
-    preprocessor = load_json(root / "preprocessor_config.json", default={})
-    config = load_json(root / "model_config.json", default={})
-    return KslWordRecognizer(
-        model_dir=root,
-        labels=labels,
-        preprocessor=preprocessor,
-        config=config,
-        device=device,
-    )
+    return EmptyKslRecognizer()
 
 
-def predict(model: KslWordRecognizer, frames: list, timestamps_ms: list[int | None]) -> list[dict]:
+def predict(model: Any, frames: list, timestamps_ms: list[int | None]) -> list[dict]:
     """Return one word-level caption prediction per input RGB frame."""
 
     if len(frames) != len(timestamps_ms):

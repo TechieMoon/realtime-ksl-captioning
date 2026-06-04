@@ -195,29 +195,19 @@ The adapter supports two Hugging Face repo formats:
 
 The current model is an isolated-word classifier. It expects one word clip at a time, so the frontend records and sends one frame sequence per word.
 
-## Checked-In AI Model Package
+## Local AI Model Package
 
-This repository now includes a local Hugging Face-compatible model package in [ai_model](ai_model). It is intentionally inference-first: training can happen later, then the trained weights/config can be added behind the same `inference.py` contract.
-
-Local backend test with the checked-in model package:
-
-```powershell
-cd server
-$env:MODEL_BACKEND = "huggingface"
-$env:HF_MODEL_ID = "..\ai_model"
-$env:MODEL_DEVICE = "cpu"
-pytest tests/test_ai_model_contract.py tests/test_huggingface_adapter.py
-```
-
-Planned production direction:
+The checked-in [ai_model](ai_model) folder is kept only for the legacy
+MediaPipe MVP training/upload flow. The current end-to-end app loads the team
+word-classifier model from Hugging Face:
 
 ```text
-Webcam video -> YOLO/ROI detection -> VideoMAE-style temporal classifier -> KSL word captions
-Microphone audio -> Whisper/faster-whisper ASR -> speech captions
-Caption manager -> merge by timestamps -> overlay / virtual camera output
+Seoyoung07/korean-sign-word-classifier-mediapipe
 ```
 
-The current AI package covers the KSL model contract and conservative real-time inference scaffold. Audio ASR and caption merging can be added as separate backend/client tasks without changing this model contract.
+Unused CTC/gloss decoder code is not part of this GitHub repository. The old
+untrained YOLO/VideoMAE scaffold was also removed so the repo only keeps model
+paths that are actually exercised.
 
 ## Training
 

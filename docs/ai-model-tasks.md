@@ -63,7 +63,7 @@ Prediction output:
 - Return an empty text or low confidence when the sign is unknown.
 - Prefer stable word output over rapid flickering predictions.
 - Track latency per frame; first demo target is under 150 ms inference time on RTX3090 for one frame.
-- The current MediaPipe MVP runs mostly on CPU and benchmarks around 112 ms/frame on the development machine; a later VideoMAE/torch model can use RTX3090 more directly.
+- The current production path is the Hugging Face isolated-word MediaPipe classifier. Keep unused decoder or translation scaffolds out of the GitHub repo unless they are trained and wired into the backend.
 
 ## Packaging Notes
 

@@ -27,9 +27,6 @@ def main() -> None:
         (model_card, "README.md"),
         (AI_MODEL_DIR / "inference.py", "inference.py"),
         (AI_MODEL_DIR / "mediapipe_mvp.py", "mediapipe_mvp.py"),
-        (AI_MODEL_DIR / "modeling.py", "modeling.py"),
-        (AI_MODEL_DIR / "model_config.json", "model_config.json"),
-        (AI_MODEL_DIR / "preprocessor_config.json", "preprocessor_config.json"),
         (AI_MODEL_DIR / "requirements.txt", "requirements.txt"),
     ]
     for local_path, repo_path in files:
