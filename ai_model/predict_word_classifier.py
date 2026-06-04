@@ -8,7 +8,7 @@ from typing import Any
 import numpy as np
 import torch
 
-from .config import KeypointCTCConfig
+from .config import WordClassifierConfig
 from .keypoint_extractor import HolisticExtractorConfig, HolisticKeypointExtractor
 from .word_classifier import WordKeypointClassifier
 from .word_dataset import _fit_length
@@ -40,7 +40,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--task-model-path",
-        default="model/assets/holistic_landmarker.task",
+        default="ai_model/assets/holistic_landmarker.task",
         help="MediaPipe HolisticLandmarker .task path.",
     )
     parser.add_argument("--target-fps", type=float, default=15.0)
@@ -97,7 +97,7 @@ def load_model(
 ) -> tuple[WordKeypointClassifier, dict[str, int], dict[str, Any]]:
     checkpoint = torch.load(checkpoint_path, map_location=device)
     label_to_id = checkpoint["label_to_id"]
-    config = KeypointCTCConfig(**checkpoint["config"])
+    config = WordClassifierConfig.from_dict(checkpoint["config"])
     model = WordKeypointClassifier(len(label_to_id), config=config)
     model.load_state_dict(checkpoint["model_state"])
     model.to(device).eval()

@@ -25,5 +25,6 @@ build/
 *.pdf
 ai_model/*.joblib
 ai_model/assets/*.task
+!ai_model/assets/holistic_landmarker.task
 ai_model/metrics*.json
 training/runs/

@@ -1,4 +1,7 @@
-from dataclasses import dataclass
+from __future__ import annotations
+
+from dataclasses import dataclass, fields
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -31,11 +34,9 @@ class SignKeypointLayout:
 
 
 @dataclass
-class KeypointCTCConfig:
+class WordClassifierConfig:
     num_keypoints: int = 115
     input_features: int = 16
-    gloss_vocab_size: int = 1000
-    blank_id: int = 0
     d_model: int = 256
     spatial_layers: int = 2
     temporal_layers: int = 4
@@ -43,20 +44,10 @@ class KeypointCTCConfig:
     dim_feedforward: int = 1024
     dropout: float = 0.1
     max_frames: int = 512
-    use_causal_temporal_mask: bool = False
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "WordClassifierConfig":
+        """Load current config while ignoring legacy CTC-only checkpoint keys."""
 
-@dataclass
-class Gloss2TextConfig:
-    gloss_vocab_size: int = 1000
-    text_vocab_size: int = 8000
-    pad_id: int = 0
-    bos_id: int = 1
-    eos_id: int = 2
-    d_model: int = 256
-    num_layers: int = 4
-    num_heads: int = 4
-    dim_feedforward: int = 1024
-    dropout: float = 0.1
-    max_gloss_len: int = 128
-    max_text_len: int = 128
+        allowed = {field.name for field in fields(cls)}
+        return cls(**{key: value for key, value in data.items() if key in allowed})

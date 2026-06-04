@@ -3,11 +3,11 @@ from __future__ import annotations
 import torch
 from torch import Tensor, nn
 
-from .config import KeypointCTCConfig, SignKeypointLayout
-from .keypoint_ctc import (
+from .config import SignKeypointLayout, WordClassifierConfig
+from .transformer_blocks import (
     AttentionPooling,
     SinusoidalPositionalEncoding,
-    _lengths_to_padding_mask,
+    lengths_to_padding_mask,
 )
 from .preprocessing import KeypointPreprocessor, build_part_ids
 
@@ -18,11 +18,11 @@ class WordKeypointClassifier(nn.Module):
     def __init__(
         self,
         num_classes: int,
-        config: KeypointCTCConfig | None = None,
+        config: WordClassifierConfig | None = None,
         layout: SignKeypointLayout | None = None,
     ) -> None:
         super().__init__()
-        self.config = config or KeypointCTCConfig()
+        self.config = config or WordClassifierConfig()
         self.layout = layout or SignKeypointLayout()
         self.preprocessor = KeypointPreprocessor(self.layout)
 
@@ -93,7 +93,7 @@ class WordKeypointClassifier(nn.Module):
         x = self.frame_pool(x)
         x = self.temporal_position(x)
 
-        padding_mask = _lengths_to_padding_mask(lengths, num_frames)
+        padding_mask = lengths_to_padding_mask(lengths, num_frames)
         x = self.temporal_encoder(x, src_key_padding_mask=padding_mask)
         x = self.clip_pool(x, keypoint_mask=padding_mask)
         return self.classifier(x)

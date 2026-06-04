@@ -9,7 +9,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from .config import KeypointCTCConfig
+from .config import WordClassifierConfig
 from .word_classifier import WordKeypointClassifier
 from .word_dataset import (
     WordKeypointDataset,
@@ -138,11 +138,10 @@ def main() -> None:
     save_vocab(label_to_id, output_dir / "label_to_id.json")
 
     if resume_checkpoint is not None:
-        config = KeypointCTCConfig(**resume_checkpoint["config"])
+        config = WordClassifierConfig.from_dict(resume_checkpoint["config"])
         start_epoch = int(resume_checkpoint["epoch"]) + 1
     else:
-        config = KeypointCTCConfig(
-            gloss_vocab_size=len(label_to_id),
+        config = WordClassifierConfig(
             d_model=args.d_model,
             spatial_layers=args.spatial_layers,
             temporal_layers=args.temporal_layers,

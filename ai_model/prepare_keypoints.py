@@ -16,7 +16,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--split-root", required=True, help="ex: 1.Training or 2.Validation")
     parser.add_argument("--cache-root", default="keypoint_cache")
     parser.add_argument("--manifest-out", required=True)
-    parser.add_argument("--task-model-path", default="model/assets/holistic_landmarker.task")
+    parser.add_argument("--task-model-path", default="ai_model/assets/holistic_landmarker.task")
     parser.add_argument("--target-fps", type=float, default=15.0)
     parser.add_argument("--max-frames", type=int, default=None)
     parser.add_argument("--limit", type=int, default=None)

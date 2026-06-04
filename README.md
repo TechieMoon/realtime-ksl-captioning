@@ -197,23 +197,24 @@ The current model is an isolated-word classifier. It expects one word clip at a 
 
 ## Local AI Model Package
 
-The checked-in [ai_model](ai_model) folder is kept only for the legacy
-MediaPipe MVP training/upload flow. The current end-to-end app loads the team
-word-classifier model from Hugging Face:
+The checked-in [ai_model](ai_model) folder now contains the legacy MediaPipe MVP
+runtime plus the teammate's isolated-word classifier training utilities. The
+current end-to-end app loads the team word-classifier model from Hugging Face:
 
 ```text
 Seoyoung07/korean-sign-word-classifier-mediapipe
 ```
 
-Unused CTC/gloss decoder code is not part of this GitHub repository. The old
-untrained YOLO/VideoMAE scaffold was also removed so the repo only keeps model
-paths that are actually exercised.
+The top-level `model/` folder was intentionally merged into `ai_model/` and
+removed. Unused CTC/gloss decoder files were also removed because the current
+word classifier was not trained with CTC. For local word-classifier training or
+single-video prediction, see [ai_model/README.md](ai_model/README.md).
 
 ## Training
 
-Training code lives in [training/README.md](training/README.md). AIHub dataset zip files and trained model artifacts are intentionally not tracked in GitHub.
+Legacy MediaPipe MVP training code lives in [training/README.md](training/README.md). The isolated-word keypoint classifier utilities live in [ai_model/README.md](ai_model/README.md). AIHub dataset zip files and trained model artifacts are intentionally not tracked in GitHub.
 
-The training script prints validation accuracy and a per-class report automatically, then writes `ai_model/mediapipe_mvp.joblib` for Hugging Face upload. It also writes `ai_model/metrics_mediapipe_mvp.json`, which should be uploaded to Hugging Face with the model artifact but not committed to GitHub.
+The legacy training script prints validation accuracy and a per-class report automatically, then writes `ai_model/mediapipe_mvp.joblib` for Hugging Face upload. It also writes `ai_model/metrics_mediapipe_mvp.json`, which should be uploaded to Hugging Face with the model artifact but not committed to GitHub.
 
 For a class-presentation model that uses the full downloaded AIHub training and validation splits:
 
