@@ -4,6 +4,7 @@ import "./App.css";
 const FRAME_WIDTH = 640;
 const FRAME_HEIGHT = 360;
 const DEFAULT_FPS = 15;
+const DEFAULT_VIRTUAL_CAMERA_DEVICE = "/dev/video20";
 
 type ConnectionMode = "localhost" | "ip";
 
@@ -19,17 +20,164 @@ type RecordedFrame = {
   jpegBytes: ArrayBuffer;
 };
 
+function isEditableTarget(target: EventTarget | null) {
+  return (
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLSelectElement ||
+    target instanceof HTMLTextAreaElement
+  );
+}
+
+function compactCaptionText(text: string) {
+  return text.replace(/\s+/g, " ").trim();
+}
+
+function appendWordToCaption(lines: string[], word: string) {
+  const next = lines.length > 0 ? [...lines] : [""];
+  const lastIndex = next.length - 1;
+  next[lastIndex] = compactCaptionText(
+    [next[lastIndex], word].filter(Boolean).join(" "),
+  );
+  return next.slice(-2);
+}
+
+function moveToNextSentence(lines: string[]) {
+  const next = lines.length > 0 ? [...lines] : [""];
+  if (next.length >= 2) {
+    return [next[1], ""];
+  }
+  return [next[0], ""];
+}
+
+function visibleCaptionLines(lines: string[]) {
+  return lines.map(compactCaptionText).filter(Boolean).slice(-2);
+}
+
+function buildFramePacket(metadata: RecordedFrame["metadata"], jpegBytes: ArrayBuffer) {
+  const metadataBytes = new TextEncoder().encode(JSON.stringify(metadata));
+  const packet = new Uint8Array(4 + metadataBytes.length + jpegBytes.byteLength);
+  const view = new DataView(packet.buffer);
+  view.setUint32(0, metadataBytes.length, false);
+  packet.set(metadataBytes, 4);
+  packet.set(new Uint8Array(jpegBytes), 4 + metadataBytes.length);
+  return packet;
+}
+
+function drawContainedVideo(
+  ctx: CanvasRenderingContext2D,
+  video: HTMLVideoElement,
+  width: number,
+  height: number,
+) {
+  ctx.fillStyle = "#000000";
+  ctx.fillRect(0, 0, width, height);
+
+  const sourceWidth = video.videoWidth || width;
+  const sourceHeight = video.videoHeight || height;
+  const scale = Math.min(width / sourceWidth, height / sourceHeight);
+  const drawWidth = sourceWidth * scale;
+  const drawHeight = sourceHeight * scale;
+  const x = (width - drawWidth) / 2;
+  const y = (height - drawHeight) / 2;
+  ctx.drawImage(video, x, y, drawWidth, drawHeight);
+}
+
+function wrapCanvasText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number,
+) {
+  const words = text.split(" ").filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (ctx.measureText(candidate).width <= maxWidth) {
+      current = candidate;
+      continue;
+    }
+    if (current) {
+      lines.push(current);
+    }
+    if (ctx.measureText(word).width <= maxWidth) {
+      current = word;
+      continue;
+    }
+
+    let chunk = "";
+    for (const char of Array.from(word)) {
+      const chunkCandidate = `${chunk}${char}`;
+      if (ctx.measureText(chunkCandidate).width <= maxWidth) {
+        chunk = chunkCandidate;
+      } else {
+        if (chunk) lines.push(chunk);
+        chunk = char;
+      }
+    }
+    current = chunk;
+  }
+
+  if (current) lines.push(current);
+  return lines;
+}
+
+function drawCaptionText(
+  ctx: CanvasRenderingContext2D,
+  captionLines: string[],
+  width: number,
+  height: number,
+  requestedFontSize: number,
+) {
+  const lines = visibleCaptionLines(captionLines);
+  if (lines.length === 0) return;
+
+  const maxWidth = width * 0.88;
+  let fontSize = Math.min(requestedFontSize, 44);
+  ctx.font = `900 ${fontSize}px Inter, Arial, sans-serif`;
+  let wrapped = lines.flatMap((line) => wrapCanvasText(ctx, line, maxWidth));
+  wrapped = wrapped.slice(-4);
+  if (wrapped.length === 0) return;
+
+  fontSize = Math.min(fontSize, Math.floor((height * 0.3) / (wrapped.length * 1.25)));
+  fontSize = Math.max(18, fontSize);
+  const lineHeight = fontSize * 1.25;
+  ctx.font = `900 ${fontSize}px Inter, Arial, sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = "#000000";
+  ctx.lineWidth = Math.max(5, fontSize * 0.13);
+  ctx.fillStyle = "#ffffff";
+
+  const totalHeight = wrapped.length * lineHeight;
+  const firstY = height - Math.max(38, height * 0.11) - totalHeight + lineHeight / 2;
+  wrapped.forEach((line, index) => {
+    const y = firstY + index * lineHeight;
+    ctx.strokeText(line, width / 2, y, maxWidth);
+    ctx.fillText(line, width / 2, y, maxWidth);
+  });
+}
+
 function App() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const virtualCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const virtualWsRef = useRef<WebSocket | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const recordTimerRef = useRef<number | null>(null);
+  const virtualTimerRef = useRef<number | null>(null);
   const recordedFramesRef = useRef<RecordedFrame[]>([]);
   const currentSegmentIdRef = useRef<string>("");
   const frameIdRef = useRef(0);
+  const virtualFrameIdRef = useRef(0);
+  const virtualFrameSendingRef = useRef(false);
+  const captionLinesRef = useRef<string[]>([""]);
+  const fontSizeRef = useRef(34);
 
-  const [caption, setCaption] = useState("연결 대기 중");
+  const [captionLines, setCaptionLines] = useState<string[]>([""]);
+  const [recognitionStatus, setRecognitionStatus] = useState("자막 대기");
   const [connected, setConnected] = useState(false);
   const [recording, setRecording] = useState(false);
   const [sending, setSending] = useState(false);
@@ -49,16 +197,49 @@ function App() {
   const [sessionId, setSessionId] = useState("demo-1");
   const [token, setToken] = useState("");
   const [serverStatus, setServerStatus] = useState("서버 미연결");
+  const [virtualCameraDevice, setVirtualCameraDevice] = useState(
+    DEFAULT_VIRTUAL_CAMERA_DEVICE,
+  );
+  const [virtualCameraConnected, setVirtualCameraConnected] = useState(false);
+  const [virtualCameraStatus, setVirtualCameraStatus] =
+    useState("가상카메라 미연결");
+
+  const resolvedServerHost = useMemo(
+    () => (connectionMode === "localhost" ? "localhost" : serverHost.trim()),
+    [connectionMode, serverHost],
+  );
+
+  const resolvedServerPort = useMemo(
+    () => serverPort.trim() || "8000",
+    [serverPort],
+  );
 
   const serverUrl = useMemo(() => {
-    const host =
-      connectionMode === "localhost" ? "localhost" : serverHost.trim();
     const params = new URLSearchParams({ session_id: sessionId.trim() });
     if (token.trim()) {
       params.set("token", token.trim());
     }
-    return `ws://${host || "localhost"}:${serverPort.trim() || "8000"}/ws/captions?${params.toString()}`;
-  }, [connectionMode, serverHost, serverPort, sessionId, token]);
+    return `ws://${resolvedServerHost || "localhost"}:${resolvedServerPort}/ws/captions?${params.toString()}`;
+  }, [resolvedServerHost, resolvedServerPort, sessionId, token]);
+
+  const virtualCameraUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      session_id: `${sessionId.trim() || "demo-1"}-virtual-camera`,
+    });
+    if (token.trim()) {
+      params.set("token", token.trim());
+    }
+    if (virtualCameraDevice.trim()) {
+      params.set("device", virtualCameraDevice.trim());
+    }
+    return `ws://${resolvedServerHost || "localhost"}:${resolvedServerPort}/ws/virtual-camera?${params.toString()}`;
+  }, [
+    resolvedServerHost,
+    resolvedServerPort,
+    sessionId,
+    token,
+    virtualCameraDevice,
+  ]);
 
   const refreshDevices = useCallback(async () => {
     if (!navigator.mediaDevices?.enumerateDevices) return;
@@ -70,6 +251,13 @@ function App() {
     if (recordTimerRef.current !== null) {
       window.clearInterval(recordTimerRef.current);
       recordTimerRef.current = null;
+    }
+  }, []);
+
+  const stopVirtualCameraTimer = useCallback(() => {
+    if (virtualTimerRef.current !== null) {
+      window.clearInterval(virtualTimerRef.current);
+      virtualTimerRef.current = null;
     }
   }, []);
 
@@ -111,17 +299,54 @@ function App() {
     const ws = wsRef.current;
     if (!ws || ws.readyState !== WebSocket.OPEN) return;
 
-    const metadataBytes = new TextEncoder().encode(
-      JSON.stringify(frame.metadata),
-    );
-    const packet = new Uint8Array(
-      4 + metadataBytes.length + frame.jpegBytes.byteLength,
-    );
-    const view = new DataView(packet.buffer);
-    view.setUint32(0, metadataBytes.length, false);
-    packet.set(metadataBytes, 4);
-    packet.set(new Uint8Array(frame.jpegBytes), 4 + metadataBytes.length);
-    ws.send(packet);
+    ws.send(buildFramePacket(frame.metadata, frame.jpegBytes));
+  }, []);
+
+  const sendVirtualCameraFrame = useCallback(async () => {
+    const ws = virtualWsRef.current;
+    const video = videoRef.current;
+    const canvas = virtualCanvasRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN || !video || !canvas) return;
+    if (virtualFrameSendingRef.current) return;
+    if (video.readyState < video.HAVE_CURRENT_DATA) return;
+
+    virtualFrameSendingRef.current = true;
+    try {
+      canvas.width = FRAME_WIDTH;
+      canvas.height = FRAME_HEIGHT;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      drawContainedVideo(ctx, video, FRAME_WIDTH, FRAME_HEIGHT);
+      drawCaptionText(
+        ctx,
+        captionLinesRef.current,
+        FRAME_WIDTH,
+        FRAME_HEIGHT,
+        fontSizeRef.current,
+      );
+
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob(resolve, "image/jpeg", 0.86);
+      });
+      if (!blob || ws.readyState !== WebSocket.OPEN) return;
+
+      ws.send(
+        buildFramePacket(
+          {
+            frame_id: virtualFrameIdRef.current++,
+            timestamp_ms: Math.round(performance.now()),
+            width: FRAME_WIDTH,
+            height: FRAME_HEIGHT,
+            format: "jpeg",
+            segment_id: "virtual-camera",
+          },
+          await blob.arrayBuffer(),
+        ),
+      );
+    } finally {
+      virtualFrameSendingRef.current = false;
+    }
   }, []);
 
   const captureFrame = useCallback(async () => {
@@ -163,7 +388,7 @@ function App() {
     currentSegmentIdRef.current = segmentId;
     setRecordedFrames(0);
     setRecording(true);
-    setCaption("녹화 중");
+    setRecognitionStatus("녹화 중");
     void captureFrame();
     recordTimerRef.current = window.setInterval(
       () => void captureFrame(),
@@ -181,12 +406,12 @@ function App() {
     if (!ws || ws.readyState !== WebSocket.OPEN || !segmentId) return;
     const frames = [...recordedFramesRef.current];
     if (frames.length === 0) {
-      setCaption("프레임 없음");
+      setRecognitionStatus("프레임 없음");
       return;
     }
 
     setSending(true);
-    setCaption("전송 중");
+    setRecognitionStatus("전송 중");
     ws.send(JSON.stringify({ type: "segment_start", segment_id: segmentId }));
     frames.forEach(sendFramePacket);
     ws.send(JSON.stringify({ type: "segment_end", segment_id: segmentId }));
@@ -228,7 +453,13 @@ function App() {
       try {
         const data = JSON.parse(event.data);
         if (data.type === "caption") {
-          setCaption(data.text || "결과 없음");
+          const word = compactCaptionText(data.text || "");
+          if (word) {
+            setCaptionLines((current) => appendWordToCaption(current, word));
+            setRecognitionStatus(`인식: ${word}`);
+          } else {
+            setRecognitionStatus("결과 없음");
+          }
           setSending(false);
           if (data.latency_ms) {
             setLatency(Math.round(data.latency_ms));
@@ -238,7 +469,7 @@ function App() {
           setServerStatus(data.status);
         }
         if (data.type === "error") {
-          setCaption(data.message || data.code);
+          setRecognitionStatus(data.message || data.code);
           setServerStatus(data.code);
           setSending(false);
         }
@@ -268,33 +499,123 @@ function App() {
     wsRef.current?.close();
   }, []);
 
+  const connectVirtualCamera = useCallback(() => {
+    if (virtualWsRef.current) {
+      virtualWsRef.current.close();
+    }
+
+    const ws = new WebSocket(virtualCameraUrl);
+    ws.binaryType = "arraybuffer";
+    setVirtualCameraStatus("가상카메라 연결 중");
+
+    ws.onopen = () => {
+      setVirtualCameraConnected(true);
+      setVirtualCameraStatus("가상카메라 연결됨");
+      virtualFrameIdRef.current = 0;
+      ws.send(
+        JSON.stringify({
+          type: "start",
+          width: FRAME_WIDTH,
+          height: FRAME_HEIGHT,
+          fps,
+          format: "jpeg",
+          client_name: "virtual-camera-client",
+        }),
+      );
+      void sendVirtualCameraFrame();
+      virtualTimerRef.current = window.setInterval(
+        () => void sendVirtualCameraFrame(),
+        Math.round(1000 / fps),
+      );
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === "status") {
+          setVirtualCameraStatus(data.status);
+        }
+        if (data.type === "error") {
+          setVirtualCameraStatus(data.message || data.code);
+          stopVirtualCameraTimer();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    ws.onclose = () => {
+      stopVirtualCameraTimer();
+      setVirtualCameraConnected(false);
+      setVirtualCameraStatus("가상카메라 미연결");
+    };
+
+    ws.onerror = (err) => {
+      console.error(err);
+      setVirtualCameraStatus("가상카메라 오류");
+    };
+
+    virtualWsRef.current = ws;
+  }, [fps, sendVirtualCameraFrame, stopVirtualCameraTimer, virtualCameraUrl]);
+
+  const disconnectVirtualCamera = useCallback(() => {
+    const ws = virtualWsRef.current;
+    if (ws?.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: "stop" }));
+    }
+    ws?.close();
+  }, []);
+
+  const startNewSentence = useCallback(() => {
+    setCaptionLines((current) => moveToNextSentence(current));
+  }, []);
+
+  const clearCaptions = useCallback(() => {
+    setCaptionLines([""]);
+    setRecognitionStatus("자막 대기");
+  }, []);
+
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void startWebcam(selectedDeviceId);
   }, [selectedDeviceId, startWebcam]);
 
   useEffect(() => {
+    captionLinesRef.current = captionLines;
+  }, [captionLines]);
+
+  useEffect(() => {
+    fontSizeRef.current = fontSize;
+  }, [fontSize]);
+
+  useEffect(() => {
     return () => {
       stopRecordingTimer();
+      stopVirtualCameraTimer();
       wsRef.current?.close();
+      virtualWsRef.current?.close();
       stopWebcam();
     };
-  }, [stopRecordingTimer, stopWebcam]);
+  }, [stopRecordingTimer, stopVirtualCameraTimer, stopWebcam]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const target = event.target;
-      const isEditing =
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLSelectElement ||
-        target instanceof HTMLTextAreaElement;
-      if (event.code !== "Space" || isEditing) return;
-      event.preventDefault();
-      toggleRecording();
+      if (isEditableTarget(event.target)) return;
+      if (event.code === "Space") {
+        event.preventDefault();
+        toggleRecording();
+      }
+      if (event.code === "Enter") {
+        event.preventDefault();
+        startNewSentence();
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [toggleRecording]);
+  }, [startNewSentence, toggleRecording]);
+
+  const displayCaptionLines = visibleCaptionLines(captionLines);
 
   return (
     <div className="app">
@@ -305,6 +626,7 @@ function App() {
         <div>Latency: {latency}ms</div>
         <div>FPS: {fps}</div>
         <div>Frames: {recordedFrames}</div>
+        <div>Virtual: {virtualCameraConnected ? "On" : "Off"}</div>
       </header>
 
       <main className="main-layout">
@@ -327,7 +649,11 @@ function App() {
               fontSize: `${fontSize}px`,
             }}
           >
-            {caption}
+            {displayCaptionLines.map((line, index) => (
+              <span className="caption-line" key={`${index}-${line}`}>
+                {line}
+              </span>
+            ))}
           </div>
         </section>
 
@@ -410,6 +736,34 @@ function App() {
           </section>
 
           <section className="control-section">
+            <h2>Virtual Camera</h2>
+
+            <label htmlFor="virtual-camera-device">Device</label>
+            <input
+              id="virtual-camera-device"
+              value={virtualCameraDevice}
+              onChange={(event) => setVirtualCameraDevice(event.target.value)}
+            />
+
+            <div className="button-row">
+              <button
+                onClick={connectVirtualCamera}
+                disabled={virtualCameraConnected}
+              >
+                Start
+              </button>
+              <button
+                onClick={disconnectVirtualCamera}
+                disabled={!virtualCameraConnected}
+              >
+                Stop
+              </button>
+            </div>
+
+            <div className="field-note">{virtualCameraStatus}</div>
+          </section>
+
+          <section className="control-section">
             <h2>Capture</h2>
 
             <label htmlFor="fps">FPS: {fps}</label>
@@ -445,12 +799,26 @@ function App() {
               onChange={(event) => setFontSize(Number(event.target.value))}
             />
 
+            <div className="button-row">
+              <button onClick={startNewSentence}>New Line</button>
+              <button onClick={clearCaptions}>Clear</button>
+            </div>
+
             <button onClick={() => setFontSize(34)}>Reset Overlay</button>
+
+            <div className="caption-buffer" aria-live="polite">
+              {displayCaptionLines.map((line, index) => (
+                <div key={`${index}-${line}`}>{line}</div>
+              ))}
+            </div>
+
+            <div className="field-note">{recognitionStatus}</div>
           </section>
         </aside>
       </main>
 
       <canvas ref={canvasRef} className="hidden-canvas" />
+      <canvas ref={virtualCanvasRef} className="hidden-canvas" />
     </div>
   );
 }

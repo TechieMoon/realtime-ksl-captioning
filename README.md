@@ -12,8 +12,9 @@ Desktop client webcam
   -> FastAPI backend on localhost or LAN host
   -> Mock or Hugging Face-loaded KSL word classifier
   -> WebSocket caption events
-  -> Desktop client overlay preview
-  -> OBS Virtual Camera
+  -> Desktop client overlay preview and overlay canvas
+  -> Backend virtual-camera WebSocket
+  -> v4l2loopback virtual webcam device
   -> Zoom / Google Meet
 ```
 
@@ -72,7 +73,12 @@ The frontend has a webcam dropdown and two server host modes:
 - `localhost`: use this when frontend and backend run on the same computer.
 - `IP address`: use this when the backend is on another computer in the same LAN.
 
-Connect to the server first, then record one isolated word segment at a time. Press Space once to start recording a word and press Space again to stop recording and send that frame sequence to the backend.
+Connect to the server first, then record one isolated word segment at a time.
+Press Space once to start recording a word and press Space again to stop
+recording and send that frame sequence to the backend. Predicted words are
+appended to the current caption sentence with spaces. Press Enter to start the
+next sentence. The overlay keeps at most two sentences; when a third sentence is
+started, the older first sentence is removed and the second sentence moves up.
 
 ## Local End-to-End Test
 
@@ -124,8 +130,53 @@ show `Connected` and the server status should show `session_started`.
 
 To test one word: click outside text inputs, press Space to start recording,
 perform one sign word, then press Space again to stop and send the frame
-sequence. The prediction appears as the video overlay caption. For a connection
-smoke test without the real model, start the backend with `MODEL_BACKEND=mock`.
+sequence. The prediction is appended to the video overlay caption. Press Enter
+to move to the next sentence. For a connection smoke test without the real
+model, start the backend with `MODEL_BACKEND=mock`.
+
+## Zoom Virtual Camera Test
+
+The browser cannot create a selectable OS webcam device by itself. For Zoom or
+Google Meet, the frontend draws the webcam and two-line caption overlay into a
+hidden canvas, sends those JPEG frames to the backend, and the backend writes
+them to a local v4l2loopback virtual webcam.
+
+On Ubuntu, prepare a virtual webcam device:
+
+```bash
+cd realtime-ksl-captioning
+cd server
+source .venv/bin/activate
+pip install -r requirements.txt
+cd ..
+./scripts/setup_virtual_camera_ubuntu.sh
+```
+
+The default device is:
+
+```text
+/dev/video20
+```
+
+Start backend and frontend as in the local end-to-end test. In the frontend:
+
+1. Connect the caption server.
+2. Keep `Virtual Camera` device as `/dev/video20`.
+3. Click `Start` in the `Virtual Camera` section.
+4. Open Zoom and select `KSL Caption Camera` as the camera.
+
+If Zoom does not show the virtual camera, run:
+
+```bash
+v4l2-ctl --list-devices
+```
+
+If `/dev/video20` exists but the backend cannot open it, confirm your user is in
+the `video` group and log out/in after group changes:
+
+```bash
+groups
+```
 
 ## Local Network Test
 
@@ -292,10 +343,19 @@ Caption event:
 }
 ```
 
+Virtual camera endpoint:
+
+```text
+ws://<server-host>:8000/ws/virtual-camera?session_id=<unique-session-id>&device=/dev/video20
+```
+
+It uses the same `start` message and binary JPEG packet format. The JPEG frames
+should already contain the final video image with captions drawn into it.
+
 ## Team Tasks
 
 - Backend: `server/` FastAPI backend, WebSocket protocol, model adapter, GPU server runtime.
-- Frontend client: webcam selection, isolated-word frame sequence capture, caption overlay, OBS Virtual Camera MVP. See [docs/frontend-client-tasks.md](docs/frontend-client-tasks.md).
+- Frontend client: webcam selection, isolated-word frame sequence capture, rolling two-sentence caption overlay, virtual-camera frame streaming. See [docs/frontend-client-tasks.md](docs/frontend-client-tasks.md).
 - AI model: KSL word recognition model, Hugging Face repo packaging, `inference.py` contract. See [docs/ai-model-tasks.md](docs/ai-model-tasks.md).
 
 ## Tests

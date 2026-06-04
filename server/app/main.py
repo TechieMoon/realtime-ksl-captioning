@@ -5,10 +5,15 @@ from fastapi import FastAPI, Response, WebSocket
 
 from app.config import Settings, get_settings
 from app.models import KslModelAdapter, build_model_adapter
+from app.virtual_camera import VirtualCameraSinkFactory, handle_virtual_camera_socket
 from app.ws import handle_caption_socket
 
 
-def create_app(settings: Settings | None = None, model_adapter: KslModelAdapter | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None,
+    model_adapter: KslModelAdapter | None = None,
+    virtual_camera_sink_factory: VirtualCameraSinkFactory | None = None,
+) -> FastAPI:
     app_settings = settings or get_settings()
     adapter = model_adapter or build_model_adapter(app_settings)
 
@@ -54,8 +59,20 @@ def create_app(settings: Settings | None = None, model_adapter: KslModelAdapter 
             model=adapter,
         )
 
+    @app.websocket("/ws/virtual-camera")
+    async def virtual_camera(websocket: WebSocket) -> None:
+        session_id = websocket.query_params.get("session_id")
+        if not session_id:
+            await websocket.close(code=1008, reason="session_id query parameter is required")
+            return
+        await handle_virtual_camera_socket(
+            websocket,
+            session_id=session_id,
+            settings=app_settings,
+            sink_factory=virtual_camera_sink_factory,
+        )
+
     return app
 
 
 app = create_app()
-

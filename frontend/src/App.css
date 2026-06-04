@@ -102,6 +102,9 @@ select {
   left: 50%;
   transform: translateX(-50%);
   width: min(86%, 960px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   color: #ffffff;
   font-weight: 900;
   line-height: 1.25;
@@ -115,6 +118,14 @@ select {
     -2px 2px 0 #000000,
     2px 2px 0 #000000,
     0 3px 8px rgba(0, 0, 0, 0.62);
+}
+
+.caption-overlay:empty {
+  display: none;
+}
+
+.caption-line {
+  display: block;
 }
 
 .control-panel {
@@ -227,6 +238,22 @@ select {
   color: #64748b;
   font-size: 12px;
   overflow-wrap: anywhere;
+}
+
+.caption-buffer {
+  min-height: 56px;
+  padding: 10px;
+  border: 1px solid #c8d0dc;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #111827;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.caption-buffer:empty {
+  display: none;
 }
 
 .hidden-canvas {
