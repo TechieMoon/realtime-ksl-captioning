@@ -4,6 +4,292 @@ Real-Time Word-Level Korean Sign Language Captioning System for Video Conferenci
 
 이 프로젝트는 농인 사용자의 노트북에서 webcam 영상을 서버로 보내고, 서버에서 Korean Sign Language 단어 자막을 생성한 뒤, 클라이언트가 자막을 webcam preview 위에 overlay해서 Zoom/Google Meet에 전달하는 MVP입니다.
 
+## Submission Contents For TA Review
+
+- [Execution Environment](#execution-environment)
+- [How To Run](#how-to-run)
+- [Reproducibility Scope](#reproducibility-scope)
+- [AI Tools Used](#ai-tools-used)
+- [Baseline Sources And Existing Components](#baseline-sources-and-existing-components)
+- [TA / AI Agent Quickstart](#ta--ai-agent-quickstart)
+
+## Execution Environment
+
+Tested local environment:
+
+- OS: Ubuntu 24.04-class Linux environment
+- Python: 3.12.3
+- Node.js: 20.20.2
+- npm: 10.8.2
+- GPU used for reported evaluation runs: NVIDIA RTX 3090 with CUDA-enabled PyTorch
+- CPU-only inference is supported by setting `MODEL_DEVICE=cpu` or `MODEL_DEVICE=auto`, but it is slower.
+
+Backend requirements are in [server/requirements.txt](server/requirements.txt). Key tested backend library versions:
+
+| Package | Tested version | Requirement range |
+|---|---:|---|
+| `fastapi` | 0.136.3 | `>=0.115,<1.0` |
+| `huggingface-hub` | 0.36.2 | `>=0.25,<1.0` |
+| `mediapipe` | 0.10.35 | `>=0.10.35,<1.0` |
+| `numpy` | 2.4.6 | `>=2.0,<3.0` |
+| `opencv-python-headless` | 4.13.0.92 | `>=4.10,<5.0` |
+| `pillow` | 11.3.0 | `>=10.4,<12.0` |
+| `pydantic-settings` | 2.14.1 | `>=2.4,<3.0` |
+| `pyvirtualcam` | 0.15.0 | `>=0.12,<1.0` |
+| `torch` | 2.12.0 | `>=2.3,<3.0` |
+| `uvicorn` | 0.48.0 | `>=0.30,<1.0` |
+
+Frontend requirements are in [frontend/package.json](frontend/package.json). Important frontend dependencies:
+
+- React 19
+- Vite 8
+- TypeScript 6
+- Node.js `>=20.19.0`
+
+The setup helper is:
+
+```bash
+./scripts/setup_ubuntu.sh
+```
+
+It creates `server/.venv`, installs backend dependencies, copies `server/.env.example` to `server/.env` if needed, verifies Node.js 20.19+, and installs frontend dependencies.
+
+## How To Run
+
+### 1. Install And Set Up
+
+```bash
+git clone https://github.com/TechieMoon/realtime-ksl-captioning.git
+cd realtime-ksl-captioning
+
+sudo apt update
+sudo apt install -y git curl python3-venv
+
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+./scripts/setup_ubuntu.sh
+```
+
+### 2. Run Backend
+
+Real model mode:
+
+```bash
+cd realtime-ksl-captioning/server
+source .venv/bin/activate
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Expected health checks:
+
+```bash
+curl http://localhost:8000/healthz
+curl http://localhost:8000/readyz
+```
+
+Expected output shape:
+
+```json
+{"status":"ok","service":"realtime-ksl-captioning"}
+```
+
+`/readyz` should report `model_backend` as `huggingface` and `status` as `ready`.
+
+Mock connectivity mode:
+
+```bash
+cd realtime-ksl-captioning/server
+source .venv/bin/activate
+MODEL_BACKEND=mock uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+In another terminal:
+
+```bash
+cd realtime-ksl-captioning/server
+source .venv/bin/activate
+python scripts/smoke_websocket_client.py
+```
+
+Expected mock smoke output includes a `caption` event with text `안녕하세요`.
+
+### 3. Run Frontend
+
+```bash
+cd realtime-ksl-captioning/frontend
+npm run dev -- --host 0.0.0.0 --port 5173
+```
+
+Open:
+
+```text
+http://localhost:5173
+```
+
+Use the webcam dropdown, keep server mode as `localhost`, set port `8000`, and click `Connect`.
+
+Word capture controls:
+
+- `Space`: start one isolated-word recording.
+- `Space`: stop recording and send that word segment to the backend.
+- `Enter`: move to the next caption sentence.
+- The overlay keeps at most two caption sentences.
+
+### 4. Reproduce Evaluation Results
+
+The trained model weights are public on Hugging Face:
+
+```text
+https://huggingface.co/Seoyoung07/korean-sign-word-classifier-mediapipe
+```
+
+The evaluation datasets are public on Hugging Face:
+
+```text
+https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-test-100
+https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-self-made-60
+```
+
+Download the evaluation datasets:
+
+```bash
+cd realtime-ksl-captioning
+
+server/.venv/bin/python - <<'PY'
+from huggingface_hub import snapshot_download
+
+snapshot_download(
+    repo_id="Seoyoung07/korean-sign-word-classifier-mediapipe-test-100",
+    repo_type="dataset",
+    local_dir="data/hf-test-100",
+)
+
+snapshot_download(
+    repo_id="Seoyoung07/korean-sign-word-classifier-mediapipe-self-made-60",
+    repo_type="dataset",
+    local_dir="data/hf-self-made-60",
+)
+PY
+```
+
+Run Test-100 evaluation:
+
+```bash
+cd realtime-ksl-captioning
+server/.venv/bin/python scripts/evaluate_video_folder.py \
+  data/hf-test-100/videos \
+  --output-dir reports/reproduced-test100 \
+  --device auto \
+  --top-k 5
+```
+
+Expected aggregate output:
+
+```text
+top1=60/100 top5=71/100 errors=0
+```
+
+Run Self-made-60 evaluation:
+
+```bash
+cd realtime-ksl-captioning
+server/.venv/bin/python scripts/evaluate_video_folder.py \
+  data/hf-self-made-60/videos \
+  --output-dir reports/reproduced-self-made-60 \
+  --device auto \
+  --top-k 5
+```
+
+Expected aggregate output:
+
+```text
+top1=5/60 top5=7/60 errors=0
+```
+
+The committed reference reports are:
+
+- [reports/test100/README.md](reports/test100/README.md)
+- [reports/self-made-60/README.md](reports/self-made-60/README.md)
+- [docs/huggingface-datasets.md](docs/huggingface-datasets.md)
+
+### 5. Run Zoom Virtual Camera Demo
+
+```bash
+cd realtime-ksl-captioning
+./scripts/setup_virtual_camera_ubuntu.sh
+```
+
+Then run backend and frontend, click `Virtual Camera` `Start` in the frontend, and select `KSL Caption Camera` in Zoom.
+
+## Reproducibility Scope
+
+This submission supports end-to-end inference and evaluation reproduction, not full training-from-scratch reproduction.
+
+What can be reproduced after downloading this repo:
+
+- Backend startup with mock model and real Hugging Face model.
+- Frontend webcam word-capture workflow.
+- Localhost end-to-end inference from webcam to caption.
+- Optional Zoom virtual camera output on Ubuntu with `v4l2loopback`.
+- Test-100 evaluation result: Top-1 `60 / 100`, Top-5 `71 / 100`, errors `0`.
+- Self-made-60 evaluation result: Top-1 `5 / 60`, Top-5 `7 / 60`, errors `0`.
+
+What is intentionally not fully reproduced from scratch:
+
+- Full training of the epoch-41 checkpoint.
+
+Reason:
+
+- The model was trained on Korean sign-language video data from AIHub. The raw AIHub training data is not redistributed in this GitHub repo because it is large and subject to AIHub access/license terms.
+- The full local keypoint cache used during continued training was also large and machine-local, so it is not committed to GitHub.
+- Full training would require separate AIHub dataset access, significant storage, MediaPipe keypoint extraction time, and GPU training time.
+
+Accepted reproducibility artifact for this submission:
+
+- Trained model weights on Hugging Face.
+- Public evaluation datasets on Hugging Face.
+- Inference and evaluation code in this GitHub repo.
+- Committed evaluation reports and machine-readable CSV/JSON files.
+
+Therefore, the submitted reproducible result is the inference/evaluation result for the uploaded weights on the two public evaluation datasets, not the complete training process from raw AIHub videos.
+
+## AI Tools Used
+
+- AI tool used: Codex.
+
+Where Codex was used:
+
+- Backend/frontend implementation support.
+- WebSocket protocol and virtual-camera implementation support.
+- Local debugging and test execution support.
+- Evaluation script updates and result report generation.
+- Hugging Face model/dataset upload packaging support.
+- README and TA runbook documentation support.
+
+Codex was not used to create the training videos or to generate model labels. The evaluation videos are real MP4 files, and model predictions are produced by the submitted Hugging Face checkpoint and the repository inference code.
+
+## Baseline Sources And Existing Components
+
+This project does not include a separate comparison baseline experiment. The submitted result is the current MediaPipe-keypoint word-classifier inference/evaluation pipeline.
+
+Existing components used:
+
+- MediaPipe Holistic Landmarker is used for the first-stage keypoint extraction from video frames. It combines pose, face, and hand landmarking for full-body landmark extraction. See the official Google AI Edge MediaPipe Holistic Landmarker documentation: https://ai.google.dev/edge/mediapipe/solutions/vision/holistic_landmarker
+- MediaPipe framework source/documentation: https://github.com/google-ai-edge/mediapipe
+- Hugging Face Hub is used for trained model and evaluation dataset distribution. Dataset upload/documentation follows Hugging Face dataset repository conventions: https://huggingface.co/docs/hub/en/datasets-adding
+- Current model repo: https://huggingface.co/Seoyoung07/korean-sign-word-classifier-mediapipe
+
+The neural classifier is trained on extracted keypoint sequences, not raw RGB frames. The current inference wrapper performs:
+
+```text
+MP4 video
+-> MediaPipe Holistic Landmarker keypoint extraction
+-> [T, 115, 4] keypoint sequence
+-> PyTorch word classifier
+-> Korean word prediction
+```
+
 ## TA / AI Agent Quickstart
 
 조교가 새 Ubuntu 컴퓨터에서 바로 실행할 때는 이 순서대로 진행하면 됩니다.
@@ -435,11 +721,17 @@ single-video prediction, see [ai_model/README.md](ai_model/README.md).
 
 ## Training
 
-Legacy MediaPipe MVP training code lives in [training/README.md](training/README.md). The isolated-word keypoint classifier utilities live in [ai_model/README.md](ai_model/README.md). AIHub dataset zip files and trained model artifacts are intentionally not tracked in GitHub.
+This section is kept for legacy and optional training context. It is not the
+reproducibility path for the submitted epoch-41 Hugging Face checkpoint. For
+grading, use the inference/evaluation commands in [How To Run](#how-to-run) and
+the scope described in [Reproducibility Scope](#reproducibility-scope).
+
+Legacy MediaPipe MVP training code lives in [training/README.md](training/README.md). The isolated-word keypoint classifier utilities live in [ai_model/README.md](ai_model/README.md). AIHub dataset zip files, local keypoint caches, and trained model artifacts are intentionally not tracked in GitHub.
 
 The legacy training script prints validation accuracy and a per-class report automatically, then writes `ai_model/mediapipe_mvp.joblib` for Hugging Face upload. It also writes `ai_model/metrics_mediapipe_mvp.json`, which should be uploaded to Hugging Face with the model artifact but not committed to GitHub.
 
-For a class-presentation model that uses the full downloaded AIHub training and validation splits:
+For historical local experiments with the full downloaded AIHub training and
+validation splits:
 
 ```powershell
 $env:KSL_DATA_ROOT = "D:\수어 영상"
