@@ -11,15 +11,18 @@ if ! command -v "${PYTHON_BIN}" >/dev/null 2>&1; then
   exit 1
 fi
 
+PYTHON_VERSION="$("${PYTHON_BIN}" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
+VENV_PACKAGE="python${PYTHON_VERSION}-venv"
+
 if ! "${PYTHON_BIN}" -m venv --help >/dev/null 2>&1; then
   echo "[setup] python venv support is missing."
-  echo "[setup] On Ubuntu, run: sudo apt update && sudo apt install python3.12-venv"
+  echo "[setup] On Ubuntu, run: sudo apt update && sudo apt install python3-venv ${VENV_PACKAGE}"
   exit 1
 fi
 
 if ! "${PYTHON_BIN}" -m ensurepip --version >/dev/null 2>&1; then
   echo "[setup] python ensurepip is missing."
-  echo "[setup] On Ubuntu, run: sudo apt update && sudo apt install python3.12-venv"
+  echo "[setup] On Ubuntu, run: sudo apt update && sudo apt install python3-venv ${VENV_PACKAGE}"
   exit 1
 fi
 
@@ -58,3 +61,4 @@ npm install
 echo "[setup] done"
 echo "[setup] backend: cd ${ROOT_DIR}/server && source .venv/bin/activate && uvicorn app.main:app --host 0.0.0.0 --port 8000"
 echo "[setup] frontend: cd ${ROOT_DIR}/frontend && npm run dev -- --host 0.0.0.0 --port 5173"
+echo "[setup] health: curl http://localhost:8000/healthz"

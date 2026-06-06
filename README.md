@@ -4,6 +4,152 @@ Real-Time Word-Level Korean Sign Language Captioning System for Video Conferenci
 
 이 프로젝트는 농인 사용자의 노트북에서 webcam 영상을 서버로 보내고, 서버에서 Korean Sign Language 단어 자막을 생성한 뒤, 클라이언트가 자막을 webcam preview 위에 overlay해서 Zoom/Google Meet에 전달하는 MVP입니다.
 
+## TA / AI Agent Quickstart
+
+조교가 새 Ubuntu 컴퓨터에서 바로 실행할 때는 이 순서대로 진행하면 됩니다.
+더 자세한 요구사항, 검증 명령, 문제 해결은 [docs/ta-runbook.md](docs/ta-runbook.md)를 참고하세요.
+
+### 1. Requirements
+
+- Ubuntu 22.04/24.04 권장
+- Python 3.10 이상, `python3-venv`, `pip`
+- Node.js 20.19 이상
+- Webcam이 연결된 Chrome/Chromium 계열 브라우저
+- 인터넷 연결: Python/npm 패키지 설치 및 Hugging Face 모델 다운로드용
+- 실제 모델 실행 시 Hugging Face repo 접근 권한
+  - public repo이면 token 없이 실행 가능
+  - private repo이면 read token을 `server/.env`의 `HF_TOKEN`에 넣어야 함
+- Zoom virtual camera 테스트 시 Linux `v4l2loopback` 지원 필요
+- CUDA GPU는 선택사항입니다. 없으면 `MODEL_DEVICE=cpu` 또는 `auto`로 CPU 실행이 가능합니다.
+
+### 2. Fresh Clone Setup
+
+```bash
+git clone https://github.com/TechieMoon/realtime-ksl-captioning.git
+cd realtime-ksl-captioning
+
+# Ubuntu에서 venv 패키지가 없다면 먼저 설치
+sudo apt update
+sudo apt install -y python3-venv curl git
+
+# Node.js 20.19+ 필요. node -v가 20.19 미만이면 설치
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+./scripts/setup_ubuntu.sh
+```
+
+`scripts/setup_ubuntu.sh`는 다음 작업을 수행합니다.
+
+- `server/.venv` 생성
+- backend dependency 설치
+- `server/.env.example`을 `server/.env`로 복사
+- Node.js version 확인
+- frontend dependency 설치
+
+### 3. Start Backend
+
+Terminal 1:
+
+```bash
+cd realtime-ksl-captioning/server
+source .venv/bin/activate
+
+# 실모델 기본값: MODEL_BACKEND=huggingface
+# GPU가 없으면 server/.env에서 MODEL_DEVICE=cpu 또는 auto로 둡니다.
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Backend가 켜진 뒤 다른 터미널에서 확인:
+
+```bash
+curl http://localhost:8000/healthz
+curl http://localhost:8000/readyz
+```
+
+실모델 다운로드나 Hugging Face 권한 문제를 배제하고 WebSocket만 먼저 확인하려면:
+
+```bash
+cd realtime-ksl-captioning/server
+source .venv/bin/activate
+MODEL_BACKEND=mock uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+### 4. Start Frontend
+
+Terminal 2:
+
+```bash
+cd realtime-ksl-captioning/frontend
+npm run dev -- --host 0.0.0.0 --port 5173
+```
+
+Open:
+
+```text
+http://localhost:5173
+```
+
+Frontend 설정:
+
+- Webcam dropdown에서 사용할 카메라 선택
+- Server Host Mode: `localhost`
+- Host/IP: `127.0.0.1`
+- Port: `8000`
+- `Connect` 클릭
+
+사용법:
+
+- `Space`: 단어 녹화 시작
+- 수어 단어 수행
+- `Space`: 단어 녹화 종료 및 backend 전송
+- 예측 단어가 자막에 append됨
+- `Enter`: 다음 문장 시작
+- 자막은 최대 두 문장 유지
+
+### 5. Zoom Virtual Camera
+
+Zoom에서 자막 overlay 영상을 카메라로 선택하려면 Ubuntu에서 가상 카메라를 준비합니다.
+
+```bash
+cd realtime-ksl-captioning
+./scripts/setup_virtual_camera_ubuntu.sh
+```
+
+로그아웃/로그인 또는 `newgrp video`가 필요할 수 있습니다. 그 다음:
+
+1. Backend와 frontend를 실행합니다.
+2. Frontend에서 caption server에 `Connect`합니다.
+3. `Virtual Camera` device를 `/dev/video20`으로 둡니다.
+4. `Virtual Camera` 섹션의 `Start`를 누릅니다.
+5. Zoom에서 `KSL Caption Camera`를 선택합니다.
+
+### 6. Verification Commands
+
+```bash
+# Backend unit tests
+cd realtime-ksl-captioning/server
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+pytest
+
+# Backend compile check
+cd realtime-ksl-captioning
+server/.venv/bin/python -m compileall server/app server/tests server/scripts scripts
+
+# Frontend checks
+cd realtime-ksl-captioning/frontend
+npm run lint
+npm run build
+```
+
+Latest local Test-100 report:
+
+- [reports/test100/test100_report_20260606_171322_ko.md](reports/test100/test100_report_20260606_171322_ko.md)
+- Top-1: 60 / 100
+- Top-5: 71 / 100
+- Inference errors: 0
+
 ## Architecture
 
 ```text
@@ -18,15 +164,16 @@ Desktop client webcam
   -> Zoom / Google Meet
 ```
 
-Hugging Face는 실시간 inference 서버가 아닙니다. AI 팀원이 모델을 Hugging Face Hub에 업로드하면, 백엔드 서버가 해당 repo를 다운로드하고 RTX3090에서 직접 실행합니다.
+Hugging Face는 실시간 inference 서버가 아닙니다. AI 팀원이 모델을 Hugging Face Hub에 업로드하면, 백엔드 서버가 해당 repo를 다운로드하고 로컬 CPU/GPU에서 직접 실행합니다.
 
 ## Backend Quickstart
 
-```powershell
-cd server
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+```bash
+cd realtime-ksl-captioning/server
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements-dev.txt
+cp -n .env.example .env
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -39,8 +186,17 @@ GET http://localhost:8000/readyz
 
 Smoke test:
 
-```powershell
-cd server
+```bash
+cd realtime-ksl-captioning/server
+source .venv/bin/activate
+MODEL_BACKEND=mock uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+In another terminal:
+
+```bash
+cd realtime-ksl-captioning/server
+source .venv/bin/activate
 python scripts/smoke_websocket_client.py
 ```
 
@@ -182,23 +338,25 @@ groups
 
 서버 컴퓨터와 클라이언트 컴퓨터를 따로 두고 테스트할 때는 두 컴퓨터가 같은 Wi-Fi 또는 같은 LAN에 있어야 합니다.
 
-On the RTX3090 server computer:
+On the backend server computer:
 
-```powershell
+```bash
 cd server
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 Find the server computer's local IPv4 address:
 
-```powershell
-ipconfig
+```bash
+hostname -I
+# or
+ip -4 addr
 ```
 
 Example:
 
 ```text
-IPv4 Address . . . . . . . . . . . : 192.168.0.25
+192.168.0.25
 ```
 
 From the client computer, open this health check first:
@@ -224,18 +382,18 @@ If the health check fails:
 
 Default mode still uses the mock model for backend tests:
 
-```powershell
-$env:MODEL_BACKEND = "mock"
+```bash
+MODEL_BACKEND=mock uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 For the current Hugging Face word-classifier model:
 
-```powershell
-$env:MODEL_BACKEND = "huggingface"
-$env:HF_MODEL_ID = "Seoyoung07/korean-sign-word-classifier-mediapipe"
-$env:HF_MODEL_REVISION = "main"
-$env:MODEL_DEVICE = "cpu"
-$env:HF_TOKEN = "<optional-private-model-token>"
+```bash
+export MODEL_BACKEND=huggingface
+export HF_MODEL_ID=Seoyoung07/korean-sign-word-classifier-mediapipe
+export HF_MODEL_REVISION=main
+export MODEL_DEVICE=auto
+# export HF_TOKEN=<optional-private-model-read-token>
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
