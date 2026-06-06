@@ -150,6 +150,13 @@ Latest local Test-100 report:
 - Top-5: 71 / 100
 - Inference errors: 0
 
+Latest self-made-60 report:
+
+- [reports/self-made-60/README.md](reports/self-made-60/README.md)
+- Top-1: 5 / 60
+- Top-5: 7 / 60
+- Inference errors: 0
+
 ## Architecture
 
 ```text
