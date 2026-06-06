@@ -157,6 +157,13 @@ Latest self-made-60 report:
 - Top-5: 7 / 60
 - Inference errors: 0
 
+Public Hugging Face evaluation datasets:
+
+- [Test-100 dataset](https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-test-100)
+- [Self-made-60 dataset](https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-self-made-60)
+- Upload and verification notes: [docs/huggingface-datasets.md](docs/huggingface-datasets.md)
+- AI tool used: Codex
+
 ## Architecture
 
 ```text

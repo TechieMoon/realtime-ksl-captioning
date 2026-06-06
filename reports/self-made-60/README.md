@@ -2,6 +2,12 @@
 
 This folder contains the evaluation report for 60 newly recorded self-made videos.
 
+## Hugging Face Dataset
+
+- Public dataset URL: https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-self-made-60
+- Upload commit: `9e11d935526a54994d8f33e56649213fafa02057`
+- AI tool used: Codex
+
 ## Summary
 
 - Input folder used for evaluation: `/home/moon/Downloads/self-made-60`
