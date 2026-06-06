@@ -22,6 +22,7 @@ from app.models.huggingface import _import_repo_module, _select_torch_device  # 
 
 
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".avi", ".mkv", ".webm"}
+DEFAULT_LABEL_ALIASES = {"꺠끗하다": "깨끗하다"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -33,6 +34,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--target-fps", type=float, default=15.0)
     parser.add_argument("--top-k", type=int, default=5)
+    parser.add_argument(
+        "--label-alias",
+        action="append",
+        default=[],
+        help="Expected-label alias in RAW=CANONICAL format. Can be repeated.",
+    )
+    parser.add_argument(
+        "--disable-default-label-aliases",
+        action="store_true",
+        help="Do not apply built-in filename typo aliases such as 꺠끗하다=깨끗하다.",
+    )
     return parser.parse_args()
 
 
@@ -51,6 +63,8 @@ def main() -> None:
     csv_path = args.output_dir / f"test100_results_{timestamp}.csv"
     json_path = args.output_dir / f"test100_results_{timestamp}.json"
     md_path = args.output_dir / f"test100_report_{timestamp}.md"
+    ko_md_path = args.output_dir / f"test100_report_{timestamp}_ko.md"
+    label_aliases = build_label_aliases(args)
 
     snapshot = Path(snapshot_download(repo_id=args.repo_id, revision=args.revision))
     module = _import_repo_module(snapshot, "model.predict_word_classifier")
@@ -69,13 +83,16 @@ def main() -> None:
     started_at = time.perf_counter()
     try:
         for index, video_path in enumerate(videos, start=1):
-            expected = video_path.stem
-            print(f"[{index}/{len(videos)}] {expected}", flush=True)
+            expected_raw = video_path.stem
+            expected = normalize_label(expected_raw, label_aliases)
+            print(f"[{index}/{len(videos)}] {expected_raw}", flush=True)
             item_start = time.perf_counter()
             row: dict[str, Any] = {
                 "index": index,
                 "file": str(video_path),
+                "expected_raw": expected_raw,
                 "expected": expected,
+                "label_alias_applied": expected_raw != expected,
                 "expected_in_vocab": expected in label_to_id,
                 "predicted": "",
                 "confidence": None,
@@ -119,14 +136,16 @@ def main() -> None:
         extractor.close()
 
     total_elapsed = round(time.perf_counter() - started_at, 3)
-    summary = build_summary(results, args, snapshot, total_elapsed)
+    summary = build_summary(results, args, snapshot, checkpoint, label_aliases, total_elapsed)
     write_json(json_path, summary, results)
     write_csv(csv_path, results)
     write_markdown(md_path, summary, results)
+    write_markdown_ko(ko_md_path, summary, results)
 
     print(f"wrote {json_path}")
     print(f"wrote {csv_path}")
     print(f"wrote {md_path}")
+    print(f"wrote {ko_md_path}")
     print(
         f"top1={summary['top1_correct']}/{summary['total']} "
         f"top5={summary['topk_contains_expected']}/{summary['total']} "
@@ -138,6 +157,8 @@ def build_summary(
     results: list[dict[str, Any]],
     args: argparse.Namespace,
     snapshot: Path,
+    checkpoint: dict[str, Any],
+    label_aliases: dict[str, str],
     total_elapsed: float,
 ) -> dict[str, Any]:
     total = len(results)
@@ -151,9 +172,18 @@ def build_summary(
         "repo_id": args.repo_id,
         "revision": args.revision,
         "snapshot": str(snapshot),
+        "checkpoint_epoch": checkpoint.get("epoch"),
+        "checkpoint_val_acc": checkpoint.get("val_acc"),
+        "checkpoint_best_acc": checkpoint.get("best_acc"),
         "device": args.device,
         "target_fps": args.target_fps,
         "top_k": args.top_k,
+        "label_aliases": label_aliases,
+        "alias_applied": [
+            {"raw": row["expected_raw"], "canonical": row["expected"]}
+            for row in results
+            if row["label_alias_applied"]
+        ],
         "total": total,
         "top1_correct": top1_correct,
         "top1_accuracy": round(top1_correct / total, 4) if total else 0,
@@ -163,6 +193,26 @@ def build_summary(
         "missing_vocab": missing_vocab,
         "elapsed_sec": total_elapsed,
     }
+
+
+def build_label_aliases(args: argparse.Namespace) -> dict[str, str]:
+    aliases: dict[str, str] = {}
+    if not args.disable_default_label_aliases:
+        aliases.update(DEFAULT_LABEL_ALIASES)
+    for item in args.label_alias:
+        if "=" not in item:
+            raise ValueError(f"Invalid --label-alias value, expected RAW=CANONICAL: {item}")
+        raw, canonical = item.split("=", 1)
+        raw = raw.strip()
+        canonical = canonical.strip()
+        if not raw or not canonical:
+            raise ValueError(f"Invalid --label-alias value, expected RAW=CANONICAL: {item}")
+        aliases[raw] = canonical
+    return aliases
+
+
+def normalize_label(label: str, aliases: dict[str, str]) -> str:
+    return aliases.get(label, label)
 
 
 def write_json(path: Path, summary: dict[str, Any], results: list[dict[str, Any]]) -> None:
@@ -178,7 +228,9 @@ def write_csv(path: Path, results: list[dict[str, Any]]) -> None:
             output,
             fieldnames=[
                 "index",
+                "expected_raw",
                 "expected",
+                "label_alias_applied",
                 "predicted",
                 "confidence",
                 "top1_correct",
@@ -212,6 +264,8 @@ def write_markdown(path: Path, summary: dict[str, Any], results: list[dict[str, 
         f"- Input directory: `{summary['input_dir']}`",
         f"- Model: `{summary['repo_id']}`",
         f"- Snapshot: `{Path(summary['snapshot']).name}`",
+        f"- Checkpoint epoch: `{summary['checkpoint_epoch']}`",
+        f"- Checkpoint validation accuracy: `{summary['checkpoint_val_acc']}`",
         f"- Device: `{summary['device']}`",
         f"- Target FPS: `{summary['target_fps']}`",
         f"- Total videos: **{summary['total']}**",
@@ -221,6 +275,16 @@ def write_markdown(path: Path, summary: dict[str, Any], results: list[dict[str, 
         f"- Total elapsed: **{summary['elapsed_sec']} sec**",
         "",
     ]
+    if summary["alias_applied"]:
+        alias_text = ", ".join(
+            f"`{item['raw']}` -> `{item['canonical']}`" for item in summary["alias_applied"]
+        )
+        lines += [
+            "## Expected Label Normalization",
+            "",
+            f"Applied aliases: {alias_text}",
+            "",
+        ]
     if summary["missing_vocab"]:
         lines += [
             "## Labels Not Found In Model Vocabulary",
@@ -232,7 +296,7 @@ def write_markdown(path: Path, summary: dict[str, Any], results: list[dict[str, 
     lines += [
         "## Top-1 Correct Words",
         "",
-        ", ".join(f"`{row['expected']}`" for row in correct) if correct else "None",
+        ", ".join(format_expected_label(row) for row in correct) if correct else "None",
         "",
         "## Top-1 Failures",
         "",
@@ -245,7 +309,7 @@ def write_markdown(path: Path, summary: dict[str, Any], results: list[dict[str, 
             f"{candidate['label']} ({candidate['probability']:.4f})" for candidate in row["top_k"]
         )
         lines.append(
-            f"| {row['index']} | {row['expected']} | {row['predicted']} | {confidence} | {top_k} | {row['error']} |"
+            f"| {row['index']} | {format_expected_label(row)} | {row['predicted']} | {confidence} | {top_k} | {row['error']} |"
         )
 
     lines += [
@@ -258,12 +322,104 @@ def write_markdown(path: Path, summary: dict[str, Any], results: list[dict[str, 
     for row in results:
         confidence = "" if row["confidence"] is None else f"{row['confidence']:.4f}"
         lines.append(
-            f"| {row['index']} | {row['expected']} | {row['predicted']} | "
+            f"| {row['index']} | {format_expected_label(row)} | {row['predicted']} | "
             f"{'OK' if row['top1_correct'] else 'FAIL'} | "
             f"{'OK' if row['topk_contains_expected'] else 'FAIL'} | "
             f"{confidence} | {row['input_frames'] or ''} | `{Path(row['file']).name}` |"
         )
 
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def format_expected_label(row: dict[str, Any]) -> str:
+    if row.get("label_alias_applied"):
+        return f"`{row['expected_raw']}` -> `{row['expected']}`"
+    return f"`{row['expected']}`"
+
+
+def write_markdown_ko(path: Path, summary: dict[str, Any], results: list[dict[str, Any]]) -> None:
+    correct = [row for row in results if row["top1_correct"]]
+    failed = [row for row in results if not row["top1_correct"]]
+    topk_only = [row for row in failed if row["topk_contains_expected"]]
+    lines = [
+        "# Test-100 수어 단어 모델 평가 보고서",
+        "",
+        "## 요약",
+        "",
+        f"- 평가 일시: `{summary['created_at']}`",
+        f"- 테스트 폴더: `{summary['input_dir']}`",
+        f"- 모델: `{summary['repo_id']}`",
+        f"- 모델 스냅샷: `{Path(summary['snapshot']).name}`",
+        f"- 체크포인트 epoch: `{summary['checkpoint_epoch']}`",
+        f"- 체크포인트 validation accuracy: `{summary['checkpoint_val_acc']}`",
+        f"- 실행 장치: `{summary['device']}`",
+        f"- 입력 영상 수: **{summary['total']}개**",
+        f"- Top-1 정답: **{summary['top1_correct']} / {summary['total']}개** ({summary['top1_accuracy'] * 100:.2f}%)",
+        f"- Top-{summary['top_k']} 안에 정답 포함: **{summary['topk_contains_expected']} / {summary['total']}개** ({summary['topk_accuracy'] * 100:.2f}%)",
+        f"- Top-1 오답: **{len(failed)}개**",
+        f"- 추론 에러: **{summary['errors']}개**",
+        f"- 총 평가 시간: **{summary['elapsed_sec']}초**",
+        "",
+    ]
+    if summary["alias_applied"]:
+        alias_text = ", ".join(
+            f"`{item['raw']}` -> `{item['canonical']}`" for item in summary["alias_applied"]
+        )
+        lines += [
+            "## 정답 라벨 정규화",
+            "",
+            f"- 적용한 alias: {alias_text}",
+            "- 파일명 오타 또는 표기 차이만 있는 경우 canonical 라벨 기준으로 정답 여부를 계산했습니다.",
+            "",
+        ]
+    if summary["missing_vocab"]:
+        lines += [
+            "## 모델 vocabulary에 없는 정답 라벨",
+            "",
+            ", ".join(f"`{label}`" for label in summary["missing_vocab"]),
+            "",
+        ]
+    lines += [
+        "## 맞은 단어 Top-1 기준",
+        "",
+        f"총 {len(correct)}개: "
+        + (", ".join(format_expected_label(row) for row in correct) if correct else "없음"),
+        "",
+        "## 틀린 단어 Top-1 기준",
+        "",
+        f"총 {len(failed)}개입니다. 아래 표에서 `Top-{summary['top_k']} 후보`에 정답이 들어간 경우는 모델의 1순위는 틀렸지만 후보 안에는 정답이 있었던 항목입니다.",
+        "",
+        f"| # | 정답 | 예측 1순위 | confidence | Top-{summary['top_k']} 후보 |",
+        "|---:|---|---|---:|---|",
+    ]
+    for row in failed:
+        confidence = "" if row["confidence"] is None else f"{row['confidence']:.4f}"
+        top_k = ", ".join(
+            f"{candidate['label']} ({candidate['probability']:.4f})" for candidate in row["top_k"]
+        )
+        lines.append(
+            f"| {row['index']} | {format_expected_label(row)} | {row['predicted']} | {confidence} | {top_k} |"
+        )
+    lines += [
+        "",
+        f"## Top-1은 틀렸지만 Top-{summary['top_k']} 안에 정답이 있었던 단어",
+        "",
+        f"총 {len(topk_only)}개: "
+        + (", ".join(format_expected_label(row) for row in topk_only) if topk_only else "없음"),
+        "",
+        "## 전체 결과",
+        "",
+        f"| # | 정답 | 예측 1순위 | Top-1 | Top-{summary['top_k']} | confidence | 추출 프레임 | 파일 |",
+        "|---:|---|---|---|---|---:|---:|---|",
+    ]
+    for row in results:
+        confidence = "" if row["confidence"] is None else f"{row['confidence']:.4f}"
+        lines.append(
+            f"| {row['index']} | {format_expected_label(row)} | {row['predicted']} | "
+            f"{'정답' if row['top1_correct'] else '오답'} | "
+            f"{'포함' if row['topk_contains_expected'] else '미포함'} | "
+            f"{confidence} | {row['input_frames'] or ''} | `{Path(row['file']).name}` |"
+        )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

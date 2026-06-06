@@ -1,0 +1,4834 @@
+{
+  "summary": {
+    "created_at": "2026-06-06T17:16:04",
+    "input_dir": "/home/moon/Downloads/Test-100",
+    "repo_id": "Seoyoung07/korean-sign-word-classifier-mediapipe",
+    "revision": "main",
+    "snapshot": "/home/moon/.cache/huggingface/hub/models--Seoyoung07--korean-sign-word-classifier-mediapipe/snapshots/f7f31077b55c4aa6e64ba58d2db42af03fa93dbe",
+    "checkpoint_epoch": 41,
+    "checkpoint_val_acc": 0.8962213765938981,
+    "checkpoint_best_acc": 0.8962213765938981,
+    "device": "cuda",
+    "target_fps": 15.0,
+    "top_k": 5,
+    "label_aliases": {
+      "꺠끗하다": "깨끗하다"
+    },
+    "alias_applied": [
+      {
+        "raw": "꺠끗하다",
+        "canonical": "깨끗하다"
+      }
+    ],
+    "total": 100,
+    "top1_correct": 60,
+    "top1_accuracy": 0.6,
+    "topk_contains_expected": 71,
+    "topk_accuracy": 0.71,
+    "errors": 0,
+    "missing_vocab": [],
+    "elapsed_sec": 160.319
+  },
+  "results": [
+    {
+      "index": 1,
+      "file": "/home/moon/Downloads/Test-100/간호사.mp4",
+      "expected_raw": "간호사",
+      "expected": "간호사",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "간호사",
+      "confidence": 0.9996203184127808,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "간호사",
+          "label_id": 43,
+          "probability": 0.9996203184127808
+        },
+        {
+          "rank": 2,
+          "label": "키다리",
+          "label_id": 2684,
+          "probability": 0.00020125019364058971
+        },
+        {
+          "rank": 3,
+          "label": "예술가",
+          "label_id": 1893,
+          "probability": 0.00010644728899933398
+        },
+        {
+          "rank": 4,
+          "label": "취객",
+          "label_id": 2614,
+          "probability": 1.1568165973585565e-05
+        },
+        {
+          "rank": 5,
+          "label": "이심전심",
+          "label_id": 2145,
+          "probability": 8.588806849729735e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 2.353,
+      "error": ""
+    },
+    {
+      "index": 2,
+      "file": "/home/moon/Downloads/Test-100/갈등.mp4",
+      "expected_raw": "갈등",
+      "expected": "갈등",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "갈등",
+      "confidence": 0.2097097933292389,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "갈등",
+          "label_id": 44,
+          "probability": 0.2097097933292389
+        },
+        {
+          "rank": 2,
+          "label": "교제",
+          "label_id": 325,
+          "probability": 0.19820283353328705
+        },
+        {
+          "rank": 3,
+          "label": "여아",
+          "label_id": 1804,
+          "probability": 0.1734972596168518
+        },
+        {
+          "rank": 4,
+          "label": "표리부동",
+          "label_id": 2791,
+          "probability": 0.14491097629070282
+        },
+        {
+          "rank": 5,
+          "label": "이기주의",
+          "label_id": 2119,
+          "probability": 0.08543235063552856
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 48,
+      "effective_frames": 48,
+      "elapsed_sec": 1.453,
+      "error": ""
+    },
+    {
+      "index": 3,
+      "file": "/home/moon/Downloads/Test-100/갈색.mp4",
+      "expected_raw": "갈색",
+      "expected": "갈색",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "갈색",
+      "confidence": 0.7155948877334595,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "갈색",
+          "label_id": 45,
+          "probability": 0.7155948877334595
+        },
+        {
+          "rank": 2,
+          "label": "백삼십사",
+          "label_id": 1019,
+          "probability": 0.1294879913330078
+        },
+        {
+          "rank": 3,
+          "label": "100만원",
+          "label_id": 2,
+          "probability": 0.07411281764507294
+        },
+        {
+          "rank": 4,
+          "label": "벌꿀",
+          "label_id": 1103,
+          "probability": 0.019228268414735794
+        },
+        {
+          "rank": 5,
+          "label": "슬프다",
+          "label_id": 1565,
+          "probability": 0.00582763971760869
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 50,
+      "effective_frames": 50,
+      "elapsed_sec": 1.482,
+      "error": ""
+    },
+    {
+      "index": 4,
+      "file": "/home/moon/Downloads/Test-100/감기.mp4",
+      "expected_raw": "감기",
+      "expected": "감기",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "수상",
+      "confidence": 0.8308733105659485,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "수상",
+          "label_id": 1526,
+          "probability": 0.8308733105659485
+        },
+        {
+          "rank": 2,
+          "label": "콧물",
+          "label_id": 2674,
+          "probability": 0.07591678947210312
+        },
+        {
+          "rank": 3,
+          "label": "실토",
+          "label_id": 1613,
+          "probability": 0.03746098652482033
+        },
+        {
+          "rank": 4,
+          "label": "졸리다",
+          "label_id": 2365,
+          "probability": 0.013665575534105301
+        },
+        {
+          "rank": 5,
+          "label": "안산",
+          "label_id": 1681,
+          "probability": 0.011084423400461674
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 48,
+      "effective_frames": 48,
+      "elapsed_sec": 1.439,
+      "error": ""
+    },
+    {
+      "index": 5,
+      "file": "/home/moon/Downloads/Test-100/감동.mp4",
+      "expected_raw": "감동",
+      "expected": "감동",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "감동",
+      "confidence": 0.8948965072631836,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "감동",
+          "label_id": 50,
+          "probability": 0.8948965072631836
+        },
+        {
+          "rank": 2,
+          "label": "중요",
+          "label_id": 2413,
+          "probability": 0.0733989030122757
+        },
+        {
+          "rank": 3,
+          "label": "체감",
+          "label_id": 2554,
+          "probability": 0.007950801402330399
+        },
+        {
+          "rank": 4,
+          "label": "새파래지다",
+          "label_id": 1384,
+          "probability": 0.005454514175653458
+        },
+        {
+          "rank": 5,
+          "label": "8번째",
+          "label_id": 9,
+          "probability": 0.004382770974189043
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 56,
+      "effective_frames": 56,
+      "elapsed_sec": 1.664,
+      "error": ""
+    },
+    {
+      "index": 6,
+      "file": "/home/moon/Downloads/Test-100/거북선.mp4",
+      "expected_raw": "거북선",
+      "expected": "거북선",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "징검다리",
+      "confidence": 0.5250418782234192,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "징검다리",
+          "label_id": 2461,
+          "probability": 0.5250418782234192
+        },
+        {
+          "rank": 2,
+          "label": "달빛",
+          "label_id": 627,
+          "probability": 0.09917939454317093
+        },
+        {
+          "rank": 3,
+          "label": "수심",
+          "label_id": 1530,
+          "probability": 0.09729856997728348
+        },
+        {
+          "rank": 4,
+          "label": "치료제",
+          "label_id": 2619,
+          "probability": 0.05545946583151817
+        },
+        {
+          "rank": 5,
+          "label": "장애인등에대한특수교육법",
+          "label_id": 2282,
+          "probability": 0.02723165787756443
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.876,
+      "error": ""
+    },
+    {
+      "index": 7,
+      "file": "/home/moon/Downloads/Test-100/거지.mp4",
+      "expected_raw": "거지",
+      "expected": "거지",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "거지",
+      "confidence": 0.9985260963439941,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "거지",
+          "label_id": 113,
+          "probability": 0.9985260963439941
+        },
+        {
+          "rank": 2,
+          "label": "통역사",
+          "label_id": 2709,
+          "probability": 0.0013642044505104423
+        },
+        {
+          "rank": 3,
+          "label": "공범",
+          "label_id": 251,
+          "probability": 2.8207217837916687e-05
+        },
+        {
+          "rank": 4,
+          "label": "양다리",
+          "label_id": 1726,
+          "probability": 9.014896932058036e-06
+        },
+        {
+          "rank": 5,
+          "label": "백이십오",
+          "label_id": 1069,
+          "probability": 4.586696832120651e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 51,
+      "effective_frames": 51,
+      "elapsed_sec": 1.49,
+      "error": ""
+    },
+    {
+      "index": 8,
+      "file": "/home/moon/Downloads/Test-100/검사.mp4",
+      "expected_raw": "검사",
+      "expected": "검사",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "예식장",
+      "confidence": 0.42525389790534973,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "예식장",
+          "label_id": 1895,
+          "probability": 0.42525389790534973
+        },
+        {
+          "rank": 2,
+          "label": "술집",
+          "label_id": 1559,
+          "probability": 0.24494963884353638
+        },
+        {
+          "rank": 3,
+          "label": "센티미터",
+          "label_id": 1479,
+          "probability": 0.1724165976047516
+        },
+        {
+          "rank": 4,
+          "label": "한국은행",
+          "label_id": 2821,
+          "probability": 0.017341051250696182
+        },
+        {
+          "rank": 5,
+          "label": "공항시장",
+          "label_id": 261,
+          "probability": 0.015651939436793327
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 61,
+      "effective_frames": 61,
+      "elapsed_sec": 1.848,
+      "error": ""
+    },
+    {
+      "index": 9,
+      "file": "/home/moon/Downloads/Test-100/결혼.mp4",
+      "expected_raw": "결혼",
+      "expected": "결혼",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "결혼",
+      "confidence": 0.9751997590065002,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "결혼",
+          "label_id": 162,
+          "probability": 0.9751997590065002
+        },
+        {
+          "rank": 2,
+          "label": "직원",
+          "label_id": 2434,
+          "probability": 0.007042854093015194
+        },
+        {
+          "rank": 3,
+          "label": "들키다",
+          "label_id": 743,
+          "probability": 0.004691597074270248
+        },
+        {
+          "rank": 4,
+          "label": "증원",
+          "label_id": 2418,
+          "probability": 0.0019449496176093817
+        },
+        {
+          "rank": 5,
+          "label": "취업",
+          "label_id": 2615,
+          "probability": 0.0019287833711132407
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 54,
+      "effective_frames": 54,
+      "elapsed_sec": 1.552,
+      "error": ""
+    },
+    {
+      "index": 10,
+      "file": "/home/moon/Downloads/Test-100/결혼식.mp4",
+      "expected_raw": "결혼식",
+      "expected": "결혼식",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "재택근무",
+      "confidence": 0.5402565002441406,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "재택근무",
+          "label_id": 2300,
+          "probability": 0.5402565002441406
+        },
+        {
+          "rank": 2,
+          "label": "결혼식",
+          "label_id": 163,
+          "probability": 0.21814018487930298
+        },
+        {
+          "rank": 3,
+          "label": "어쩔 수 없다",
+          "label_id": 1764,
+          "probability": 0.18357336521148682
+        },
+        {
+          "rank": 4,
+          "label": "결혼",
+          "label_id": 162,
+          "probability": 0.03147394210100174
+        },
+        {
+          "rank": 5,
+          "label": "휴학",
+          "label_id": 2929,
+          "probability": 0.007713897153735161
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.576,
+      "error": ""
+    },
+    {
+      "index": 11,
+      "file": "/home/moon/Downloads/Test-100/경고.mp4",
+      "expected_raw": "경고",
+      "expected": "경고",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "과천시수어통역센터",
+      "confidence": 0.25752848386764526,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "과천시수어통역센터",
+          "label_id": 269,
+          "probability": 0.25752848386764526
+        },
+        {
+          "rank": 2,
+          "label": "주민센터",
+          "label_id": 2384,
+          "probability": 0.24750499427318573
+        },
+        {
+          "rank": 3,
+          "label": "가짜",
+          "label_id": 35,
+          "probability": 0.2171044945716858
+        },
+        {
+          "rank": 4,
+          "label": "물총",
+          "label_id": 916,
+          "probability": 0.10039962828159332
+        },
+        {
+          "rank": 5,
+          "label": "백십오",
+          "label_id": 1034,
+          "probability": 0.0626550167798996
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.868,
+      "error": ""
+    },
+    {
+      "index": 12,
+      "file": "/home/moon/Downloads/Test-100/경비실.mp4",
+      "expected_raw": "경비실",
+      "expected": "경비실",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "경비실",
+      "confidence": 0.9995065927505493,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "경비실",
+          "label_id": 181,
+          "probability": 0.9995065927505493
+        },
+        {
+          "rank": 2,
+          "label": "신기2",
+          "label_id": 1590,
+          "probability": 0.000349068344803527
+        },
+        {
+          "rank": 3,
+          "label": "검사",
+          "label_id": 135,
+          "probability": 2.21969294216251e-05
+        },
+        {
+          "rank": 4,
+          "label": "밀거래",
+          "label_id": 935,
+          "probability": 1.3700311683351174e-05
+        },
+        {
+          "rank": 5,
+          "label": "영주시청",
+          "label_id": 1879,
+          "probability": 1.1733817700587679e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.853,
+      "error": ""
+    },
+    {
+      "index": 13,
+      "file": "/home/moon/Downloads/Test-100/고모.mp4",
+      "expected_raw": "고모",
+      "expected": "고모",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "작은엄마",
+      "confidence": 0.5094081163406372,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "작은엄마",
+          "label_id": 2258,
+          "probability": 0.5094081163406372
+        },
+        {
+          "rank": 2,
+          "label": "외할머니",
+          "label_id": 1968,
+          "probability": 0.23256970942020416
+        },
+        {
+          "rank": 3,
+          "label": "엄마",
+          "label_id": 1773,
+          "probability": 0.06408293545246124
+        },
+        {
+          "rank": 4,
+          "label": "외동딸",
+          "label_id": 1963,
+          "probability": 0.05171269550919533
+        },
+        {
+          "rank": 5,
+          "label": "훌륭",
+          "label_id": 2927,
+          "probability": 0.04477371647953987
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.846,
+      "error": ""
+    },
+    {
+      "index": 14,
+      "file": "/home/moon/Downloads/Test-100/고민.mp4",
+      "expected_raw": "고민",
+      "expected": "고민",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "고민",
+      "confidence": 0.9769085049629211,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "고민",
+          "label_id": 210,
+          "probability": 0.9769085049629211
+        },
+        {
+          "rank": 2,
+          "label": "다섯번째",
+          "label_id": 611,
+          "probability": 0.007613745518028736
+        },
+        {
+          "rank": 3,
+          "label": "졸리다",
+          "label_id": 2365,
+          "probability": 0.001736513222567737
+        },
+        {
+          "rank": 4,
+          "label": "오래도록",
+          "label_id": 1905,
+          "probability": 0.0016895319567993283
+        },
+        {
+          "rank": 5,
+          "label": "비상식적",
+          "label_id": 1223,
+          "probability": 0.0009828362381085753
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.829,
+      "error": ""
+    },
+    {
+      "index": 15,
+      "file": "/home/moon/Downloads/Test-100/고아원.mp4",
+      "expected_raw": "고아원",
+      "expected": "고아원",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "처남",
+      "confidence": 0.8941203951835632,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "처남",
+          "label_id": 2505,
+          "probability": 0.8941203951835632
+        },
+        {
+          "rank": 2,
+          "label": "고아원",
+          "label_id": 220,
+          "probability": 0.038201503455638885
+        },
+        {
+          "rank": 3,
+          "label": "광주시청",
+          "label_id": 300,
+          "probability": 0.03172045573592186
+        },
+        {
+          "rank": 4,
+          "label": "시댁",
+          "label_id": 1571,
+          "probability": 0.01262520533055067
+        },
+        {
+          "rank": 5,
+          "label": "금산군지부",
+          "label_id": 423,
+          "probability": 0.003397668246179819
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 51,
+      "effective_frames": 51,
+      "elapsed_sec": 1.498,
+      "error": ""
+    },
+    {
+      "index": 16,
+      "file": "/home/moon/Downloads/Test-100/고추.mp4",
+      "expected_raw": "고추",
+      "expected": "고추",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "가수",
+      "confidence": 0.7778931260108948,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "가수",
+          "label_id": 27,
+          "probability": 0.7778931260108948
+        },
+        {
+          "rank": 2,
+          "label": "고추",
+          "label_id": 233,
+          "probability": 0.1928309202194214
+        },
+        {
+          "rank": 3,
+          "label": "불쌍",
+          "label_id": 1207,
+          "probability": 0.004416183568537235
+        },
+        {
+          "rank": 4,
+          "label": "사과",
+          "label_id": 1249,
+          "probability": 0.0022809961810708046
+        },
+        {
+          "rank": 5,
+          "label": "육만오천",
+          "label_id": 2059,
+          "probability": 0.0021555048879235983
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 47,
+      "effective_frames": 47,
+      "elapsed_sec": 1.382,
+      "error": ""
+    },
+    {
+      "index": 17,
+      "file": "/home/moon/Downloads/Test-100/골절.mp4",
+      "expected_raw": "골절",
+      "expected": "골절",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "골절",
+      "confidence": 0.9071104526519775,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "골절",
+          "label_id": 242,
+          "probability": 0.9071104526519775
+        },
+        {
+          "rank": 2,
+          "label": "알아서",
+          "label_id": 1703,
+          "probability": 0.030846236273646355
+        },
+        {
+          "rank": 3,
+          "label": "광양군수어통역센터",
+          "label_id": 291,
+          "probability": 0.018211694434285164
+        },
+        {
+          "rank": 4,
+          "label": "영암군수어통역센터",
+          "label_id": 1867,
+          "probability": 0.010140965692698956
+        },
+        {
+          "rank": 5,
+          "label": "영광군수어통역센터",
+          "label_id": 1851,
+          "probability": 0.004501652903854847
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.951,
+      "error": ""
+    },
+    {
+      "index": 18,
+      "file": "/home/moon/Downloads/Test-100/골짜기.mp4",
+      "expected_raw": "골짜기",
+      "expected": "골짜기",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "골짜기",
+      "confidence": 0.9998557567596436,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "골짜기",
+          "label_id": 243,
+          "probability": 0.9998557567596436
+        },
+        {
+          "rank": 2,
+          "label": "지름길",
+          "label_id": 2427,
+          "probability": 2.5577332053217106e-05
+        },
+        {
+          "rank": 3,
+          "label": "방법",
+          "label_id": 976,
+          "probability": 1.4671304597868584e-05
+        },
+        {
+          "rank": 4,
+          "label": "팔십억",
+          "label_id": 2750,
+          "probability": 1.1931566405110061e-05
+        },
+        {
+          "rank": 5,
+          "label": "강물",
+          "label_id": 74,
+          "probability": 7.291540896403603e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 43,
+      "effective_frames": 43,
+      "elapsed_sec": 1.255,
+      "error": ""
+    },
+    {
+      "index": 19,
+      "file": "/home/moon/Downloads/Test-100/공범.mp4",
+      "expected_raw": "공범",
+      "expected": "공범",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "공범",
+      "confidence": 0.9946861267089844,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "공범",
+          "label_id": 251,
+          "probability": 0.9946861267089844
+        },
+        {
+          "rank": 2,
+          "label": "서울시청",
+          "label_id": 1420,
+          "probability": 0.004478320945054293
+        },
+        {
+          "rank": 3,
+          "label": "서울역",
+          "label_id": 1421,
+          "probability": 0.00015921086014714092
+        },
+        {
+          "rank": 4,
+          "label": "백구십구",
+          "label_id": 995,
+          "probability": 0.00011827078560600057
+        },
+        {
+          "rank": 5,
+          "label": "멀다",
+          "label_id": 830,
+          "probability": 8.785427053226158e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.881,
+      "error": ""
+    },
+    {
+      "index": 20,
+      "file": "/home/moon/Downloads/Test-100/광주.mp4",
+      "expected_raw": "광주",
+      "expected": "광주",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "삼",
+      "confidence": 0.3915065824985504,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "삼",
+          "label_id": 1324,
+          "probability": 0.3915065824985504
+        },
+        {
+          "rank": 2,
+          "label": "원주",
+          "label_id": 2022,
+          "probability": 0.29761791229248047
+        },
+        {
+          "rank": 3,
+          "label": "포천",
+          "label_id": 2782,
+          "probability": 0.09964540600776672
+        },
+        {
+          "rank": 4,
+          "label": "사",
+          "label_id": 1242,
+          "probability": 0.07130483537912369
+        },
+        {
+          "rank": 5,
+          "label": "사십사",
+          "label_id": 1278,
+          "probability": 0.05513811111450195
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 41,
+      "effective_frames": 41,
+      "elapsed_sec": 1.215,
+      "error": ""
+    },
+    {
+      "index": 21,
+      "file": "/home/moon/Downloads/Test-100/교수.mp4",
+      "expected_raw": "교수",
+      "expected": "교수",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "교수",
+      "confidence": 0.4706301689147949,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "교수",
+          "label_id": 319,
+          "probability": 0.4706301689147949
+        },
+        {
+          "rank": 2,
+          "label": "동대문구지부",
+          "label_id": 712,
+          "probability": 0.1662733107805252
+        },
+        {
+          "rank": 3,
+          "label": "증원",
+          "label_id": 2418,
+          "probability": 0.07334255427122116
+        },
+        {
+          "rank": 4,
+          "label": "구두",
+          "label_id": 334,
+          "probability": 0.029292024672031403
+        },
+        {
+          "rank": 5,
+          "label": "신식",
+          "label_id": 1595,
+          "probability": 0.028699973598122597
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.585,
+      "error": ""
+    },
+    {
+      "index": 22,
+      "file": "/home/moon/Downloads/Test-100/교제.mp4",
+      "expected_raw": "교제",
+      "expected": "교제",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "교제",
+      "confidence": 0.9900639653205872,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "교제",
+          "label_id": 325,
+          "probability": 0.9900639653205872
+        },
+        {
+          "rank": 2,
+          "label": "파헤치다",
+          "label_id": 2733,
+          "probability": 0.002825756324455142
+        },
+        {
+          "rank": 3,
+          "label": "근무",
+          "label_id": 419,
+          "probability": 0.002000811044126749
+        },
+        {
+          "rank": 4,
+          "label": "회개",
+          "label_id": 2908,
+          "probability": 0.001102454960346222
+        },
+        {
+          "rank": 5,
+          "label": "야구부",
+          "label_id": 1716,
+          "probability": 0.0009465395705774426
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.755,
+      "error": ""
+    },
+    {
+      "index": 23,
+      "file": "/home/moon/Downloads/Test-100/구걸.mp4",
+      "expected_raw": "구걸",
+      "expected": "구걸",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "고깃국",
+      "confidence": 0.5157840847969055,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "고깃국",
+          "label_id": 198,
+          "probability": 0.5157840847969055
+        },
+        {
+          "rank": 2,
+          "label": "구걸",
+          "label_id": 331,
+          "probability": 0.05107903480529785
+        },
+        {
+          "rank": 3,
+          "label": "괴롭히다",
+          "label_id": 307,
+          "probability": 0.0500645749270916
+        },
+        {
+          "rank": 4,
+          "label": "퇴원",
+          "label_id": 2717,
+          "probability": 0.03353767469525337
+        },
+        {
+          "rank": 5,
+          "label": "진단서",
+          "label_id": 2438,
+          "probability": 0.02799244597554207
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.968,
+      "error": ""
+    },
+    {
+      "index": 24,
+      "file": "/home/moon/Downloads/Test-100/구두.mp4",
+      "expected_raw": "구두",
+      "expected": "구두",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "가죽신",
+      "confidence": 0.9336808323860168,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "가죽신",
+          "label_id": 34,
+          "probability": 0.9336808323860168
+        },
+        {
+          "rank": 2,
+          "label": "평가",
+          "label_id": 2767,
+          "probability": 0.05012423172593117
+        },
+        {
+          "rank": 3,
+          "label": "육억",
+          "label_id": 2079,
+          "probability": 0.0018515526317059994
+        },
+        {
+          "rank": 4,
+          "label": "경찰서",
+          "label_id": 190,
+          "probability": 0.0013578505022451282
+        },
+        {
+          "rank": 5,
+          "label": "의혹",
+          "label_id": 2116,
+          "probability": 0.0010292151710018516
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.608,
+      "error": ""
+    },
+    {
+      "index": 25,
+      "file": "/home/moon/Downloads/Test-100/귀.mp4",
+      "expected_raw": "귀",
+      "expected": "귀",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "다과",
+      "confidence": 0.23756848275661469,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "다과",
+          "label_id": 606,
+          "probability": 0.23756848275661469
+        },
+        {
+          "rank": 2,
+          "label": "치료",
+          "label_id": 2617,
+          "probability": 0.17146636545658112
+        },
+        {
+          "rank": 3,
+          "label": "구만오천",
+          "label_id": 345,
+          "probability": 0.11198592931032181
+        },
+        {
+          "rank": 4,
+          "label": "때리다",
+          "label_id": 753,
+          "probability": 0.105570487678051
+        },
+        {
+          "rank": 5,
+          "label": "가평군수어통역센터",
+          "label_id": 36,
+          "probability": 0.056096624583005905
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 59,
+      "effective_frames": 59,
+      "elapsed_sec": 1.74,
+      "error": ""
+    },
+    {
+      "index": 26,
+      "file": "/home/moon/Downloads/Test-100/금연.mp4",
+      "expected_raw": "금연",
+      "expected": "금연",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "금연",
+      "confidence": 0.9990707039833069,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "금연",
+          "label_id": 426,
+          "probability": 0.9990707039833069
+        },
+        {
+          "rank": 2,
+          "label": "두번째",
+          "label_id": 735,
+          "probability": 0.0005771733704023063
+        },
+        {
+          "rank": 3,
+          "label": "이십칠",
+          "label_id": 2158,
+          "probability": 0.0001414046564605087
+        },
+        {
+          "rank": 4,
+          "label": "영어",
+          "label_id": 1873,
+          "probability": 3.5587509046308696e-05
+        },
+        {
+          "rank": 5,
+          "label": "무매력",
+          "label_id": 876,
+          "probability": 2.4443126676487736e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 56,
+      "effective_frames": 56,
+      "elapsed_sec": 1.623,
+      "error": ""
+    },
+    {
+      "index": 27,
+      "file": "/home/moon/Downloads/Test-100/급행.mp4",
+      "expected_raw": "급행",
+      "expected": "급행",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "대출",
+      "confidence": 0.9305437207221985,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "대출",
+          "label_id": 668,
+          "probability": 0.9305437207221985
+        },
+        {
+          "rank": 2,
+          "label": "빠르다",
+          "label_id": 1233,
+          "probability": 0.06347932666540146
+        },
+        {
+          "rank": 3,
+          "label": "너",
+          "label_id": 556,
+          "probability": 0.002386963926255703
+        },
+        {
+          "rank": 4,
+          "label": "전문",
+          "label_id": 2317,
+          "probability": 0.00127125543076545
+        },
+        {
+          "rank": 5,
+          "label": "논란",
+          "label_id": 580,
+          "probability": 0.0009187430259771645
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 46,
+      "effective_frames": 46,
+      "elapsed_sec": 1.313,
+      "error": ""
+    },
+    {
+      "index": 28,
+      "file": "/home/moon/Downloads/Test-100/기린.mp4",
+      "expected_raw": "기린",
+      "expected": "기린",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "기린",
+      "confidence": 0.9951194524765015,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "기린",
+          "label_id": 444,
+          "probability": 0.9951194524765015
+        },
+        {
+          "rank": 2,
+          "label": "가만히",
+          "label_id": 22,
+          "probability": 0.003919762093573809
+        },
+        {
+          "rank": 3,
+          "label": "잔소리",
+          "label_id": 2260,
+          "probability": 0.00011535662633832544
+        },
+        {
+          "rank": 4,
+          "label": "이것",
+          "label_id": 2118,
+          "probability": 0.00011312963761156425
+        },
+        {
+          "rank": 5,
+          "label": "백이십일",
+          "label_id": 1072,
+          "probability": 8.982475264929235e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 46,
+      "effective_frames": 46,
+      "elapsed_sec": 1.354,
+      "error": ""
+    },
+    {
+      "index": 29,
+      "file": "/home/moon/Downloads/Test-100/기분.mp4",
+      "expected_raw": "기분",
+      "expected": "기분",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "기분",
+      "confidence": 0.812928318977356,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "기분",
+          "label_id": 448,
+          "probability": 0.812928318977356
+        },
+        {
+          "rank": 2,
+          "label": "괴롭히다",
+          "label_id": 307,
+          "probability": 0.06305120140314102
+        },
+        {
+          "rank": 3,
+          "label": "역겹다",
+          "label_id": 1819,
+          "probability": 0.013651142828166485
+        },
+        {
+          "rank": 4,
+          "label": "걱정",
+          "label_id": 119,
+          "probability": 0.013383264653384686
+        },
+        {
+          "rank": 5,
+          "label": "받다",
+          "label_id": 962,
+          "probability": 0.010215900838375092
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 53,
+      "effective_frames": 53,
+      "elapsed_sec": 1.518,
+      "error": ""
+    },
+    {
+      "index": 30,
+      "file": "/home/moon/Downloads/Test-100/기술자.mp4",
+      "expected_raw": "기술자",
+      "expected": "기술자",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "전기기술자",
+      "confidence": 0.3085278570652008,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "전기기술자",
+          "label_id": 2311,
+          "probability": 0.3085278570652008
+        },
+        {
+          "rank": 2,
+          "label": "수집가",
+          "label_id": 1542,
+          "probability": 0.26430490612983704
+        },
+        {
+          "rank": 3,
+          "label": "유권자",
+          "label_id": 2041,
+          "probability": 0.12562020123004913
+        },
+        {
+          "rank": 4,
+          "label": "킬로미터",
+          "label_id": 2687,
+          "probability": 0.07509241998195648
+        },
+        {
+          "rank": 5,
+          "label": "한약방",
+          "label_id": 2829,
+          "probability": 0.03649110347032547
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.836,
+      "error": ""
+    },
+    {
+      "index": 31,
+      "file": "/home/moon/Downloads/Test-100/기차역.mp4",
+      "expected_raw": "기차역",
+      "expected": "기차역",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "사업장",
+      "confidence": 0.383465439081192,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "사업장",
+          "label_id": 1292,
+          "probability": 0.383465439081192
+        },
+        {
+          "rank": 2,
+          "label": "기차역",
+          "label_id": 456,
+          "probability": 0.17422427237033844
+        },
+        {
+          "rank": 3,
+          "label": "강진군주민지원센터",
+          "label_id": 90,
+          "probability": 0.10581374168395996
+        },
+        {
+          "rank": 4,
+          "label": "기피하다",
+          "label_id": 459,
+          "probability": 0.10233290493488312
+        },
+        {
+          "rank": 5,
+          "label": "째려보다",
+          "label_id": 2466,
+          "probability": 0.03987293690443039
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 57,
+      "effective_frames": 57,
+      "elapsed_sec": 1.683,
+      "error": ""
+    },
+    {
+      "index": 32,
+      "file": "/home/moon/Downloads/Test-100/까마귀.mp4",
+      "expected_raw": "까마귀",
+      "expected": "까마귀",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "까마귀",
+      "confidence": 0.9986928105354309,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "까마귀",
+          "label_id": 480,
+          "probability": 0.9986928105354309
+        },
+        {
+          "rank": 2,
+          "label": "새알",
+          "label_id": 1381,
+          "probability": 0.000977741670794785
+        },
+        {
+          "rank": 3,
+          "label": "새똥",
+          "label_id": 1380,
+          "probability": 0.00030745184631086886
+        },
+        {
+          "rank": 4,
+          "label": "포항시수화통역센터",
+          "label_id": 2788,
+          "probability": 2.299499328728416e-06
+        },
+        {
+          "rank": 5,
+          "label": "소식",
+          "label_id": 1489,
+          "probability": 2.0786890218005283e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 56,
+      "effective_frames": 56,
+      "elapsed_sec": 1.646,
+      "error": ""
+    },
+    {
+      "index": 33,
+      "file": "/home/moon/Downloads/Test-100/꺠끗하다.mp4",
+      "expected_raw": "꺠끗하다",
+      "expected": "깨끗하다",
+      "label_alias_applied": true,
+      "expected_in_vocab": true,
+      "predicted": "깨끗하다",
+      "confidence": 0.9125207662582397,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "깨끗하다",
+          "label_id": 485,
+          "probability": 0.9125207662582397
+        },
+        {
+          "rank": 2,
+          "label": "쑥쓰럽다",
+          "label_id": 1641,
+          "probability": 0.08404398709535599
+        },
+        {
+          "rank": 3,
+          "label": "주다",
+          "label_id": 2381,
+          "probability": 0.0010510276770219207
+        },
+        {
+          "rank": 4,
+          "label": "우울",
+          "label_id": 1994,
+          "probability": 0.00035537825897336006
+        },
+        {
+          "rank": 5,
+          "label": "연천",
+          "label_id": 1834,
+          "probability": 0.00029359658947214484
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 56,
+      "effective_frames": 56,
+      "elapsed_sec": 1.622,
+      "error": ""
+    },
+    {
+      "index": 34,
+      "file": "/home/moon/Downloads/Test-100/꼬마.mp4",
+      "expected_raw": "꼬마",
+      "expected": "꼬마",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "꼬마",
+      "confidence": 0.5987212657928467,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "꼬마",
+          "label_id": 488,
+          "probability": 0.5987212657928467
+        },
+        {
+          "rank": 2,
+          "label": "남양주",
+          "label_id": 532,
+          "probability": 0.31166115403175354
+        },
+        {
+          "rank": 3,
+          "label": "무시하다",
+          "label_id": 884,
+          "probability": 0.061438340693712234
+        },
+        {
+          "rank": 4,
+          "label": "잘하다",
+          "label_id": 2262,
+          "probability": 0.006122003309428692
+        },
+        {
+          "rank": 5,
+          "label": "뻔뻔",
+          "label_id": 1237,
+          "probability": 0.006107133813202381
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.789,
+      "error": ""
+    },
+    {
+      "index": 35,
+      "file": "/home/moon/Downloads/Test-100/꿀벌.mp4",
+      "expected_raw": "꿀벌",
+      "expected": "꿀벌",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "꿀벌",
+      "confidence": 0.995795488357544,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "꿀벌",
+          "label_id": 495,
+          "probability": 0.995795488357544
+        },
+        {
+          "rank": 2,
+          "label": "무매력",
+          "label_id": 876,
+          "probability": 0.003600095631554723
+        },
+        {
+          "rank": 3,
+          "label": "달다",
+          "label_id": 621,
+          "probability": 0.0001786492794053629
+        },
+        {
+          "rank": 4,
+          "label": "복습",
+          "label_id": 1150,
+          "probability": 8.645368507131934e-05
+        },
+        {
+          "rank": 5,
+          "label": "순금",
+          "label_id": 1546,
+          "probability": 5.918088572798297e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 54,
+      "effective_frames": 54,
+      "elapsed_sec": 1.577,
+      "error": ""
+    },
+    {
+      "index": 36,
+      "file": "/home/moon/Downloads/Test-100/나누다.mp4",
+      "expected_raw": "나누다",
+      "expected": "나누다",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "나누다",
+      "confidence": 0.9995504021644592,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "나누다",
+          "label_id": 500,
+          "probability": 0.9995504021644592
+        },
+        {
+          "rank": 2,
+          "label": "변덕",
+          "label_id": 1112,
+          "probability": 0.0003559436008799821
+        },
+        {
+          "rank": 3,
+          "label": "현충일",
+          "label_id": 2856,
+          "probability": 2.9433873351081274e-05
+        },
+        {
+          "rank": 4,
+          "label": "분당",
+          "label_id": 1188,
+          "probability": 5.769501512986608e-06
+        },
+        {
+          "rank": 5,
+          "label": "고깃국",
+          "label_id": 198,
+          "probability": 3.1646204661228694e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 56,
+      "effective_frames": 56,
+      "elapsed_sec": 1.599,
+      "error": ""
+    },
+    {
+      "index": 37,
+      "file": "/home/moon/Downloads/Test-100/나쁘다.mp4",
+      "expected_raw": "나쁘다",
+      "expected": "나쁘다",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "신부",
+      "confidence": 0.8467522859573364,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "신부",
+          "label_id": 1593,
+          "probability": 0.8467522859573364
+        },
+        {
+          "rank": 2,
+          "label": "갈색",
+          "label_id": 45,
+          "probability": 0.12395402789115906
+        },
+        {
+          "rank": 3,
+          "label": "나쁘다",
+          "label_id": 503,
+          "probability": 0.008553708903491497
+        },
+        {
+          "rank": 4,
+          "label": "가명",
+          "label_id": 23,
+          "probability": 0.00794235710054636
+        },
+        {
+          "rank": 5,
+          "label": "부럽다",
+          "label_id": 1163,
+          "probability": 0.0053008669055998325
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.714,
+      "error": ""
+    },
+    {
+      "index": 38,
+      "file": "/home/moon/Downloads/Test-100/낚시.mp4",
+      "expected_raw": "낚시",
+      "expected": "낚시",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "낚시",
+      "confidence": 0.3424316942691803,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "낚시",
+          "label_id": 511,
+          "probability": 0.3424316942691803
+        },
+        {
+          "rank": 2,
+          "label": "놓치다",
+          "label_id": 592,
+          "probability": 0.32194751501083374
+        },
+        {
+          "rank": 3,
+          "label": "낚시터",
+          "label_id": 513,
+          "probability": 0.11084745079278946
+        },
+        {
+          "rank": 4,
+          "label": "싱가폴",
+          "label_id": 1634,
+          "probability": 0.06813227385282516
+        },
+        {
+          "rank": 5,
+          "label": "습자",
+          "label_id": 1566,
+          "probability": 0.03445019945502281
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 45,
+      "effective_frames": 45,
+      "elapsed_sec": 1.331,
+      "error": ""
+    },
+    {
+      "index": 39,
+      "file": "/home/moon/Downloads/Test-100/남녀.mp4",
+      "expected_raw": "남녀",
+      "expected": "남녀",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "남녀",
+      "confidence": 0.3177006244659424,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "남녀",
+          "label_id": 521,
+          "probability": 0.3177006244659424
+        },
+        {
+          "rank": 2,
+          "label": "눈",
+          "label_id": 594,
+          "probability": 0.17915743589401245
+        },
+        {
+          "rank": 3,
+          "label": "구십오만",
+          "label_id": 362,
+          "probability": 0.16531962156295776
+        },
+        {
+          "rank": 4,
+          "label": "백삼십사",
+          "label_id": 1019,
+          "probability": 0.0736951157450676
+        },
+        {
+          "rank": 5,
+          "label": "얼마",
+          "label_id": 1772,
+          "probability": 0.05667492002248764
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.727,
+      "error": ""
+    },
+    {
+      "index": 40,
+      "file": "/home/moon/Downloads/Test-100/남매.mp4",
+      "expected_raw": "남매",
+      "expected": "남매",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "남편",
+      "confidence": 0.5826010704040527,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "남편",
+          "label_id": 543,
+          "probability": 0.5826010704040527
+        },
+        {
+          "rank": 2,
+          "label": "남매",
+          "label_id": 525,
+          "probability": 0.3683435618877411
+        },
+        {
+          "rank": 3,
+          "label": "오빠",
+          "label_id": 1915,
+          "probability": 0.03937970846891403
+        },
+        {
+          "rank": 4,
+          "label": "열두번째",
+          "label_id": 1842,
+          "probability": 0.005781521089375019
+        },
+        {
+          "rank": 5,
+          "label": "횡성군주민지원센터",
+          "label_id": 2920,
+          "probability": 0.0006730738678015769
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 52,
+      "effective_frames": 52,
+      "elapsed_sec": 1.563,
+      "error": ""
+    },
+    {
+      "index": 41,
+      "file": "/home/moon/Downloads/Test-100/남자.mp4",
+      "expected_raw": "남자",
+      "expected": "남자",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "남자",
+      "confidence": 0.9024018049240112,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "남자",
+          "label_id": 540,
+          "probability": 0.9024018049240112
+        },
+        {
+          "rank": 2,
+          "label": "에어컨",
+          "label_id": 1781,
+          "probability": 0.0386694073677063
+        },
+        {
+          "rank": 3,
+          "label": "실천",
+          "label_id": 1612,
+          "probability": 0.020356545224785805
+        },
+        {
+          "rank": 4,
+          "label": "부여군지부",
+          "label_id": 1173,
+          "probability": 0.011381629854440689
+        },
+        {
+          "rank": 5,
+          "label": "인사법",
+          "label_id": 2185,
+          "probability": 0.002999073127284646
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.732,
+      "error": ""
+    },
+    {
+      "index": 42,
+      "file": "/home/moon/Downloads/Test-100/네쌍둥이.mp4",
+      "expected_raw": "네쌍둥이",
+      "expected": "네쌍둥이",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "우유",
+      "confidence": 0.18610069155693054,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "우유",
+          "label_id": 1995,
+          "probability": 0.18610069155693054
+        },
+        {
+          "rank": 2,
+          "label": "결점",
+          "label_id": 159,
+          "probability": 0.1777791529893875
+        },
+        {
+          "rank": 3,
+          "label": "찔리다",
+          "label_id": 2470,
+          "probability": 0.16210411489009857
+        },
+        {
+          "rank": 4,
+          "label": "칠만오천",
+          "label_id": 2636,
+          "probability": 0.10002022981643677
+        },
+        {
+          "rank": 5,
+          "label": "캄보디아",
+          "label_id": 2668,
+          "probability": 0.0934862345457077
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.856,
+      "error": ""
+    },
+    {
+      "index": 43,
+      "file": "/home/moon/Downloads/Test-100/노래.mp4",
+      "expected_raw": "노래",
+      "expected": "노래",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "노래",
+      "confidence": 0.9179871678352356,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "노래",
+          "label_id": 568,
+          "probability": 0.9179871678352356
+        },
+        {
+          "rank": 2,
+          "label": "지름길",
+          "label_id": 2427,
+          "probability": 0.01843203231692314
+        },
+        {
+          "rank": 3,
+          "label": "콩기름",
+          "label_id": 2676,
+          "probability": 0.018426092341542244
+        },
+        {
+          "rank": 4,
+          "label": "빈말",
+          "label_id": 1227,
+          "probability": 0.0062344432808458805
+        },
+        {
+          "rank": 5,
+          "label": "이백오십만",
+          "label_id": 2136,
+          "probability": 0.005689310375601053
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.609,
+      "error": ""
+    },
+    {
+      "index": 44,
+      "file": "/home/moon/Downloads/Test-100/노르웨이.mp4",
+      "expected_raw": "노르웨이",
+      "expected": "노르웨이",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "노르웨이",
+      "confidence": 0.46831926703453064,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "노르웨이",
+          "label_id": 570,
+          "probability": 0.46831926703453064
+        },
+        {
+          "rank": 2,
+          "label": "떨다",
+          "label_id": 759,
+          "probability": 0.2884438931941986
+        },
+        {
+          "rank": 3,
+          "label": "대출",
+          "label_id": 668,
+          "probability": 0.15817198157310486
+        },
+        {
+          "rank": 4,
+          "label": "쌍둥이",
+          "label_id": 1638,
+          "probability": 0.0146067775785923
+        },
+        {
+          "rank": 5,
+          "label": "너희",
+          "label_id": 558,
+          "probability": 0.008629297837615013
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 41,
+      "effective_frames": 41,
+      "elapsed_sec": 1.207,
+      "error": ""
+    },
+    {
+      "index": 45,
+      "file": "/home/moon/Downloads/Test-100/논의.mp4",
+      "expected_raw": "논의",
+      "expected": "논의",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "상담",
+      "confidence": 0.9974289536476135,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "상담",
+          "label_id": 1366,
+          "probability": 0.9974289536476135
+        },
+        {
+          "rank": 2,
+          "label": "마포",
+          "label_id": 790,
+          "probability": 0.0025183982215821743
+        },
+        {
+          "rank": 3,
+          "label": "육십만",
+          "label_id": 2067,
+          "probability": 9.411015525984112e-06
+        },
+        {
+          "rank": 4,
+          "label": "불쌍",
+          "label_id": 1207,
+          "probability": 5.917485395912081e-06
+        },
+        {
+          "rank": 5,
+          "label": "정밀검사",
+          "label_id": 2336,
+          "probability": 5.299929398461245e-06
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 49,
+      "effective_frames": 49,
+      "elapsed_sec": 1.42,
+      "error": ""
+    },
+    {
+      "index": 46,
+      "file": "/home/moon/Downloads/Test-100/농부.mp4",
+      "expected_raw": "농부",
+      "expected": "농부",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "일반인",
+      "confidence": 0.6694547533988953,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "일반인",
+          "label_id": 2203,
+          "probability": 0.6694547533988953
+        },
+        {
+          "rank": 2,
+          "label": "요리사",
+          "label_id": 1972,
+          "probability": 0.2705819606781006
+        },
+        {
+          "rank": 3,
+          "label": "의자",
+          "label_id": 2110,
+          "probability": 0.021839657798409462
+        },
+        {
+          "rank": 4,
+          "label": "유권자",
+          "label_id": 2041,
+          "probability": 0.005676540546119213
+        },
+        {
+          "rank": 5,
+          "label": "전기기술자",
+          "label_id": 2311,
+          "probability": 0.004892989061772823
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 48,
+      "effective_frames": 48,
+      "elapsed_sec": 1.438,
+      "error": ""
+    },
+    {
+      "index": 47,
+      "file": "/home/moon/Downloads/Test-100/누나.mp4",
+      "expected_raw": "누나",
+      "expected": "누나",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "누나",
+      "confidence": 0.9958674907684326,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "누나",
+          "label_id": 593,
+          "probability": 0.9958674907684326
+        },
+        {
+          "rank": 2,
+          "label": "형",
+          "label_id": 2861,
+          "probability": 0.00295105017721653
+        },
+        {
+          "rank": 3,
+          "label": "처형",
+          "label_id": 2507,
+          "probability": 0.0009284332627430558
+        },
+        {
+          "rank": 4,
+          "label": "오빠",
+          "label_id": 1915,
+          "probability": 7.707607437623665e-05
+        },
+        {
+          "rank": 5,
+          "label": "이억오천만",
+          "label_id": 2161,
+          "probability": 3.5821904020849615e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 44,
+      "effective_frames": 44,
+      "elapsed_sec": 1.317,
+      "error": ""
+    },
+    {
+      "index": 48,
+      "file": "/home/moon/Downloads/Test-100/뉴질랜드.mp4",
+      "expected_raw": "뉴질랜드",
+      "expected": "뉴질랜드",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "강진군주민지원센터",
+      "confidence": 0.38190099596977234,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "강진군주민지원센터",
+          "label_id": 90,
+          "probability": 0.38190099596977234
+        },
+        {
+          "rank": 2,
+          "label": "공주시청",
+          "label_id": 258,
+          "probability": 0.3280714750289917
+        },
+        {
+          "rank": 3,
+          "label": "기차",
+          "label_id": 455,
+          "probability": 0.23768830299377441
+        },
+        {
+          "rank": 4,
+          "label": "공식발표",
+          "label_id": 255,
+          "probability": 0.010711015202105045
+        },
+        {
+          "rank": 5,
+          "label": "한약방",
+          "label_id": 2829,
+          "probability": 0.006045464426279068
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 53,
+      "effective_frames": 53,
+      "elapsed_sec": 1.566,
+      "error": ""
+    },
+    {
+      "index": 49,
+      "file": "/home/moon/Downloads/Test-100/당황.mp4",
+      "expected_raw": "당황",
+      "expected": "당황",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "당황",
+      "confidence": 0.9997619986534119,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "당황",
+          "label_id": 644,
+          "probability": 0.9997619986534119
+        },
+        {
+          "rank": 2,
+          "label": "근근이",
+          "label_id": 418,
+          "probability": 7.804248161846772e-05
+        },
+        {
+          "rank": 3,
+          "label": "서점",
+          "label_id": 1424,
+          "probability": 2.7993606636300683e-05
+        },
+        {
+          "rank": 4,
+          "label": "없다",
+          "label_id": 1775,
+          "probability": 2.644443156896159e-05
+        },
+        {
+          "rank": 5,
+          "label": "결점",
+          "label_id": 159,
+          "probability": 2.44691163970856e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 48,
+      "effective_frames": 48,
+      "elapsed_sec": 1.425,
+      "error": ""
+    },
+    {
+      "index": 50,
+      "file": "/home/moon/Downloads/Test-100/대기업.mp4",
+      "expected_raw": "대기업",
+      "expected": "대기업",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "대기업",
+      "confidence": 0.9950489401817322,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "대기업",
+          "label_id": 651,
+          "probability": 0.9950489401817322
+        },
+        {
+          "rank": 2,
+          "label": "희생",
+          "label_id": 2941,
+          "probability": 0.0018098544096574187
+        },
+        {
+          "rank": 3,
+          "label": "뽐내다",
+          "label_id": 1240,
+          "probability": 0.001163636683486402
+        },
+        {
+          "rank": 4,
+          "label": "합심",
+          "label_id": 2836,
+          "probability": 0.0007711058715358377
+        },
+        {
+          "rank": 5,
+          "label": "방충",
+          "label_id": 981,
+          "probability": 0.00026840707869268954
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.874,
+      "error": ""
+    },
+    {
+      "index": 51,
+      "file": "/home/moon/Downloads/Test-100/망각.mp4",
+      "expected_raw": "망각",
+      "expected": "망각",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "이상",
+      "confidence": 0.8551216125488281,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "이상",
+          "label_id": 2143,
+          "probability": 0.8551216125488281
+        },
+        {
+          "rank": 2,
+          "label": "당신",
+          "label_id": 639,
+          "probability": 0.05826244503259659
+        },
+        {
+          "rank": 3,
+          "label": "묻다",
+          "label_id": 910,
+          "probability": 0.04888591542840004
+        },
+        {
+          "rank": 4,
+          "label": "얼마",
+          "label_id": 1772,
+          "probability": 0.005908957216888666
+        },
+        {
+          "rank": 5,
+          "label": "요리사",
+          "label_id": 1972,
+          "probability": 0.00400038156658411
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 52,
+      "effective_frames": 52,
+      "elapsed_sec": 1.54,
+      "error": ""
+    },
+    {
+      "index": 52,
+      "file": "/home/moon/Downloads/Test-100/매력.mp4",
+      "expected_raw": "매력",
+      "expected": "매력",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "무매력",
+      "confidence": 0.6075442433357239,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "무매력",
+          "label_id": 876,
+          "probability": 0.6075442433357239
+        },
+        {
+          "rank": 2,
+          "label": "매력",
+          "label_id": 815,
+          "probability": 0.39091044664382935
+        },
+        {
+          "rank": 3,
+          "label": "울산",
+          "label_id": 2012,
+          "probability": 0.00014215002011042088
+        },
+        {
+          "rank": 4,
+          "label": "하는수없다",
+          "label_id": 2803,
+          "probability": 0.00013333640526980162
+        },
+        {
+          "rank": 5,
+          "label": "전세",
+          "label_id": 2322,
+          "probability": 0.00012111842079320922
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 52,
+      "effective_frames": 52,
+      "elapsed_sec": 1.524,
+      "error": ""
+    },
+    {
+      "index": 53,
+      "file": "/home/moon/Downloads/Test-100/매표소.mp4",
+      "expected_raw": "매표소",
+      "expected": "매표소",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "치료",
+      "confidence": 0.6918386816978455,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "치료",
+          "label_id": 2617,
+          "probability": 0.6918386816978455
+        },
+        {
+          "rank": 2,
+          "label": "매표소",
+          "label_id": 818,
+          "probability": 0.2279893010854721
+        },
+        {
+          "rank": 3,
+          "label": "중랑구주민지원센터",
+          "label_id": 2407,
+          "probability": 0.033790189772844315
+        },
+        {
+          "rank": 4,
+          "label": "십억",
+          "label_id": 1625,
+          "probability": 0.008468705229461193
+        },
+        {
+          "rank": 5,
+          "label": "의혹",
+          "label_id": 2116,
+          "probability": 0.007857095450162888
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.615,
+      "error": ""
+    },
+    {
+      "index": 54,
+      "file": "/home/moon/Downloads/Test-100/매형.mp4",
+      "expected_raw": "매형",
+      "expected": "매형",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "매형",
+      "confidence": 0.8035311698913574,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "매형",
+          "label_id": 819,
+          "probability": 0.8035311698913574
+        },
+        {
+          "rank": 2,
+          "label": "제부",
+          "label_id": 2344,
+          "probability": 0.1711544245481491
+        },
+        {
+          "rank": 3,
+          "label": "오빠",
+          "label_id": 1915,
+          "probability": 0.015083116479218006
+        },
+        {
+          "rank": 4,
+          "label": "육십오억",
+          "label_id": 2073,
+          "probability": 0.003987886011600494
+        },
+        {
+          "rank": 5,
+          "label": "항공사",
+          "label_id": 2838,
+          "probability": 0.001416949788108468
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 47,
+      "effective_frames": 47,
+      "elapsed_sec": 1.386,
+      "error": ""
+    },
+    {
+      "index": 55,
+      "file": "/home/moon/Downloads/Test-100/맹세.mp4",
+      "expected_raw": "맹세",
+      "expected": "맹세",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "이",
+      "confidence": 0.9991577863693237,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "이",
+          "label_id": 2117,
+          "probability": 0.9991577863693237
+        },
+        {
+          "rank": 2,
+          "label": "금산",
+          "label_id": 421,
+          "probability": 0.0004248520126566291
+        },
+        {
+          "rank": 3,
+          "label": "이만",
+          "label_id": 2124,
+          "probability": 0.0003164789522998035
+        },
+        {
+          "rank": 4,
+          "label": "삼",
+          "label_id": 1324,
+          "probability": 4.843490387429483e-05
+        },
+        {
+          "rank": 5,
+          "label": "이십이",
+          "label_id": 2156,
+          "probability": 6.314695838227635e-06
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 40,
+      "effective_frames": 40,
+      "elapsed_sec": 1.182,
+      "error": ""
+    },
+    {
+      "index": 56,
+      "file": "/home/moon/Downloads/Test-100/머리.mp4",
+      "expected_raw": "머리",
+      "expected": "머리",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "머리",
+      "confidence": 0.9942492246627808,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "머리",
+          "label_id": 825,
+          "probability": 0.9942492246627808
+        },
+        {
+          "rank": 2,
+          "label": "머리카락",
+          "label_id": 826,
+          "probability": 0.005007118918001652
+        },
+        {
+          "rank": 3,
+          "label": "십이",
+          "label_id": 1630,
+          "probability": 0.00020959597895853221
+        },
+        {
+          "rank": 4,
+          "label": "천",
+          "label_id": 2508,
+          "probability": 8.746255480218679e-05
+        },
+        {
+          "rank": 5,
+          "label": "육십일",
+          "label_id": 2076,
+          "probability": 8.573497325414792e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 63,
+      "effective_frames": 63,
+      "elapsed_sec": 1.82,
+      "error": ""
+    },
+    {
+      "index": 57,
+      "file": "/home/moon/Downloads/Test-100/머리카락.mp4",
+      "expected_raw": "머리카락",
+      "expected": "머리카락",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "머리카락",
+      "confidence": 0.7990923523902893,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "머리카락",
+          "label_id": 826,
+          "probability": 0.7990923523902893
+        },
+        {
+          "rank": 2,
+          "label": "머리",
+          "label_id": 825,
+          "probability": 0.1849645972251892
+        },
+        {
+          "rank": 3,
+          "label": "육",
+          "label_id": 2057,
+          "probability": 0.010044114664196968
+        },
+        {
+          "rank": 4,
+          "label": "십오",
+          "label_id": 1626,
+          "probability": 0.0015670307911932468
+        },
+        {
+          "rank": 5,
+          "label": "천",
+          "label_id": 2508,
+          "probability": 0.0010425264481455088
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 58,
+      "effective_frames": 58,
+      "elapsed_sec": 1.646,
+      "error": ""
+    },
+    {
+      "index": 58,
+      "file": "/home/moon/Downloads/Test-100/먹구름.mp4",
+      "expected_raw": "먹구름",
+      "expected": "먹구름",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "먹구름",
+      "confidence": 0.9975377321243286,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "먹구름",
+          "label_id": 828,
+          "probability": 0.9975377321243286
+        },
+        {
+          "rank": 2,
+          "label": "판박이",
+          "label_id": 2735,
+          "probability": 0.0023537948727607727
+        },
+        {
+          "rank": 3,
+          "label": "깜빡하다",
+          "label_id": 484,
+          "probability": 2.6384692318970338e-05
+        },
+        {
+          "rank": 4,
+          "label": "하늘",
+          "label_id": 2804,
+          "probability": 2.2609925508731976e-05
+        },
+        {
+          "rank": 5,
+          "label": "수심",
+          "label_id": 1530,
+          "probability": 1.0314652172382921e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 61,
+      "effective_frames": 61,
+      "elapsed_sec": 1.805,
+      "error": ""
+    },
+    {
+      "index": 59,
+      "file": "/home/moon/Downloads/Test-100/멀다.mp4",
+      "expected_raw": "멀다",
+      "expected": "멀다",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "얻어먹다",
+      "confidence": 0.1947738379240036,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "얻어먹다",
+          "label_id": 1768,
+          "probability": 0.1947738379240036
+        },
+        {
+          "rank": 2,
+          "label": "동거",
+          "label_id": 705,
+          "probability": 0.12948887050151825
+        },
+        {
+          "rank": 3,
+          "label": "열심",
+          "label_id": 1847,
+          "probability": 0.08224716782569885
+        },
+        {
+          "rank": 4,
+          "label": "실천",
+          "label_id": 1612,
+          "probability": 0.06904492527246475
+        },
+        {
+          "rank": 5,
+          "label": "수성구지부",
+          "label_id": 1529,
+          "probability": 0.06606124341487885
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 49,
+      "effective_frames": 49,
+      "elapsed_sec": 1.418,
+      "error": ""
+    },
+    {
+      "index": 60,
+      "file": "/home/moon/Downloads/Test-100/멍청하다.mp4",
+      "expected_raw": "멍청하다",
+      "expected": "멍청하다",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "무념무상",
+      "confidence": 0.999996542930603,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "무념무상",
+          "label_id": 869,
+          "probability": 0.999996542930603
+        },
+        {
+          "rank": 2,
+          "label": "수갑",
+          "label_id": 1522,
+          "probability": 1.0524371418796363e-06
+        },
+        {
+          "rank": 3,
+          "label": "잠기다",
+          "label_id": 2264,
+          "probability": 9.058258001459762e-07
+        },
+        {
+          "rank": 4,
+          "label": "편견",
+          "label_id": 2765,
+          "probability": 3.406007635931019e-07
+        },
+        {
+          "rank": 5,
+          "label": "비등하다",
+          "label_id": 1220,
+          "probability": 2.9448017357935896e-07
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 47,
+      "effective_frames": 47,
+      "elapsed_sec": 1.368,
+      "error": ""
+    },
+    {
+      "index": 61,
+      "file": "/home/moon/Downloads/Test-100/며느리.mp4",
+      "expected_raw": "며느리",
+      "expected": "며느리",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "며느리",
+      "confidence": 0.2353454977273941,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "며느리",
+          "label_id": 832,
+          "probability": 0.2353454977273941
+        },
+        {
+          "rank": 2,
+          "label": "이십억",
+          "label_id": 2151,
+          "probability": 0.17981401085853577
+        },
+        {
+          "rank": 3,
+          "label": "전염",
+          "label_id": 2324,
+          "probability": 0.1291690468788147
+        },
+        {
+          "rank": 4,
+          "label": "등지다",
+          "label_id": 747,
+          "probability": 0.07046716660261154
+        },
+        {
+          "rank": 5,
+          "label": "사위",
+          "label_id": 1296,
+          "probability": 0.05504089593887329
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 46,
+      "effective_frames": 46,
+      "elapsed_sec": 1.355,
+      "error": ""
+    },
+    {
+      "index": 62,
+      "file": "/home/moon/Downloads/Test-100/면역.mp4",
+      "expected_raw": "면역",
+      "expected": "면역",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "면역",
+      "confidence": 0.923891007900238,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "면역",
+          "label_id": 834,
+          "probability": 0.923891007900238
+        },
+        {
+          "rank": 2,
+          "label": "병문안",
+          "label_id": 1124,
+          "probability": 0.03061969019472599
+        },
+        {
+          "rank": 3,
+          "label": "쌀가루",
+          "label_id": 1635,
+          "probability": 0.006288035307079554
+        },
+        {
+          "rank": 4,
+          "label": "기차역",
+          "label_id": 456,
+          "probability": 0.0062201740220189095
+        },
+        {
+          "rank": 5,
+          "label": "포항시청",
+          "label_id": 2790,
+          "probability": 0.005873907823115587
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.847,
+      "error": ""
+    },
+    {
+      "index": 63,
+      "file": "/home/moon/Downloads/Test-100/명령.mp4",
+      "expected_raw": "명령",
+      "expected": "명령",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "놀리다",
+      "confidence": 0.4169968068599701,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "놀리다",
+          "label_id": 589,
+          "probability": 0.4169968068599701
+        },
+        {
+          "rank": 2,
+          "label": "병명",
+          "label_id": 1123,
+          "probability": 0.14488744735717773
+        },
+        {
+          "rank": 3,
+          "label": "과천시수어통역센터",
+          "label_id": 269,
+          "probability": 0.1281384825706482
+        },
+        {
+          "rank": 4,
+          "label": "분필",
+          "label_id": 1190,
+          "probability": 0.11774909496307373
+        },
+        {
+          "rank": 5,
+          "label": "육만오천",
+          "label_id": 2059,
+          "probability": 0.1064121425151825
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 57,
+      "effective_frames": 57,
+      "elapsed_sec": 1.658,
+      "error": ""
+    },
+    {
+      "index": 64,
+      "file": "/home/moon/Downloads/Test-100/명예.mp4",
+      "expected_raw": "명예",
+      "expected": "명예",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "성씨",
+      "confidence": 0.48370012640953064,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "성씨",
+          "label_id": 1460,
+          "probability": 0.48370012640953064
+        },
+        {
+          "rank": 2,
+          "label": "출석",
+          "label_id": 2597,
+          "probability": 0.10223747789859772
+        },
+        {
+          "rank": 3,
+          "label": "인색하다",
+          "label_id": 2187,
+          "probability": 0.08646796643733978
+        },
+        {
+          "rank": 4,
+          "label": "일확천금",
+          "label_id": 2224,
+          "probability": 0.0748683363199234
+        },
+        {
+          "rank": 5,
+          "label": "명예",
+          "label_id": 841,
+          "probability": 0.07466968148946762
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.653,
+      "error": ""
+    },
+    {
+      "index": 65,
+      "file": "/home/moon/Downloads/Test-100/모범생.mp4",
+      "expected_raw": "모범생",
+      "expected": "모범생",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "모범생",
+      "confidence": 0.9999995231628418,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "모범생",
+          "label_id": 844,
+          "probability": 0.9999995231628418
+        },
+        {
+          "rank": 2,
+          "label": "포항시수화통역센터",
+          "label_id": 2788,
+          "probability": 1.5994785940165457e-07
+        },
+        {
+          "rank": 3,
+          "label": "상상하다",
+          "label_id": 1370,
+          "probability": 4.6669317299574686e-08
+        },
+        {
+          "rank": 4,
+          "label": "진땀나다",
+          "label_id": 2442,
+          "probability": 4.4604600901720914e-08
+        },
+        {
+          "rank": 5,
+          "label": "백사십이",
+          "label_id": 1012,
+          "probability": 2.5063661368562862e-08
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.762,
+      "error": ""
+    },
+    {
+      "index": 66,
+      "file": "/home/moon/Downloads/Test-100/몸무게.mp4",
+      "expected_raw": "몸무게",
+      "expected": "몸무게",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "교제",
+      "confidence": 0.7529061436653137,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "교제",
+          "label_id": 325,
+          "probability": 0.7529061436653137
+        },
+        {
+          "rank": 2,
+          "label": "몸",
+          "label_id": 854,
+          "probability": 0.12509602308273315
+        },
+        {
+          "rank": 3,
+          "label": "파헤치다",
+          "label_id": 2733,
+          "probability": 0.036359772086143494
+        },
+        {
+          "rank": 4,
+          "label": "예습",
+          "label_id": 1894,
+          "probability": 0.023079566657543182
+        },
+        {
+          "rank": 5,
+          "label": "회개",
+          "label_id": 2908,
+          "probability": 0.01479367446154356
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 51,
+      "effective_frames": 51,
+      "elapsed_sec": 1.51,
+      "error": ""
+    },
+    {
+      "index": 67,
+      "file": "/home/moon/Downloads/Test-100/무궁화.mp4",
+      "expected_raw": "무궁화",
+      "expected": "무궁화",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "무궁화",
+      "confidence": 0.9989239573478699,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "무궁화",
+          "label_id": 867,
+          "probability": 0.9989239573478699
+        },
+        {
+          "rank": 2,
+          "label": "기지",
+          "label_id": 454,
+          "probability": 0.0006067398353479803
+        },
+        {
+          "rank": 3,
+          "label": "백사십구",
+          "label_id": 1007,
+          "probability": 0.00034899800084531307
+        },
+        {
+          "rank": 4,
+          "label": "후원",
+          "label_id": 2922,
+          "probability": 3.3546504710102454e-05
+        },
+        {
+          "rank": 5,
+          "label": "수재",
+          "label_id": 1540,
+          "probability": 8.48678064357955e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.747,
+      "error": ""
+    },
+    {
+      "index": 68,
+      "file": "/home/moon/Downloads/Test-100/무지개.mp4",
+      "expected_raw": "무지개",
+      "expected": "무지개",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "무지개",
+      "confidence": 0.9951364398002625,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "무지개",
+          "label_id": 899,
+          "probability": 0.9951364398002625
+        },
+        {
+          "rank": 2,
+          "label": "일산",
+          "label_id": 2209,
+          "probability": 0.0010234537767246366
+        },
+        {
+          "rank": 3,
+          "label": "걷다",
+          "label_id": 125,
+          "probability": 0.0009208866395056248
+        },
+        {
+          "rank": 4,
+          "label": "감히",
+          "label_id": 56,
+          "probability": 0.0005811455775983632
+        },
+        {
+          "rank": 5,
+          "label": "테니스",
+          "label_id": 2707,
+          "probability": 0.00034216608037240803
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 52,
+      "effective_frames": 52,
+      "elapsed_sec": 1.536,
+      "error": ""
+    },
+    {
+      "index": 69,
+      "file": "/home/moon/Downloads/Test-100/물약.mp4",
+      "expected_raw": "물약",
+      "expected": "물약",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "물약",
+      "confidence": 0.9999614953994751,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "물약",
+          "label_id": 915,
+          "probability": 0.9999614953994751
+        },
+        {
+          "rank": 2,
+          "label": "사위",
+          "label_id": 1296,
+          "probability": 2.018083796428982e-05
+        },
+        {
+          "rank": 3,
+          "label": "한약방",
+          "label_id": 2829,
+          "probability": 7.915133210190106e-06
+        },
+        {
+          "rank": 4,
+          "label": "수면제",
+          "label_id": 1524,
+          "probability": 2.9210543743829476e-06
+        },
+        {
+          "rank": 5,
+          "label": "호수",
+          "label_id": 2868,
+          "probability": 2.3056481950334273e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 52,
+      "effective_frames": 52,
+      "elapsed_sec": 1.529,
+      "error": ""
+    },
+    {
+      "index": 70,
+      "file": "/home/moon/Downloads/Test-100/미군.mp4",
+      "expected_raw": "미군",
+      "expected": "미군",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "미군",
+      "confidence": 0.9998925924301147,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "미군",
+          "label_id": 919,
+          "probability": 0.9998925924301147
+        },
+        {
+          "rank": 2,
+          "label": "성조기",
+          "label_id": 1462,
+          "probability": 5.1647803047671914e-05
+        },
+        {
+          "rank": 3,
+          "label": "군복",
+          "label_id": 386,
+          "probability": 2.757146103249397e-05
+        },
+        {
+          "rank": 4,
+          "label": "십이",
+          "label_id": 1630,
+          "probability": 5.730720204155659e-06
+        },
+        {
+          "rank": 5,
+          "label": "올림픽경기",
+          "label_id": 1947,
+          "probability": 5.59876934858039e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 59,
+      "effective_frames": 59,
+      "elapsed_sec": 1.734,
+      "error": ""
+    },
+    {
+      "index": 71,
+      "file": "/home/moon/Downloads/Test-100/미남.mp4",
+      "expected_raw": "미남",
+      "expected": "미남",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "얻어먹다",
+      "confidence": 0.8279473781585693,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "얻어먹다",
+          "label_id": 1768,
+          "probability": 0.8279473781585693
+        },
+        {
+          "rank": 2,
+          "label": "전염",
+          "label_id": 2324,
+          "probability": 0.12090983986854553
+        },
+        {
+          "rank": 3,
+          "label": "설거지",
+          "label_id": 1435,
+          "probability": 0.04649670794606209
+        },
+        {
+          "rank": 4,
+          "label": "돕다",
+          "label_id": 703,
+          "probability": 0.00111012056004256
+        },
+        {
+          "rank": 5,
+          "label": "뻔뻔",
+          "label_id": 1237,
+          "probability": 0.0006633360753767192
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.754,
+      "error": ""
+    },
+    {
+      "index": 72,
+      "file": "/home/moon/Downloads/Test-100/미녀.mp4",
+      "expected_raw": "미녀",
+      "expected": "미녀",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "미녀",
+      "confidence": 0.9946340322494507,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "미녀",
+          "label_id": 922,
+          "probability": 0.9946340322494507
+        },
+        {
+          "rank": 2,
+          "label": "아내",
+          "label_id": 1651,
+          "probability": 0.0035371235571801662
+        },
+        {
+          "rank": 3,
+          "label": "처남",
+          "label_id": 2505,
+          "probability": 0.0007659991388209164
+        },
+        {
+          "rank": 4,
+          "label": "신혼",
+          "label_id": 1605,
+          "probability": 0.00027667926042340696
+        },
+        {
+          "rank": 5,
+          "label": "여아",
+          "label_id": 1804,
+          "probability": 0.00015711862943135202
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 44,
+      "effective_frames": 44,
+      "elapsed_sec": 1.321,
+      "error": ""
+    },
+    {
+      "index": 73,
+      "file": "/home/moon/Downloads/Test-100/미소.mp4",
+      "expected_raw": "미소",
+      "expected": "미소",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "미소",
+      "confidence": 0.9599399566650391,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "미소",
+          "label_id": 925,
+          "probability": 0.9599399566650391
+        },
+        {
+          "rank": 2,
+          "label": "다섯명",
+          "label_id": 609,
+          "probability": 0.009164826013147831
+        },
+        {
+          "rank": 3,
+          "label": "칼국수",
+          "label_id": 2666,
+          "probability": 0.00592226954177022
+        },
+        {
+          "rank": 4,
+          "label": "스웨덴",
+          "label_id": 1564,
+          "probability": 0.0038089791778475046
+        },
+        {
+          "rank": 5,
+          "label": "밉다3",
+          "label_id": 948,
+          "probability": 0.0016692760400474072
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 46,
+      "effective_frames": 46,
+      "elapsed_sec": 1.359,
+      "error": ""
+    },
+    {
+      "index": 74,
+      "file": "/home/moon/Downloads/Test-100/바다.mp4",
+      "expected_raw": "바다",
+      "expected": "바다",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "바다",
+      "confidence": 0.9947810769081116,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "바다",
+          "label_id": 949,
+          "probability": 0.9947810769081116
+        },
+        {
+          "rank": 2,
+          "label": "넘기다",
+          "label_id": 559,
+          "probability": 0.004858214873820543
+        },
+        {
+          "rank": 3,
+          "label": "기회주의",
+          "label_id": 461,
+          "probability": 9.436793334316462e-05
+        },
+        {
+          "rank": 4,
+          "label": "임시협약",
+          "label_id": 2226,
+          "probability": 5.266726657282561e-05
+        },
+        {
+          "rank": 5,
+          "label": "동아리",
+          "label_id": 719,
+          "probability": 4.1139410313917324e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.888,
+      "error": ""
+    },
+    {
+      "index": 75,
+      "file": "/home/moon/Downloads/Test-100/바람.mp4",
+      "expected_raw": "바람",
+      "expected": "바람",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "바람",
+      "confidence": 0.9999010562896729,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "바람",
+          "label_id": 950,
+          "probability": 0.9999010562896729
+        },
+        {
+          "rank": 2,
+          "label": "전남",
+          "label_id": 2313,
+          "probability": 3.057679350604303e-05
+        },
+        {
+          "rank": 3,
+          "label": "뚱뚱하다",
+          "label_id": 765,
+          "probability": 1.8958733562612906e-05
+        },
+        {
+          "rank": 4,
+          "label": "십억",
+          "label_id": 1625,
+          "probability": 6.535075954161584e-06
+        },
+        {
+          "rank": 5,
+          "label": "주목",
+          "label_id": 2382,
+          "probability": 2.5345777885377174e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.612,
+      "error": ""
+    },
+    {
+      "index": 76,
+      "file": "/home/moon/Downloads/Test-100/받다.mp4",
+      "expected_raw": "받다",
+      "expected": "받다",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "받다",
+      "confidence": 0.9996042847633362,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "받다",
+          "label_id": 962,
+          "probability": 0.9996042847633362
+        },
+        {
+          "rank": 2,
+          "label": "매력",
+          "label_id": 815,
+          "probability": 3.9813679904909804e-05
+        },
+        {
+          "rank": 3,
+          "label": "8번째",
+          "label_id": 9,
+          "probability": 3.929339800379239e-05
+        },
+        {
+          "rank": 4,
+          "label": "화천군지부",
+          "label_id": 2892,
+          "probability": 3.451378142926842e-05
+        },
+        {
+          "rank": 5,
+          "label": "끊다",
+          "label_id": 498,
+          "probability": 2.3995053197722882e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 42,
+      "effective_frames": 42,
+      "elapsed_sec": 1.263,
+      "error": ""
+    },
+    {
+      "index": 77,
+      "file": "/home/moon/Downloads/Test-100/발각.mp4",
+      "expected_raw": "발각",
+      "expected": "발각",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "코코아",
+      "confidence": 0.4743979871273041,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "코코아",
+          "label_id": 2672,
+          "probability": 0.4743979871273041
+        },
+        {
+          "rank": 2,
+          "label": "웃다",
+          "label_id": 2020,
+          "probability": 0.32349032163619995
+        },
+        {
+          "rank": 3,
+          "label": "당하다",
+          "label_id": 643,
+          "probability": 0.04735403135418892
+        },
+        {
+          "rank": 4,
+          "label": "코",
+          "label_id": 2670,
+          "probability": 0.041740790009498596
+        },
+        {
+          "rank": 5,
+          "label": "소주",
+          "label_id": 1492,
+          "probability": 0.02820834517478943
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 47,
+      "effective_frames": 47,
+      "elapsed_sec": 1.38,
+      "error": ""
+    },
+    {
+      "index": 78,
+      "file": "/home/moon/Downloads/Test-100/발견.mp4",
+      "expected_raw": "발견",
+      "expected": "발견",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "발견",
+      "confidence": 0.9821596741676331,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "발견",
+          "label_id": 965,
+          "probability": 0.9821596741676331
+        },
+        {
+          "rank": 2,
+          "label": "유조선",
+          "label_id": 2054,
+          "probability": 0.008295955136418343
+        },
+        {
+          "rank": 3,
+          "label": "홍천군수어통역센터",
+          "label_id": 2876,
+          "probability": 0.002009396906942129
+        },
+        {
+          "rank": 4,
+          "label": "서점",
+          "label_id": 1424,
+          "probability": 0.001584962010383606
+        },
+        {
+          "rank": 5,
+          "label": "한눈팔다",
+          "label_id": 2825,
+          "probability": 0.0013050775742158294
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 45,
+      "effective_frames": 45,
+      "elapsed_sec": 1.325,
+      "error": ""
+    },
+    {
+      "index": 79,
+      "file": "/home/moon/Downloads/Test-100/발인.mp4",
+      "expected_raw": "발인",
+      "expected": "발인",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "기혼",
+      "confidence": 0.47550466656684875,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "기혼",
+          "label_id": 460,
+          "probability": 0.47550466656684875
+        },
+        {
+          "rank": 2,
+          "label": "신기",
+          "label_id": 1588,
+          "probability": 0.2179892361164093
+        },
+        {
+          "rank": 3,
+          "label": "청도군지부",
+          "label_id": 2538,
+          "probability": 0.08642052114009857
+        },
+        {
+          "rank": 4,
+          "label": "결혼식",
+          "label_id": 163,
+          "probability": 0.0326404795050621
+        },
+        {
+          "rank": 5,
+          "label": "거북선",
+          "label_id": 104,
+          "probability": 0.02170746587216854
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 42,
+      "effective_frames": 42,
+      "elapsed_sec": 1.234,
+      "error": ""
+    },
+    {
+      "index": 80,
+      "file": "/home/moon/Downloads/Test-100/밤샘.mp4",
+      "expected_raw": "밤샘",
+      "expected": "밤샘",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "조회",
+      "confidence": 0.7489047050476074,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "조회",
+          "label_id": 2363,
+          "probability": 0.7489047050476074
+        },
+        {
+          "rank": 2,
+          "label": "근무",
+          "label_id": 419,
+          "probability": 0.04005313664674759
+        },
+        {
+          "rank": 3,
+          "label": "대지",
+          "label_id": 667,
+          "probability": 0.03513010963797569
+        },
+        {
+          "rank": 4,
+          "label": "총회",
+          "label_id": 2580,
+          "probability": 0.029854286462068558
+        },
+        {
+          "rank": 5,
+          "label": "달성",
+          "label_id": 631,
+          "probability": 0.015633614733815193
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 61,
+      "effective_frames": 61,
+      "elapsed_sec": 1.8,
+      "error": ""
+    },
+    {
+      "index": 81,
+      "file": "/home/moon/Downloads/Test-100/방금.mp4",
+      "expected_raw": "방금",
+      "expected": "방금",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "방금",
+      "confidence": 0.43288081884384155,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "방금",
+          "label_id": 974,
+          "probability": 0.43288081884384155
+        },
+        {
+          "rank": 2,
+          "label": "개명",
+          "label_id": 98,
+          "probability": 0.33571913838386536
+        },
+        {
+          "rank": 3,
+          "label": "수상",
+          "label_id": 1526,
+          "probability": 0.06051591783761978
+        },
+        {
+          "rank": 4,
+          "label": "결점",
+          "label_id": 159,
+          "probability": 0.031627122312784195
+        },
+        {
+          "rank": 5,
+          "label": "우습다",
+          "label_id": 1990,
+          "probability": 0.029882168397307396
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 61,
+      "effective_frames": 61,
+      "elapsed_sec": 1.804,
+      "error": ""
+    },
+    {
+      "index": 82,
+      "file": "/home/moon/Downloads/Test-100/배부르다.mp4",
+      "expected_raw": "배부르다",
+      "expected": "배부르다",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "배부르다",
+      "confidence": 0.6908456087112427,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "배부르다",
+          "label_id": 988,
+          "probability": 0.6908456087112427
+        },
+        {
+          "rank": 2,
+          "label": "표리부동",
+          "label_id": 2791,
+          "probability": 0.2999081313610077
+        },
+        {
+          "rank": 3,
+          "label": "망설이다",
+          "label_id": 809,
+          "probability": 0.005570875946432352
+        },
+        {
+          "rank": 4,
+          "label": "성급",
+          "label_id": 1444,
+          "probability": 0.0019662189297378063
+        },
+        {
+          "rank": 5,
+          "label": "낳다",
+          "label_id": 548,
+          "probability": 0.00038596996455453336
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.614,
+      "error": ""
+    },
+    {
+      "index": 83,
+      "file": "/home/moon/Downloads/Test-100/백화점.mp4",
+      "expected_raw": "백화점",
+      "expected": "백화점",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "백화점",
+      "confidence": 0.9943526983261108,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "백화점",
+          "label_id": 1099,
+          "probability": 0.9943526983261108
+        },
+        {
+          "rank": 2,
+          "label": "헛수고",
+          "label_id": 2852,
+          "probability": 0.001458123791962862
+        },
+        {
+          "rank": 3,
+          "label": "사라지다",
+          "label_id": 1255,
+          "probability": 0.0009681939263828099
+        },
+        {
+          "rank": 4,
+          "label": "제사",
+          "label_id": 2345,
+          "probability": 0.0004926203982904553
+        },
+        {
+          "rank": 5,
+          "label": "공항시장",
+          "label_id": 261,
+          "probability": 0.00041387564851902425
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.593,
+      "error": ""
+    },
+    {
+      "index": 84,
+      "file": "/home/moon/Downloads/Test-100/버릇.mp4",
+      "expected_raw": "버릇",
+      "expected": "버릇",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "버릇",
+      "confidence": 0.27063557505607605,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "버릇",
+          "label_id": 1100,
+          "probability": 0.27063557505607605
+        },
+        {
+          "rank": 2,
+          "label": "외손녀",
+          "label_id": 1965,
+          "probability": 0.2549065053462982
+        },
+        {
+          "rank": 3,
+          "label": "여행지",
+          "label_id": 1818,
+          "probability": 0.0855317935347557
+        },
+        {
+          "rank": 4,
+          "label": "사골",
+          "label_id": 1248,
+          "probability": 0.05509354546666145
+        },
+        {
+          "rank": 5,
+          "label": "개명",
+          "label_id": 98,
+          "probability": 0.022562183439731598
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.745,
+      "error": ""
+    },
+    {
+      "index": 85,
+      "file": "/home/moon/Downloads/Test-100/베트남.mp4",
+      "expected_raw": "베트남",
+      "expected": "베트남",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "베트남",
+      "confidence": 0.9753550291061401,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "베트남",
+          "label_id": 1108,
+          "probability": 0.9753550291061401
+        },
+        {
+          "rank": 2,
+          "label": "시흥",
+          "label_id": 1582,
+          "probability": 0.023689139634370804
+        },
+        {
+          "rank": 3,
+          "label": "군포",
+          "label_id": 397,
+          "probability": 0.00012463729945011437
+        },
+        {
+          "rank": 4,
+          "label": "이",
+          "label_id": 2117,
+          "probability": 0.00010624701099004596
+        },
+        {
+          "rank": 5,
+          "label": "오천",
+          "label_id": 1937,
+          "probability": 9.909677464747801e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 33,
+      "effective_frames": 33,
+      "elapsed_sec": 0.992,
+      "error": ""
+    },
+    {
+      "index": 86,
+      "file": "/home/moon/Downloads/Test-100/벨기에.mp4",
+      "expected_raw": "벨기에",
+      "expected": "벨기에",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "삼십삼",
+      "confidence": 0.30434200167655945,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "삼십삼",
+          "label_id": 1345,
+          "probability": 0.30434200167655945
+        },
+        {
+          "rank": 2,
+          "label": "사십사",
+          "label_id": 1278,
+          "probability": 0.2795479893684387
+        },
+        {
+          "rank": 3,
+          "label": "의문",
+          "label_id": 2096,
+          "probability": 0.1373126357793808
+        },
+        {
+          "rank": 4,
+          "label": "궁하다",
+          "label_id": 404,
+          "probability": 0.041352175176143646
+        },
+        {
+          "rank": 5,
+          "label": "사십삼",
+          "label_id": 1279,
+          "probability": 0.026118174195289612
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 37,
+      "effective_frames": 37,
+      "elapsed_sec": 1.112,
+      "error": ""
+    },
+    {
+      "index": 87,
+      "file": "/home/moon/Downloads/Test-100/변덕.mp4",
+      "expected_raw": "변덕",
+      "expected": "변덕",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "떨다",
+      "confidence": 0.6206390261650085,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "떨다",
+          "label_id": 759,
+          "probability": 0.6206390261650085
+        },
+        {
+          "rank": 2,
+          "label": "짓밟다",
+          "label_id": 2460,
+          "probability": 0.23728565871715546
+        },
+        {
+          "rank": 3,
+          "label": "오른쪽",
+          "label_id": 1906,
+          "probability": 0.09098617732524872
+        },
+        {
+          "rank": 4,
+          "label": "변덕",
+          "label_id": 1112,
+          "probability": 0.03135645017027855
+        },
+        {
+          "rank": 5,
+          "label": "설거지",
+          "label_id": 1435,
+          "probability": 0.004712597467005253
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": true,
+      "input_frames": 44,
+      "effective_frames": 44,
+      "elapsed_sec": 1.31,
+      "error": ""
+    },
+    {
+      "index": 88,
+      "file": "/home/moon/Downloads/Test-100/변비.mp4",
+      "expected_raw": "변비",
+      "expected": "변비",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "강요",
+      "confidence": 0.4984278678894043,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "강요",
+          "label_id": 85,
+          "probability": 0.4984278678894043
+        },
+        {
+          "rank": 2,
+          "label": "군마",
+          "label_id": 385,
+          "probability": 0.1969868540763855
+        },
+        {
+          "rank": 3,
+          "label": "보호",
+          "label_id": 1147,
+          "probability": 0.1958143711090088
+        },
+        {
+          "rank": 4,
+          "label": "치약",
+          "label_id": 2622,
+          "probability": 0.019802873954176903
+        },
+        {
+          "rank": 5,
+          "label": "괴롭히다",
+          "label_id": 307,
+          "probability": 0.01667090691626072
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.858,
+      "error": ""
+    },
+    {
+      "index": 89,
+      "file": "/home/moon/Downloads/Test-100/별.mp4",
+      "expected_raw": "별",
+      "expected": "별",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "별",
+      "confidence": 0.9978083968162537,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "별",
+          "label_id": 1118,
+          "probability": 0.9978083968162537
+        },
+        {
+          "rank": 2,
+          "label": "꿈",
+          "label_id": 497,
+          "probability": 0.001993602141737938
+        },
+        {
+          "rank": 3,
+          "label": "양산시지부",
+          "label_id": 1729,
+          "probability": 3.0393379347515292e-05
+        },
+        {
+          "rank": 4,
+          "label": "할머니",
+          "label_id": 2830,
+          "probability": 2.6773737772600725e-05
+        },
+        {
+          "rank": 5,
+          "label": "추억",
+          "label_id": 2587,
+          "probability": 1.607388912816532e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.718,
+      "error": ""
+    },
+    {
+      "index": 90,
+      "file": "/home/moon/Downloads/Test-100/병가.mp4",
+      "expected_raw": "병가",
+      "expected": "병가",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "병가",
+      "confidence": 0.9947713017463684,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "병가",
+          "label_id": 1122,
+          "probability": 0.9947713017463684
+        },
+        {
+          "rank": 2,
+          "label": "아르바이트",
+          "label_id": 1655,
+          "probability": 0.005187762901186943
+        },
+        {
+          "rank": 3,
+          "label": "근무",
+          "label_id": 419,
+          "probability": 1.6259989934042096e-05
+        },
+        {
+          "rank": 4,
+          "label": "돼지고기",
+          "label_id": 729,
+          "probability": 3.0208263979147887e-06
+        },
+        {
+          "rank": 5,
+          "label": "일터",
+          "label_id": 2223,
+          "probability": 2.473921085766051e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 61,
+      "effective_frames": 61,
+      "elapsed_sec": 1.767,
+      "error": ""
+    },
+    {
+      "index": 91,
+      "file": "/home/moon/Downloads/Test-100/병문안.mp4",
+      "expected_raw": "병문안",
+      "expected": "병문안",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "병문안",
+      "confidence": 0.9972383975982666,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "병문안",
+          "label_id": 1124,
+          "probability": 0.9972383975982666
+        },
+        {
+          "rank": 2,
+          "label": "사십사",
+          "label_id": 1278,
+          "probability": 0.0014932270860299468
+        },
+        {
+          "rank": 3,
+          "label": "치료제",
+          "label_id": 2619,
+          "probability": 0.00024894525995478034
+        },
+        {
+          "rank": 4,
+          "label": "감염병",
+          "label_id": 52,
+          "probability": 0.0002409891167189926
+        },
+        {
+          "rank": 5,
+          "label": "영양군지부",
+          "label_id": 1872,
+          "probability": 9.681506344350055e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 64,
+      "effective_frames": 64,
+      "elapsed_sec": 1.889,
+      "error": ""
+    },
+    {
+      "index": 92,
+      "file": "/home/moon/Downloads/Test-100/분필.mp4",
+      "expected_raw": "분필",
+      "expected": "분필",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "분필",
+      "confidence": 0.9323013424873352,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "분필",
+          "label_id": 1190,
+          "probability": 0.9323013424873352
+        },
+        {
+          "rank": 2,
+          "label": "개명",
+          "label_id": 98,
+          "probability": 0.061112403869628906
+        },
+        {
+          "rank": 3,
+          "label": "금욕",
+          "label_id": 428,
+          "probability": 0.001309133367612958
+        },
+        {
+          "rank": 4,
+          "label": "백사십오",
+          "label_id": 1010,
+          "probability": 0.0011401184601709247
+        },
+        {
+          "rank": 5,
+          "label": "실명",
+          "label_id": 1607,
+          "probability": 0.00112495559733361
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 61,
+      "effective_frames": 61,
+      "elapsed_sec": 1.806,
+      "error": ""
+    },
+    {
+      "index": 93,
+      "file": "/home/moon/Downloads/Test-100/불안.mp4",
+      "expected_raw": "불안",
+      "expected": "불안",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "표리부동",
+      "confidence": 0.7011649012565613,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "표리부동",
+          "label_id": 2791,
+          "probability": 0.7011649012565613
+        },
+        {
+          "rank": 2,
+          "label": "금산군주민지원센터",
+          "label_id": 422,
+          "probability": 0.13393469154834747
+        },
+        {
+          "rank": 3,
+          "label": "얌전하다",
+          "label_id": 1724,
+          "probability": 0.02985561639070511
+        },
+        {
+          "rank": 4,
+          "label": "차분",
+          "label_id": 2476,
+          "probability": 0.013987535610795021
+        },
+        {
+          "rank": 5,
+          "label": "동해시청",
+          "label_id": 727,
+          "probability": 0.012759514153003693
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.582,
+      "error": ""
+    },
+    {
+      "index": 94,
+      "file": "/home/moon/Downloads/Test-100/불행.mp4",
+      "expected_raw": "불행",
+      "expected": "불행",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "불행",
+      "confidence": 0.9978452920913696,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "불행",
+          "label_id": 1212,
+          "probability": 0.9978452920913696
+        },
+        {
+          "rank": 2,
+          "label": "검정머리",
+          "label_id": 139,
+          "probability": 0.0009728677105158567
+        },
+        {
+          "rank": 3,
+          "label": "욕망",
+          "label_id": 1974,
+          "probability": 0.0009253821917809546
+        },
+        {
+          "rank": 4,
+          "label": "고추",
+          "label_id": 233,
+          "probability": 0.00013649609172716737
+        },
+        {
+          "rank": 5,
+          "label": "성토",
+          "label_id": 1466,
+          "probability": 1.8556855138740502e-05
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 63,
+      "effective_frames": 63,
+      "elapsed_sec": 1.827,
+      "error": ""
+    },
+    {
+      "index": 95,
+      "file": "/home/moon/Downloads/Test-100/붕대.mp4",
+      "expected_raw": "붕대",
+      "expected": "붕대",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "바래다",
+      "confidence": 0.4343765676021576,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "바래다",
+          "label_id": 951,
+          "probability": 0.4343765676021576
+        },
+        {
+          "rank": 2,
+          "label": "아까",
+          "label_id": 1649,
+          "probability": 0.12175869941711426
+        },
+        {
+          "rank": 3,
+          "label": "어색하다",
+          "label_id": 1761,
+          "probability": 0.09741504490375519
+        },
+        {
+          "rank": 4,
+          "label": "금천구청",
+          "label_id": 436,
+          "probability": 0.06884787231683731
+        },
+        {
+          "rank": 5,
+          "label": "이심전심",
+          "label_id": 2145,
+          "probability": 0.043247777968645096
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 50,
+      "effective_frames": 50,
+      "elapsed_sec": 1.454,
+      "error": ""
+    },
+    {
+      "index": 96,
+      "file": "/home/moon/Downloads/Test-100/비.mp4",
+      "expected_raw": "비",
+      "expected": "비",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "비",
+      "confidence": 0.9999513626098633,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "비",
+          "label_id": 1216,
+          "probability": 0.9999513626098633
+        },
+        {
+          "rank": 2,
+          "label": "불복종",
+          "label_id": 1203,
+          "probability": 1.5244083442667034e-05
+        },
+        {
+          "rank": 3,
+          "label": "친부",
+          "label_id": 2626,
+          "probability": 8.99388123798417e-06
+        },
+        {
+          "rank": 4,
+          "label": "대기업",
+          "label_id": 651,
+          "probability": 3.4332520044699777e-06
+        },
+        {
+          "rank": 5,
+          "label": "염색",
+          "label_id": 1849,
+          "probability": 2.9505763450288214e-06
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.734,
+      "error": ""
+    },
+    {
+      "index": 97,
+      "file": "/home/moon/Downloads/Test-100/비빔밥.mp4",
+      "expected_raw": "비빔밥",
+      "expected": "비빔밥",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "비빔밥",
+      "confidence": 0.985154926776886,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "비빔밥",
+          "label_id": 1222,
+          "probability": 0.985154926776886
+        },
+        {
+          "rank": 2,
+          "label": "백사십오",
+          "label_id": 1010,
+          "probability": 0.002931067021563649
+        },
+        {
+          "rank": 3,
+          "label": "출석",
+          "label_id": 2597,
+          "probability": 0.0019535620231181383
+        },
+        {
+          "rank": 4,
+          "label": "문경시수어통역센터",
+          "label_id": 902,
+          "probability": 0.0018890653736889362
+        },
+        {
+          "rank": 5,
+          "label": "수상",
+          "label_id": 1526,
+          "probability": 0.0011223102919757366
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 60,
+      "effective_frames": 60,
+      "elapsed_sec": 1.739,
+      "error": ""
+    },
+    {
+      "index": 98,
+      "file": "/home/moon/Downloads/Test-100/비율.mp4",
+      "expected_raw": "비율",
+      "expected": "비율",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "비율",
+      "confidence": 0.9974465370178223,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "비율",
+          "label_id": 1224,
+          "probability": 0.9974465370178223
+        },
+        {
+          "rank": 2,
+          "label": "탁구공",
+          "label_id": 2690,
+          "probability": 0.0008060295367613435
+        },
+        {
+          "rank": 3,
+          "label": "반역",
+          "label_id": 959,
+          "probability": 0.0003325462166685611
+        },
+        {
+          "rank": 4,
+          "label": "더디다",
+          "label_id": 670,
+          "probability": 0.00028968596598133445
+        },
+        {
+          "rank": 5,
+          "label": "제사",
+          "label_id": 2345,
+          "probability": 0.00024342270626220852
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 53,
+      "effective_frames": 53,
+      "elapsed_sec": 1.574,
+      "error": ""
+    },
+    {
+      "index": 99,
+      "file": "/home/moon/Downloads/Test-100/빨강.mp4",
+      "expected_raw": "빨강",
+      "expected": "빨강",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "신부",
+      "confidence": 0.9025977253913879,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "신부",
+          "label_id": 1593,
+          "probability": 0.9025977253913879
+        },
+        {
+          "rank": 2,
+          "label": "거역",
+          "label_id": 106,
+          "probability": 0.08880022913217545
+        },
+        {
+          "rank": 3,
+          "label": "원하다",
+          "label_id": 2026,
+          "probability": 0.0021755860652774572
+        },
+        {
+          "rank": 4,
+          "label": "동메달",
+          "label_id": 717,
+          "probability": 0.0014202705351635814
+        },
+        {
+          "rank": 5,
+          "label": "흠집",
+          "label_id": 2936,
+          "probability": 0.0012348612071946263
+        }
+      ],
+      "top1_correct": false,
+      "topk_contains_expected": false,
+      "input_frames": 55,
+      "effective_frames": 55,
+      "elapsed_sec": 1.58,
+      "error": ""
+    },
+    {
+      "index": 100,
+      "file": "/home/moon/Downloads/Test-100/살인.mp4",
+      "expected_raw": "살인",
+      "expected": "살인",
+      "label_alias_applied": false,
+      "expected_in_vocab": true,
+      "predicted": "살인",
+      "confidence": 0.9998596906661987,
+      "top_k": [
+        {
+          "rank": 1,
+          "label": "살인",
+          "label_id": 1321,
+          "probability": 0.9998596906661987
+        },
+        {
+          "rank": 2,
+          "label": "살인2",
+          "label_id": 1323,
+          "probability": 0.00010700547136366367
+        },
+        {
+          "rank": 3,
+          "label": "살인1",
+          "label_id": 1322,
+          "probability": 2.1792224288219586e-05
+        },
+        {
+          "rank": 4,
+          "label": "부채질",
+          "label_id": 1175,
+          "probability": 3.7681297726521734e-06
+        },
+        {
+          "rank": 5,
+          "label": "교통안전교육",
+          "label_id": 329,
+          "probability": 7.890252504694217e-07
+        }
+      ],
+      "top1_correct": true,
+      "topk_contains_expected": true,
+      "input_frames": 48,
+      "effective_frames": 48,
+      "elapsed_sec": 1.422,
+      "error": ""
+    }
+  ]
+}
