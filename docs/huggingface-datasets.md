@@ -20,9 +20,17 @@ This document summarizes the public Hugging Face datasets uploaded for evaluatio
 | Test-100 | https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-test-100 | Public | `5dc76d221db9b74cc719cbbfb7528c7b5ec6a56d` | 100 | 60 / 100 | 71 / 100 | 0 |
 | Self-made-60 | https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-self-made-60 | Public | `9e11d935526a54994d8f33e56649213fafa02057` | 60 | 5 / 60 | 7 / 60 | 0 |
 
-## Dataset File Layout
+Additional public dataset for model work:
 
-Each Hugging Face dataset repo contains:
+| Dataset | Hugging Face URL | Visibility | Commit | Contents |
+|---|---|---|---|---|
+| keypoint_dataset | https://huggingface.co/datasets/Seoyoung07/keypoint_dataset | Public | `116b191777410c33e868096c7726608905c6a082` | `keypoint_cache.zip` MediaPipe Holistic keypoint sequence archive |
+
+`keypoint_dataset` contains derived keypoint sequences extracted from a subset of AI-Hub Korean sign-language videos. It does not redistribute the raw AI-Hub videos. The Hugging Face dataset card includes the AI-Hub source link, the local subset metadata copied from `/home/moon/metadata.txt`, and `AI tool used: Codex`.
+
+## Evaluation Dataset File Layout
+
+Each evaluation dataset repo contains:
 
 ```text
 README.md

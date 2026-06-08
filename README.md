@@ -151,6 +151,14 @@ https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe
 https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-self-made-60
 ```
 
+The derived MediaPipe keypoint dataset used for model work is also public:
+
+```text
+https://huggingface.co/datasets/Seoyoung07/keypoint_dataset
+```
+
+`keypoint_dataset` contains the archived `keypoint_cache.zip`, which stores MediaPipe Holistic keypoint sequences extracted from a subset of AI-Hub Korean sign-language videos. Raw AI-Hub videos are not redistributed in this repo or in that Hugging Face dataset.
+
 Download the evaluation datasets:
 
 ```bash
@@ -242,7 +250,7 @@ What is intentionally not fully reproduced from scratch:
 Reason:
 
 - The model was trained on Korean sign-language video data from AIHub. The raw AIHub training data is not redistributed in this GitHub repo because it is large and subject to AIHub access/license terms.
-- The full local keypoint cache used during continued training was also large and machine-local, so it is not committed to GitHub.
+- The derived MediaPipe keypoint cache is not committed to GitHub because of its size, but it is available as a public Hugging Face dataset: https://huggingface.co/datasets/Seoyoung07/keypoint_dataset
 - Full training would require separate AIHub dataset access, significant storage, MediaPipe keypoint extraction time, and GPU training time.
 
 Accepted reproducibility artifact for this submission:
@@ -443,10 +451,11 @@ Latest self-made-60 report:
 - Top-5: 7 / 60
 - Inference errors: 0
 
-Public Hugging Face evaluation datasets:
+Public Hugging Face datasets:
 
 - [Test-100 dataset](https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-test-100)
 - [Self-made-60 dataset](https://huggingface.co/datasets/Seoyoung07/korean-sign-word-classifier-mediapipe-self-made-60)
+- [Keypoint dataset](https://huggingface.co/datasets/Seoyoung07/keypoint_dataset): MediaPipe Holistic keypoint sequence archive extracted from a subset of AI-Hub Korean sign-language videos.
 - Upload and verification notes: [docs/huggingface-datasets.md](docs/huggingface-datasets.md)
 - AI tool used: Codex
 
