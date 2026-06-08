@@ -426,6 +426,15 @@ Check:
 
 ### Virtual Camera Start immediately disconnects
 
+This usually means the backend accepted the WebSocket but could not open the
+requested virtual camera device. The server log may show:
+
+```text
+WebSocket /ws/virtual-camera?...&device=%2Fdev%2Fvideo20 [accepted]
+connection open
+connection closed
+```
+
 Check:
 
 ```bash
@@ -443,6 +452,13 @@ sudo usermod -aG video "$USER"
 Then log out and log back in, or run `newgrp video`.
 
 Also confirm the backend is running, because the frontend sends virtual-camera frames to the backend WebSocket.
+
+If `/dev/video20` is missing, recreate it:
+
+```bash
+cd realtime-ksl-captioning
+./scripts/setup_virtual_camera_ubuntu.sh
+```
 
 If `/dev/video20` does not exist and the setup script is slow at `apt update`,
 look for a stale third-party APT source:

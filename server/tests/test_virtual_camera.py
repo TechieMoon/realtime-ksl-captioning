@@ -2,12 +2,14 @@ import json
 from io import BytesIO
 
 import numpy as np
+import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
 from app.config import Settings
 from app.frame_packet import build_frame_packet
 from app.main import create_app
+from app.virtual_camera import _validate_virtual_camera_device
 
 
 class RecordingVirtualCameraSink:
@@ -133,6 +135,11 @@ def test_virtual_camera_websocket_reports_sink_failure() -> None:
     assert error["type"] == "error"
     assert error["code"] == "virtual_camera_unavailable"
     assert "no virtual camera" in error["message"]
+
+
+def test_virtual_camera_device_validation_reports_missing_device() -> None:
+    with pytest.raises(RuntimeError, match="does not exist"):
+        _validate_virtual_camera_device("/dev/video999")
 
 
 def _jpeg_bytes() -> bytes:

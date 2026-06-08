@@ -1,6 +1,8 @@
 import json
+import os
 from collections.abc import Callable
 from contextlib import suppress
+from pathlib import Path
 from typing import Protocol
 
 import numpy as np
@@ -37,6 +39,8 @@ class PyVirtualCameraSink:
         fps: float,
         device: str | None = None,
     ) -> None:
+        _validate_virtual_camera_device(device)
+
         try:
             import pyvirtualcam
         except ModuleNotFoundError as exc:
@@ -239,3 +243,25 @@ def _is_authorized(websocket: WebSocket, settings: Settings) -> bool:
 
     authorization = websocket.headers.get("authorization", "")
     return authorization == f"Bearer {settings.caption_auth_token}"
+
+
+def _validate_virtual_camera_device(device: str | None) -> None:
+    if not device:
+        return
+
+    device_path = Path(device)
+    if not device_path.exists():
+        raise RuntimeError(
+            f"Virtual camera device {device} does not exist. "
+            "Run ./scripts/setup_virtual_camera_ubuntu.sh, then verify it with "
+            f"'ls -l {device}'."
+        )
+
+    if not device_path.is_char_device():
+        raise RuntimeError(f"{device} exists but is not a video device.")
+
+    if not os.access(device_path, os.R_OK | os.W_OK):
+        raise RuntimeError(
+            f"Current user cannot read/write {device}. "
+            "Confirm the user is in the video group, then log out and back in."
+        )

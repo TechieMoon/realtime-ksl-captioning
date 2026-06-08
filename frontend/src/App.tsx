@@ -173,6 +173,7 @@ function App() {
   const frameIdRef = useRef(0);
   const virtualFrameIdRef = useRef(0);
   const virtualFrameSendingRef = useRef(false);
+  const virtualCameraErrorRef = useRef("");
   const captionLinesRef = useRef<string[]>([""]);
   const fontSizeRef = useRef(34);
 
@@ -504,13 +505,13 @@ function App() {
       virtualWsRef.current.close();
     }
 
+    virtualCameraErrorRef.current = "";
     const ws = new WebSocket(virtualCameraUrl);
     ws.binaryType = "arraybuffer";
     setVirtualCameraStatus("가상카메라 연결 중");
 
     ws.onopen = () => {
-      setVirtualCameraConnected(true);
-      setVirtualCameraStatus("가상카메라 연결됨");
+      setVirtualCameraStatus("가상카메라 서버 연결됨");
       virtualFrameIdRef.current = 0;
       ws.send(
         JSON.stringify({
@@ -522,22 +523,41 @@ function App() {
           client_name: "virtual-camera-client",
         }),
       );
-      void sendVirtualCameraFrame();
-      virtualTimerRef.current = window.setInterval(
-        () => void sendVirtualCameraFrame(),
-        Math.round(1000 / fps),
-      );
     };
 
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
         if (data.type === "status") {
+          if (data.status === "virtual_camera_started") {
+            setVirtualCameraConnected(true);
+            setVirtualCameraStatus("가상카메라 시작됨");
+            virtualFrameIdRef.current = 0;
+            stopVirtualCameraTimer();
+            void sendVirtualCameraFrame();
+            virtualTimerRef.current = window.setInterval(
+              () => void sendVirtualCameraFrame(),
+              Math.round(1000 / fps),
+            );
+            return;
+          }
+          if (data.status === "virtual_frame_streaming") {
+            setVirtualCameraStatus("가상카메라 송출 중");
+            return;
+          }
+          if (data.status === "connected") {
+            setVirtualCameraStatus("가상카메라 서버 연결됨");
+            return;
+          }
           setVirtualCameraStatus(data.status);
         }
         if (data.type === "error") {
-          setVirtualCameraStatus(data.message || data.code);
+          const message = data.message || data.code || "가상카메라 오류";
+          virtualCameraErrorRef.current = message;
+          setVirtualCameraStatus(message);
+          setVirtualCameraConnected(false);
           stopVirtualCameraTimer();
+          ws.close();
         }
       } catch (err) {
         console.error(err);
@@ -547,7 +567,12 @@ function App() {
     ws.onclose = () => {
       stopVirtualCameraTimer();
       setVirtualCameraConnected(false);
-      setVirtualCameraStatus("가상카메라 미연결");
+      if (virtualWsRef.current === ws) {
+        virtualWsRef.current = null;
+      }
+      if (!virtualCameraErrorRef.current) {
+        setVirtualCameraStatus("가상카메라 미연결");
+      }
     };
 
     ws.onerror = (err) => {
@@ -559,6 +584,7 @@ function App() {
   }, [fps, sendVirtualCameraFrame, stopVirtualCameraTimer, virtualCameraUrl]);
 
   const disconnectVirtualCamera = useCallback(() => {
+    virtualCameraErrorRef.current = "";
     const ws = virtualWsRef.current;
     if (ws?.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({ type: "stop" }));
