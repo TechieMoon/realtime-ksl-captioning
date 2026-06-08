@@ -634,6 +634,16 @@ the `video` group and log out/in after group changes:
 groups
 ```
 
+If `./scripts/setup_virtual_camera_ubuntu.sh` is slow during `apt update`, check
+for stale third-party APT sources. For example, uninstalling NordVPN can leave
+`/etc/apt/sources.list.d/nordvpn.list`, so APT still waits on
+`repo.nordvpn.com`. If NordVPN is not needed, disable that source:
+
+```bash
+sudo mv /etc/apt/sources.list.d/nordvpn.list /etc/apt/sources.list.d/nordvpn.list.disabled
+sudo apt-get update
+```
+
 ## Local Network Test
 
 서버 컴퓨터와 클라이언트 컴퓨터를 따로 두고 테스트할 때는 두 컴퓨터가 같은 Wi-Fi 또는 같은 LAN에 있어야 합니다.

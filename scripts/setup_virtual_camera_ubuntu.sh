@@ -5,9 +5,36 @@ DEVICE_NR="${DEVICE_NR:-20}"
 CARD_LABEL="${CARD_LABEL:-KSL Caption Camera}"
 DEVICE_PATH="/dev/video${DEVICE_NR}"
 
-echo "[virtual-camera] installing v4l2loopback packages"
-sudo apt update
-sudo apt install -y v4l2loopback-dkms v4l2loopback-utils
+have_command() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+ensure_packages() {
+  local needs_packages=0
+
+  if ! modinfo v4l2loopback >/dev/null 2>&1; then
+    needs_packages=1
+  fi
+
+  if ! have_command v4l2-ctl; then
+    needs_packages=1
+  fi
+
+  if [ "${needs_packages}" -eq 0 ]; then
+    echo "[virtual-camera] v4l2loopback module and v4l2-ctl are already available"
+    return
+  fi
+
+  echo "[virtual-camera] installing missing v4l2loopback packages"
+  sudo apt-get \
+    -o Acquire::Retries=2 \
+    -o Acquire::http::Timeout=15 \
+    -o Acquire::https::Timeout=15 \
+    update
+  sudo apt-get install -y v4l2loopback-dkms v4l2loopback-utils
+}
+
+ensure_packages
 
 if [ ! -e "${DEVICE_PATH}" ]; then
   echo "[virtual-camera] creating ${DEVICE_PATH}"

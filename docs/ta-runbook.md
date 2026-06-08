@@ -269,6 +269,16 @@ Start backend and frontend normally. In the frontend:
 
 If Zoom was already open before creating `/dev/video20`, restart Zoom.
 
+If the setup script pauses for a long time during `apt update`, check for a
+stale third-party APT source. For example, uninstalling NordVPN may leave
+`/etc/apt/sources.list.d/nordvpn.list`, causing every `apt update` to wait on
+`repo.nordvpn.com`. Disable that source if NordVPN is not needed:
+
+```bash
+sudo mv /etc/apt/sources.list.d/nordvpn.list /etc/apt/sources.list.d/nordvpn.list.disabled
+sudo apt-get update
+```
+
 ## Local Network Setup
 
 If backend and frontend run on different computers:
@@ -433,6 +443,19 @@ sudo usermod -aG video "$USER"
 Then log out and log back in, or run `newgrp video`.
 
 Also confirm the backend is running, because the frontend sends virtual-camera frames to the backend WebSocket.
+
+If `/dev/video20` does not exist and the setup script is slow at `apt update`,
+look for a stale third-party APT source:
+
+```bash
+grep -RIn "repo.nordvpn.com\|nordvpn" /etc/apt/sources.list.d /etc/apt/sources.list 2>/dev/null
+```
+
+If NordVPN is no longer used and the file exists, disable it:
+
+```bash
+sudo mv /etc/apt/sources.list.d/nordvpn.list /etc/apt/sources.list.d/nordvpn.list.disabled
+```
 
 ### Zoom does not show `KSL Caption Camera`
 
